@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+注册成功  支付成功共用
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/module_include_title_bar" />
+
+    <RelativeLayout
+        android:id="@+id/relative_hint"
+        android:layout_width="match_parent"
+        android:layout_height="720px">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/wait" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_above"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您的认证信息已经提交，"
+                android:textColor="@color/text_gray"
+                android:textSize="32px" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请耐心等待审核"
+                android:textColor="@color/text_gray"
+                android:textSize="32px" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_register_success"
+        style="@style/style_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_confirm"
+        android:layout_marginLeft="@dimen/layout_horizontal_padding"
+        android:layout_marginTop="@dimen/view_space_bottom_btn_above"
+        android:layout_marginRight="@dimen/layout_horizontal_padding"
+        android:text="返回首页" />
+    <!--支付成功用-->
+    <TextView
+        android:id="@+id/tv_2_home"
+        style="@style/style_href"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_register"
+        android:layout_marginTop="40px"
+        android:gravity="center_horizontal"
+        android:text="@string/existing_account"
+        android:visibility="gone"/>
+
+</LinearLayout>

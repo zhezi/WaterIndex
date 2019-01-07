@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--边距-->
+
+    <dimen name="layout_horizontal_padding">40px</dimen>
+    <dimen name="layout_horizontal_margin">40px</dimen>
+    <!--titlebar下边框距离下方控件距离-->
+    <dimen name="view_space_title_bar_bottom">40px</dimen>
+    <!--控件间垂直距离-->
+    <dimen name="view_space_edt_vertical">30px</dimen>
+
+    <!--edt文字内容左边缩进-->
+    <dimen name="edt_padding_left">20px</dimen>
+    <!--页面底部btn距离上方控件距离-->
+    <dimen name="view_space_bottom_btn_above">100px</dimen>
+
+    <!--控件尺寸-->
+
+    <dimen name="title_bar_height">100px</dimen>
+    <dimen name="edt_height">80px</dimen>
+    <dimen name="commit_btn_height">90px</dimen>
+    <!--分割线-->
+    <dimen name="divider_width">2px</dimen>
+    <dimen name="view_space_gray">10px</dimen>
+
+
+    <!--字体-->
+
+    <!--titleBar中间文字-->
+    <dimen name="text_size_title_center">18sp</dimen>
+    <!--edt及与其同级别控件文字-->
+    <dimen name="text_size_edt">14sp</dimen>
+    <!--btn下方蓝色hint提示文字-->
+    <dimen name="text_size_hint">14sp</dimen>
+    <!--页面下方commit功能大按钮-->
+    <dimen name="text_size_commit">18sp</dimen>
+
+</resources>

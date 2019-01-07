@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/module_include_title_bar" />
+
+    <RelativeLayout
+        android:id="@+id/relative_user_detail"
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51px"
+        android:layout_marginBottom="39px">
+
+        <ImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="120px"
+            android:layout_height="120px"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="29px"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_avatar">
+
+            <TextView
+                android:id="@+id/tv_user_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="19px"
+                android:text="133 **** 1234"
+                android:textColor="@color/text_black"
+                android:textSize="32px" />
+
+            <TextView
+                android:id="@+id/tv_zhuceshijian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_user_login"
+                android:text="注册时间:"
+                android:textColor="@color/text_gray"
+                android:textSize="22px" />
+
+            <TextView
+                android:id="@+id/tv_create_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tv_zhuceshijian"
+                android:layout_toRightOf="@id/tv_zhuceshijian"
+                android:text="2018-12-14"
+                android:textColor="@color/text_gray"
+                android:textSize="22px" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_space_gray"
+        android:background="@color/space_gray" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commit_btn_height"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/style_txt_confirm_order1"
+            android:paddingLeft="0px"
+            android:text="注册手机号" />
+
+        <TextView
+            android:id="@+id/tv_user_login_tel"
+            style="@style/style_txt_confirm_order1"
+            android:layout_alignParentRight="true"
+            android:text="133 **** 1234"
+            android:textColor="@color/text_gray" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_width"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commit_btn_height"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/style_txt_confirm_order1"
+            android:paddingLeft="0px"
+            android:text="账号类型" />
+
+        <TextView
+            android:id="@+id/tv_user_type"
+            style="@style/style_txt_confirm_order1"
+            android:layout_alignParentRight="true"
+            android:text="企业"
+            android:textColor="@color/text_gray" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_width"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commit_btn_height"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/style_txt_confirm_order1"
+            android:paddingLeft="0px"
+            android:text="登录密码" />
+
+        <TextView
+            android:id="@+id/tv_change_pass"
+            style="@style/style_txt_confirm_order1"
+            android:layout_alignParentRight="true"
+            android:text="修改"
+            android:textColor="@color/primary_blue" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_width"
+        android:background="@color/divider_gray" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edt_height"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/style_txt_confirm_order1"
+            android:paddingLeft="0px"
+            android:text="身份认证" />
+
+        <TextView
+            android:id="@+id/tv_auth_status"
+            style="@style/style_txt_confirm_order1"
+            android:layout_alignParentRight="true"
+            android:text="已认证"
+            android:textColor="@color/text_gray" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_width"
+        android:background="@color/divider_gray" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/style_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_confirm_pass"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/view_space_bottom_btn_above"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:background="@drawable/btn_red_bg_selector"
+        android:text="退出登录" />
+
+</LinearLayout>

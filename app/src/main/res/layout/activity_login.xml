@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/module_include_title_bar" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/view_space_title_bar_bottom">
+
+        <EditText
+            android:id="@+id/edt_mobile"
+            style="@style/style_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hit_edt_mobile"
+            android:inputType="phone"
+            android:maxLength="11" />
+
+        <EditText
+            android:id="@+id/edt_pwd"
+            style="@style/style_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_mobile"
+            android:layout_marginTop="@dimen/view_space_edt_vertical"
+            android:hint="@string/hit_edt_password"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:maxLines="1" />
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/style_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_pwd"
+            android:layout_marginTop="@dimen/view_space_bottom_btn_above"
+            android:text="登录" />
+
+        <TextView
+            android:id="@+id/tv_register"
+            style="@style/style_hit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_login"
+            android:text="@string/register"/>
+
+        <TextView
+            android:id="@+id/tv_reset"
+            style="@style/style_hit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_login"
+            android:layout_alignParentRight="true"
+            android:text="@string/forget" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

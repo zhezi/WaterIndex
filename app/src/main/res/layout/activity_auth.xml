@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+企业认证  个人认证共用界面
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/module_include_title_bar" />
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="36px">
+
+        <LinearLayout
+            android:id="@+id/linear_choice"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edt_height"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_company"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/blue_bg_shape"
+                android:button="@null"
+                android:gravity="center"
+                android:text="企业账号"
+                android:textColor="@color/white"
+                android:textSize="32px" />
+
+            <Button
+                android:id="@+id/btn_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/blue_border_bg_shape"
+                android:button="@null"
+                android:gravity="center"
+                android:text="个人账号"
+                android:textColor="@color/primary_blue"
+                android:textSize="32px" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/linear_choice"
+            android:layout_marginTop="@dimen/view_space_edt_vertical"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--personal-->
+                <FrameLayout
+                    android:id="@+id/frame_nationality"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edt_height"
+                    android:background="@drawable/gray_border_bg_shape"
+                    android:visibility="gone">
+
+                    <Spinner
+                        android:id="@+id/sp_nationality"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:entries="@array/nationality"
+                        android:paddingLeft="10px" />
+                </FrameLayout>
+
+                <!--company  personal-->
+                <LinearLayout
+                    android:id="@+id/linear_cities"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edt_height"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="0px"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/gray_border_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/sp_province"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:entries="@array/province"
+                            android:paddingLeft="10px" />
+                    </FrameLayout>
+
+                    <View
+                        android:layout_width="20px"
+                        android:layout_height="match_parent" />
+
+                    <FrameLayout
+                        android:layout_width="0px"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/gray_border_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/sp_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:entries="@array/city"
+                            android:paddingLeft="10px" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/edt_company_name"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_name" />
+
+                <EditText
+                    android:id="@+id/edt_company_license_no"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_license_no" />
+
+                <Button
+                    android:id="@+id/btn_license_img"
+                    style="@style/btn_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:text="营业执照扫描件" />
+
+                <EditText
+                    android:id="@+id/edt_company_boss_name"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_boss_name" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_boss_id_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/btn_upload_boss_id_img_a"
+                        style="@style/btn_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="法人身份证正面" />
+
+                    <Button
+                        android:id="@+id/btn_upload_boss_id_img_b"
+                        style="@style/btn_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="法人身份证反面" />
+                </RelativeLayout>
+
+
+                <EditText
+                    android:id="@+id/edt_company_boss_tel"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_boss_tel"
+                    android:inputType="phone"
+                    android:maxLength="11" />
+
+                <EditText
+                    android:id="@+id/edt_company_other_name"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_other_name" />
+
+                <EditText
+                    android:id="@+id/edt_company_other_tel"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="@string/hint_input_company_other_tel"
+                    android:inputType="phone"
+                    android:maxLength="11" />
+
+                <!--personal-->
+                <EditText
+                    android:id="@+id/edt_user_name"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="真实姓名"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edt_id_no"
+                    style="@style/style_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:hint="身份证号"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_p_id_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_edt_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+
+                    <Button
+                        android:id="@+id/btn_upload_p_id_img_a"
+                        style="@style/btn_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="身份证正面" />
+
+                    <Button
+                        android:id="@+id/btn_upload_p_id_img_b"
+                        style="@style/btn_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="身份证反面" />
+                </RelativeLayout>
+
+
+                <Button
+                    android:id="@+id/btn_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_space_bottom_btn_above"
+                    android:background="@drawable/btn_blue_bg_selector"
+                    android:text="下一步"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_commit" />
+
+                <TextView
+                    android:id="@+id/tv_standing_off"
+                    style="@style/style_hit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/title_bar_height"
+                    android:gravity="center_horizontal"
+                    android:text="以后认证" />
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</LinearLayout>
