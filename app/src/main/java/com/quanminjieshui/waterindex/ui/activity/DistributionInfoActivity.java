@@ -262,8 +262,8 @@ public class DistributionInfoActivity extends BaseActivity {
                 tvRegion.setText(deliveryRegion);
             }
         }).setTitleText("城市选择")
-                .setDividerColor(mContext.getResources().getColor(R.color.primary_dark_blue))
-                .setTextColorCenter(mContext.getResources().getColor(R.color.primary_dark_blue)) //设置选中项文字颜色
+                .setDividerColor(mContext.getResources().getColor(R.color.btn_bg_yellow_selected))
+                .setTextColorCenter(mContext.getResources().getColor(R.color.btn_bg_yellow_selected)) //设置选中项文字颜色
                 .setContentTextSize(20)
                 .build();
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
@@ -293,13 +293,13 @@ public class DistributionInfoActivity extends BaseActivity {
                 .setTitleSize(20)
                 .setTitleText("配送时间")
                 .setTitleColor(Color.BLACK)
-                .setDividerColor(mContext.getResources().getColor(R.color.primary_dark_blue))//设置分割线的颜色
-                .setTextColorCenter(mContext.getResources().getColor(R.color.primary_dark_blue))//设置选中项的颜色
+                .setDividerColor(mContext.getResources().getColor(R.color.btn_bg_yellow_selected))//设置分割线的颜色
+                .setTextColorCenter(mContext.getResources().getColor(R.color.btn_bg_yellow_selected))//设置选中项的颜色
                 .setLineSpacingMultiplier(1.6f)//设置两横线之间的间隔倍数
                 .setTitleBgColor(mContext.getResources().getColor(R.color.divider_gray))//标题背景颜色 Night mode
                 .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
-                .setSubmitColor(mContext.getResources().getColor(R.color.primary_dark_blue))
-                .setCancelColor(mContext.getResources().getColor(R.color.primary_dark_blue))
+                .setSubmitColor(mContext.getResources().getColor(R.color.btn_bg_yellow_selected))
+                .setCancelColor(mContext.getResources().getColor(R.color.btn_bg_yellow_selected))
                 .setDate(selectedDate)
                 .setType(new boolean[]{true, true, true,false,false,false})
                 .setLabel("年", "月", "日","时","分","秒")
