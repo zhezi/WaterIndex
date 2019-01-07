@@ -49,35 +49,6 @@
 
                 android:orientation="horizontal"
                 android:layout_gravity="center_vertical">
-                <RadioButton
-                    android:id="@+id/rb1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:button="@null"
-                    android:drawableTop="@drawable/homepage_rb1_icon"
-                    android:drawablePadding="10px"
-                    android:paddingBottom="10px"
-                    android:paddingTop="17px"
-                    android:textColor="@color/homepage_rb_color"
-                    android:text="首页"
-                    android:textSize="22px"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-
-                <RadioButton
-                    android:id="@+id/rb2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:button="@null"
-                    android:drawablePadding="10px"
-                    android:paddingBottom="10px"
-                    android:paddingTop="17px"
-                    android:drawableTop="@drawable/homepage_rb2_icon"
-                    android:textColor="@color/homepage_rb_color"
-                    android:text="洗涤"
-                    android:textSize="22px"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
 
 
                 <RadioButton
