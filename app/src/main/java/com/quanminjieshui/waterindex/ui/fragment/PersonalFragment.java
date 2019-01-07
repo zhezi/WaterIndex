@@ -49,7 +49,7 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
     private String user_login;//用户登录手机号，作用同isLogin
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
-            R.id.relative_trade_lists, R.id.relative_order_lists, R.id.relative_goods,
+            R.id.relative_trade_lists, R.id.relative_order_lists,
             R.id.relative_sys_msg, R.id.relative_change_pass, R.id.relative_about_us})
     public void onClick(View v) {
 
@@ -74,10 +74,6 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
             case R.id.relative_order_lists:
                 if (checkLoginStatus())
                     jump(OrderListsActivity.class);
-                break;
-            case R.id.relative_goods:
-                if (checkLoginStatus())
-                    jump(GoodsActivity.class);
                 break;
             case R.id.relative_sys_msg:
                 if (checkLoginStatus())

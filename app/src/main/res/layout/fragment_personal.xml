@@ -22,7 +22,7 @@
                 android:layout_width="120px"
                 android:layout_height="120px"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_launcher_round"
+                android:src="@mipmap/head"
                 android:layout_marginRight="@dimen/view_space_edt_vertical"/>
 
             <TextView
@@ -142,7 +142,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/img3"
                 android:paddingLeft="26px"
-                android:text="历史委托" />
+                android:text="收款方式" />
 
             <ImageView
                 android:id="@+id/img_go_trade_lists"
@@ -178,7 +178,7 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="26px"
                 android:layout_toRightOf="@+id/img4"
-                android:text="洗涤订单" />
+                android:text="买卖需求" />
 
             <ImageView
                 android:id="@+id/img_go_order_lists"
@@ -190,34 +190,36 @@
 
         </RelativeLayout>
 
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_width"
             android:background="@color/divider_gray" />
 
         <RelativeLayout
-            android:id="@+id/relative_goods"
+            android:id="@+id/relative_change_pass"
             style="@style/PaddinLeftRight"
             android:layout_width="match_parent"
             android:layout_height="@dimen/commit_btn_height">
 
             <ImageView
-                android:id="@+id/img5"
+                android:id="@+id/img7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/refresh" />
+                android:src="@mipmap/umbrella" />
 
             <TextView
-                android:id="@+id/tv_goods"
+                android:id="@+id/tv_change_pass"
                 style="@style/style_txt_confirm_order1"
                 android:layout_centerVertical="true"
                 android:paddingLeft="26px"
-                android:layout_toRightOf="@+id/img5"
-                android:text="我的兑换" />
+                android:layout_toRightOf="@+id/img7"
+                android:text="安全中心"/>
 
             <ImageView
-                android:id="@+id/img_gooods"
+                android:id="@+id/img_go_change_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -254,42 +256,6 @@
 
             <ImageView
                 android:id="@+id/img_go_sys_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_go_to" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_width"
-            android:background="@color/divider_gray" />
-
-        <RelativeLayout
-            android:id="@+id/relative_change_pass"
-            style="@style/PaddinLeftRight"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/commit_btn_height">
-
-            <ImageView
-                android:id="@+id/img7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/umbrella" />
-
-            <TextView
-                android:id="@+id/tv_change_pass"
-                style="@style/style_txt_confirm_order1"
-                android:layout_centerVertical="true"
-                android:paddingLeft="26px"
-                android:layout_toRightOf="@+id/img7"
-                android:text="安全中心"/>
-
-            <ImageView
-                android:id="@+id/img_go_change_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

@@ -20,7 +20,7 @@
             android:layout_height="120px"
             android:layout_centerVertical="true"
             android:layout_marginRight="29px"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@mipmap/head" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
