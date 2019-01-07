@@ -145,7 +145,7 @@
 
     <style name="style_hit">
         <item name="android:textSize">@dimen/text_size_hint</item>
-        <item name="android:textColor">#ff3daaff</item>
+        <item name="android:textColor">#EEB35C</item>
         <item name="android:layout_marginTop">39px</item>
     </style>
 
