@@ -899,4 +899,25 @@ public class UrlConfig {
      */
     public static final String TRADE_INDEX="api/home/trade/index";
 
+
+    /**
+     * 身份认证
+     */
+    public static final String USER_AUTH_INFO="api/home/user/userAuthInfo";
+
+    /**
+     * 文件上传
+     */
+    public static final String UPLOAD="api/user/Upload/one";
+
+    /**
+     * 更换头像
+     */
+    public static final String AVATAR="api/home/user/setAvatar";
+
+    /**
+     * 基本资料
+     */
+    public static final String USER_INFO="api/home/user/info";
+
 }

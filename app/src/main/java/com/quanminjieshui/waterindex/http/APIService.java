@@ -168,6 +168,19 @@ public interface APIService {
     Observable<BaseEntity<UserMoney>> money(@Body RequestBody requestBody);
 
     @POST(UrlConfig.TRADE_INDEX)
-    Observable<BaseEntity<TradeIndexBase>> money(@Body RequestBody requestBody);
+    Observable<BaseEntity<TradeIndexBase>> tradeIndex(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.USER_AUTH_INFO)
+    Observable<BaseEntity<UserAuthInfo>> userAuthInfo(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.UPLOAD)
+    Observable<BaseEntity<UploadOne>> upload(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.AVATAR)
+    Observable<BaseEntity> setAvatar(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.USER_INFO)
+    Observable<BaseEntity<UserInfo>> userInfo(@Body RequestBody requestBody);
+
 }
 
