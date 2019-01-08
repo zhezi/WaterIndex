@@ -878,4 +878,15 @@ public class UrlConfig {
      */
     public static final String GOODS="api/home/user/goods";
 
+
+    /**
+     * 系统消息
+     */
+    public static final String SYSMSG="api/home/user/sysMsg";
+
+    /**
+     * 订单列表
+     */
+    public static final String LISTORDER="api/home/userOrder/listOrder";
+
 }

@@ -156,5 +156,12 @@ public interface APIService {
     //我的兑换
     @POST(UrlConfig.GOODS)
     Observable<BaseEntity<List<GoodsResposeBean>>> goods(@Body RequestBody requestBody);
+
+
+    @POST(UrlConfig.SYSMSG)
+    Observable<BaseEntity<SysMsgBase>> sysMsg(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.LISTORDER)
+    Observable<BaseEntity<List<ListOrder>>> listOrder(@Body RequestBody requestBody);
 }
 
