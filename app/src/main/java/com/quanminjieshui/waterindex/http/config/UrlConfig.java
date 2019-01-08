@@ -889,4 +889,14 @@ public class UrlConfig {
      */
     public static final String LISTORDER="api/home/userOrder/listOrder";
 
+    /**
+     * 我的资产
+     */
+    public static final String MONEY="api/home/user/money";
+
+    /**
+     * 交易市场
+     */
+    public static final String TRADE_INDEX="api/home/trade/index";
+
 }

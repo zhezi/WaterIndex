@@ -163,5 +163,11 @@ public interface APIService {
 
     @POST(UrlConfig.LISTORDER)
     Observable<BaseEntity<List<ListOrder>>> listOrder(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.MONEY)
+    Observable<BaseEntity<UserMoney>> money(@Body RequestBody requestBody);
+
+    @POST(UrlConfig.TRADE_INDEX)
+    Observable<BaseEntity<TradeIndexBase>> money(@Body RequestBody requestBody);
 }
 
