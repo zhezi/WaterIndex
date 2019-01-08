@@ -1,5 +1,4 @@
-package com.xingyoucai.irm.jsl.model;
-
+package com.quanminjieshui.waterindex.beans;
 public class Money {
 	private String ds;// : "38.15119T",
 	private String ds_freeze;// : "56.94844T",

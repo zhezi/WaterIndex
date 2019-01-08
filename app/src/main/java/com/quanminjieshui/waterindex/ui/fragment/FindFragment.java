@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ import com.quanminjieshui.waterindex.beans.InfoListsResponseBean;
 import com.quanminjieshui.waterindex.contract.model.InfoListModel;
 import com.quanminjieshui.waterindex.contract.presenter.InfoListPresenter;
 import com.quanminjieshui.waterindex.contract.view.InfoListViewImpl;
-import com.quanminjieshui.waterindex.ui.activity.GoodsActivity;
 import com.quanminjieshui.waterindex.ui.activity.GoodsListsActivity;
 import com.quanminjieshui.waterindex.ui.activity.InfoDetailActivity;
 import com.quanminjieshui.waterindex.ui.adapter.InfoListsAdapter;
@@ -75,7 +73,7 @@ public class FindFragment extends BaseFragment implements InfoListViewImpl, XRec
         xrv.setLoadingListener(this);
         xrv.setAdapter(infoListsAdapter);
         tvDetail.setText("加载数据");
-        tvDetail.setTextColor(getResources().getColor(R.color.primary_blue));
+        tvDetail.setTextColor(getResources().getColor(R.color.primary_yellow));
     }
 
     @Override

@@ -41,7 +41,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="个人账号"
-                android:textColor="@color/primary_blue"
+                android:textColor="@color/primary_yellow"
                 android:textSize="32px" />
         </LinearLayout>
 

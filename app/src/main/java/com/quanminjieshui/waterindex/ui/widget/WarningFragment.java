@@ -20,7 +20,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.quanminjieshui.waterindex.R;
-import com.quanminjieshui.waterindex.WaterIndexApplication;
 
 /**
  * @ProjectName: NewWaterIndex
@@ -74,8 +73,8 @@ public class WarningFragment extends DialogFragment {
                 })
                 .create();
         dialog.show();//不执行该步骤，下面操作会报错
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getActivity().getResources().getColor(R.color.primary_blue));
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getActivity().getResources().getColor(R.color.primary_blue));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getActivity().getResources().getColor(R.color.primary_yellow));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getActivity().getResources().getColor(R.color.primary_yellow));
         return dialog;
     }
 

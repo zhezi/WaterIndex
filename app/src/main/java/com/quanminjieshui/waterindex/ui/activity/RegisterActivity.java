@@ -232,7 +232,7 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
                 runningCode = false;
                 tv_get_sms.setText("发送验证码");
                 tv_get_sms.setBackground(getDrawable(R.drawable.blue_border_bg_shape));
-                tv_get_sms.setTextColor(getResources().getColor(R.color.primary_blue));
+                tv_get_sms.setTextColor(getResources().getColor(R.color.primary_yellow));
                 tv_get_sms.setEnabled(true);
             }
         };

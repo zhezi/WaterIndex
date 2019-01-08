@@ -148,7 +148,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
             int user_status = userDetailResponseBean.getUser_status();
             if (user_status == 0) {
                 tvAuthStatus.setText("去认证");
-                tvAuthStatus.setTextColor(getResources().getColor(R.color.primary_blue));
+                tvAuthStatus.setTextColor(getResources().getColor(R.color.primary_yellow));
                 tvAuthStatus.setEnabled(true);
             } else if (user_status == 1) {
                 tvAuthStatus.setText("已认证");

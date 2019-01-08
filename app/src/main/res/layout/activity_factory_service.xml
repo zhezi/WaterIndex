@@ -55,10 +55,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/commit_btn_height"
-            app:tabIndicatorColor="@color/primary_blue"
+            app:tabIndicatorColor="@color/primary_yellow"
             app:tabIndicatorHeight="4px"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/primary_blue"
+            app:tabSelectedTextColor="@color/primary_yellow"
             app:tabTextColor="@color/text_black"/>
 
         <View

@@ -475,7 +475,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/tv_readed"
                     android:text="@string/agreement"
-                    android:textColor="@color/primary_blue"
+                    android:textColor="@color/primary_yellow"
                     android:textSize="24px" />
             </LinearLayout>
 

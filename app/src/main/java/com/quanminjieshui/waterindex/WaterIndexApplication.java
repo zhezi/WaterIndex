@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.quanminjieshui.waterindex.utils.NetworkStateReceiver;

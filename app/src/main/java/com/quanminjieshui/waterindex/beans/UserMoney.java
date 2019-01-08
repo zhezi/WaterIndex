@@ -1,4 +1,4 @@
-package com.xingyoucai.irm.jsl.model;
+package com.quanminjieshui.waterindex.beans;
 
 public class UserMoney {
 	private Money c2c;

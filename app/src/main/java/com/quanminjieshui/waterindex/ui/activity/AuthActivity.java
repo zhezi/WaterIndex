@@ -50,7 +50,6 @@ import com.quanminjieshui.waterindex.event.SelectFragmentEvent;
 import com.quanminjieshui.waterindex.ui.adapter.SpinnerAdapter;
 import com.quanminjieshui.waterindex.ui.widget.PicturePopupWindow;
 import com.quanminjieshui.waterindex.utils.GsonUtil;
-import com.quanminjieshui.waterindex.utils.LogUtils;
 import com.quanminjieshui.waterindex.utils.PictureFileUtil;
 import com.quanminjieshui.waterindex.utils.StatusBarUtil;
 
@@ -402,7 +401,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
     private void setBtnBlueBorderBgShape(Button v) {
         v.setBackground(getResources().getDrawable(R.drawable.blue_border_bg_shape));
-        v.setTextColor(getResources().getColor(R.color.primary_blue));
+        v.setTextColor(getResources().getColor(R.color.primary_yellow));
     }
 
     private void setVisiable(View[] views) {

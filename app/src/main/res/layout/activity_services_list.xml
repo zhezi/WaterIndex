@@ -20,7 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="200px"
-                android:background="@color/primary_blue"
+                android:background="@color/primary_yellow"
                 android:orientation="vertical">
 
                 <TextView

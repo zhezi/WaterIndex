@@ -1,4 +1,4 @@
-package com.xingyoucai.irm.jsl.model;
+package com.quanminjieshui.waterindex.beans;
 
 public class UploadOne {
 	private String url;//"20190108/4952245ec70904b22b06c4b6d1ea63e3.png"

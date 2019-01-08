@@ -137,7 +137,7 @@ public class TradeListsActivity extends BaseActivity implements
         xrv.setVisibility(View.GONE);
         relativeHint.setVisibility(View.VISIBLE);
         tvDetail.setText("刷新");
-        tvDetail.setTextColor(getResources().getColor(R.color.primary_blue));
+        tvDetail.setTextColor(getResources().getColor(R.color.primary_yellow));
         tvDetail.setEnabled(true);
 
     }

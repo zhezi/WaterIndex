@@ -1,5 +1,4 @@
-package com.xingyoucai.irm.jsl.model;
-
+package com.quanminjieshui.waterindex.beans;
 public class ListOrder {
 	private String my_action;
     private int other_uid;

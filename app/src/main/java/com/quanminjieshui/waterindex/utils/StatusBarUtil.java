@@ -157,6 +157,6 @@ public class StatusBarUtil {
         StatusBarUtil.setTransparent(activity);
         ViewGroup.MarginLayoutParams titleBarParams = (ViewGroup.MarginLayoutParams) titleBar.getLayoutParams();
         titleBarParams.setMargins(0, getStatusBarHeight(activity), 0, 0);
-        StatusBarUtil.setBarColor(activity, activity.getResources().getColor(R.color.primary_blue));
+        StatusBarUtil.setBarColor(activity, activity.getResources().getColor(R.color.primary_yellow));
     }
 }
