@@ -161,26 +161,72 @@ public interface APIService {
     @POST(UrlConfig.SYSMSG)
     Observable<BaseEntity<SysMsgBase>> sysMsg(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "type", "0";
+     * "page", "1";
+     * "page_size", "10";
+     */
     @POST(UrlConfig.LISTORDER)
     Observable<BaseEntity<List<ListOrder>>> listOrder(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     */
     @POST(UrlConfig.MONEY)
     Observable<BaseEntity<UserMoney>> money(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "type", "1";
+     * "page", "1";
+     * "page_size", "10";
+     */
     @POST(UrlConfig.TRADE_INDEX)
     Observable<BaseEntity<TradeIndexBase>> tradeIndex(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     */
     @POST(UrlConfig.USER_AUTH_INFO)
     Observable<BaseEntity<UserAuthInfo>> userAuthInfo(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "file",File
+     */
     @POST(UrlConfig.UPLOAD)
     Observable<BaseEntity<UploadOne>> upload(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "avatar","url"
+     */
     @POST(UrlConfig.AVATAR)
     Observable<BaseEntity> setAvatar(@Body RequestBody requestBody);
 
+    /**
+     * "token", token;
+     * "device_type", "android";
+     */
     @POST(UrlConfig.USER_INFO)
     Observable<BaseEntity<UserInfo>> userInfo(@Body RequestBody requestBody);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "type", "0";
+     * "page", "1";
+     * "page_size", "10";
+     */
+    @POST(UrlConfig.LIST_TRADE)
+    Observable<BaseEntity<TradeListBase>> listTrade(@Body RequestBody requestBody);
 
 }
 

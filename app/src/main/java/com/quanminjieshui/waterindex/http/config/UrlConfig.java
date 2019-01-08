@@ -50,8 +50,6 @@ public class UrlConfig {
     public static final String FIND_PASS = "api/home/public/findPass";
     //身份认证-企业
     public static final String COMPANY_AUTH = "api/home/public/companyAuth";
-    //身份认证-个人
-    public static final String PERSONAL_AUTH = "api/home/public/PersonalAuth";
     //轮播图列表地址
     public static final String BANNER_LIST = "api/home/banner/bannerLists";
     //洗涤企业列表
@@ -919,5 +917,16 @@ public class UrlConfig {
      * 基本资料
      */
     public static final String USER_INFO="api/home/user/info";
+
+    /**
+     *身份认证-个人
+     */
+    public static final String PERSONAL_AUTH = "api/home/user/userAuth";
+
+
+    /**
+     * 买卖需求 - 列表
+     */
+    public static final String LIST_TRADE = "api/home/userTrade/listTrade";
 
 }
