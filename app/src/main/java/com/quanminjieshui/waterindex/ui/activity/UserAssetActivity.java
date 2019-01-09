@@ -1,5 +1,6 @@
 package com.quanminjieshui.waterindex.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -27,15 +28,14 @@ public class UserAssetActivity extends BaseActivity implements AccountDetailView
     TextView tvJsl;
     @BindView(R.id.tv_jsl_freeze)
     TextView tvJslFreeze;
-    @BindView(R.id.tv_jsl_lock_view)
-    TextView tvJslLockView;
     @BindView(R.id.tv_jsl_gyj)
     TextView tvJslGyj;
     @BindView(R.id.tv_ds)
     TextView tvDs;
     @BindView(R.id.tv_ds_freeze)
     TextView tvDsFreeze;
-
+    @BindView(R.id.tv_ds_transfer)
+    TextView tvDsTransfer;
     private AccountDetailPresenter accountDetailPresenter;
 
     @Override
@@ -65,7 +65,7 @@ public class UserAssetActivity extends BaseActivity implements AccountDetailView
         }
     }
 
-    @OnClick({R.id.left_ll, R.id.img_title_left, R.id.btn_jsl_jy, R.id.btn_jsl_zz, R.id.btn_ds_jy})
+    @OnClick({R.id.left_ll, R.id.img_title_left, R.id.btn_jsl_transfer, R.id.btn_c2c_transfer})
     public void onClick(View view) {
         int id = view.getId();
 
@@ -78,12 +78,12 @@ public class UserAssetActivity extends BaseActivity implements AccountDetailView
                 goBack(view);
                 break;
 
-            case R.id.btn_jsl_jy:
-            case R.id.btn_jsl_zz:
-            case R.id.btn_ds_jy:
-                showToast("该功能暂未开启，请稍后使用！");
+            case R.id.btn_c2c_transfer:
+                startActivity(new Intent(UserAssetActivity.this,TransferActivity.class));
                 break;
-
+            case R.id.btn_jsl_transfer:
+                startActivity(new Intent(UserAssetActivity.this,TransferActivity.class));
+                break;
             default:
                 break;
         }
@@ -96,10 +96,10 @@ public class UserAssetActivity extends BaseActivity implements AccountDetailView
         tvJsl.setText(new StringBuilder("可用：").append(accountDetailResponseBean.getJsl()).toString());
         tvJslFreeze.setText(new StringBuilder("冻结：").append(accountDetailResponseBean.getJsl_freeze()).toString());
         tvJslGyj.setText(new StringBuilder("公益金：").append(accountDetailResponseBean.getJsl_gyj()).toString());
-        tvJslLockView.setText(new StringBuilder("锁定：").append(accountDetailResponseBean.getJsl_lock_view()).toString());
 
         tvDs.setText(new StringBuilder("可用：").append(accountDetailResponseBean.getDs()).append(" T").toString());
         tvDsFreeze.setText(new StringBuilder("冻结：").append(accountDetailResponseBean.getDs_freeze()).append(" T").toString());
+        tvDsTransfer.setText(new StringBuilder("公益金：").append(accountDetailResponseBean.getJsl_gyj()).toString());//TODO
     }
 
     @Override

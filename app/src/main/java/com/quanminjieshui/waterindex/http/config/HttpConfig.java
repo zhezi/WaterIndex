@@ -7,9 +7,9 @@ package com.quanminjieshui.waterindex.http.config;
 public class HttpConfig {
 
     public static int HTTP_TIME = 30000;
-    public static String BASE_URL = "https://www.jieshuizhibiao.com";//香港服务器不稳定
+//    public static String BASE_URL = "https://www.jieshuizhibiao.com";//香港服务器不稳定
 
-//  public static String BASE_URL = "https://c2c.sshsky.com";//开发环境
+  public static String BASE_URL = "https://c2c.sshsky.com";//开发环境
 
 
     public static final String HEAD_TOKEN_KEY = "TOKEN";

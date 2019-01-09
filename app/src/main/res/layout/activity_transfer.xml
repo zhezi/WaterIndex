@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/module_include_title_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="40px"
+        android:layout_margin="40px"
+        android:orientation="horizontal"
+        android:background="@drawable/gray_bg_shape">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="从C2C账户"
+                android:textColor="@color/text_black"
+                android:textSize="32px"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="25px"
+                style="@style/style_txt_content_gray"
+                android:text="余额：1997.45 T"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:background="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="40px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="从C2C账户"
+                android:textColor="@color/text_black"
+                android:textSize="32px"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="25px"
+                style="@style/style_txt_content_gray"
+                android:text="余额：1997.45 T"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        style="@style/PaddinLeftRight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/view_space_title_bar_bottom">
+
+        <LinearLayout
+            android:id="@+id/transfer_amonut_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edt_transfer_amonut"
+                style="@style/style_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hit_edt_transfer_amonut"
+                android:maxLength="11" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20px"
+                style="@style/style_txt_content_gray"
+                android:text="可划转数量 1997.45 T"
+                android:textSize="24px"
+                android:layout_marginTop="10px"/>
+        </LinearLayout>
+
+
+
+        <EditText
+            android:id="@+id/edt_transfer_amonut_pwd"
+            style="@style/style_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/transfer_amonut_ll"
+            android:layout_marginTop="@dimen/view_space_edt_vertical"
+            android:hint="@string/hit_edt_transfer_amonut_pwd"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:maxLines="1" />
+
+        <Button
+            android:id="@+id/btn_jsl_transfer"
+            style="@style/style_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_transfer_amonut_pwd"
+            android:layout_marginTop="@dimen/view_space_bottom_btn_above"
+            android:text="立即划转" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
