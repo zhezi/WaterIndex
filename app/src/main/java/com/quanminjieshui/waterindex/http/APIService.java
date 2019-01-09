@@ -3,7 +3,6 @@ package com.quanminjieshui.waterindex.http;
 import com.quanminjieshui.waterindex.beans.AccountDetailResponseBean;
 import com.quanminjieshui.waterindex.beans.AuthDetailResponseBean;
 import com.quanminjieshui.waterindex.beans.BannerListResponseBean;
-import com.quanminjieshui.waterindex.beans.BuyResponseBean;
 import com.quanminjieshui.waterindex.beans.CreateOrderResponseBean;
 import com.quanminjieshui.waterindex.beans.FactoryDetailResponseBean;
 import com.quanminjieshui.waterindex.beans.FactoryListResponseBean;
@@ -239,5 +238,20 @@ public interface APIService {
     @POST(UrlConfig.GET_URL)
     Observable<BaseEntity>getUrl(@Body RequestBody body);
 
+    /**
+     * 修改资金密码
+     * @param requestBody
+     * @return
+     */
+    @POST(UrlConfig.CHANGE_CAPITAL_PASS)
+    Observable<BaseEntity> changeCapitalPass(@Body RequestBody requestBody);
+
+    /**
+     * 设置资金密码
+     * @param requestBody
+     * @return
+     */
+    @POST(UrlConfig.SET_CAPITAL_PASS)
+    Observable<BaseEntity> setCapitalPass(@Body RequestBody requestBody);
 }
 

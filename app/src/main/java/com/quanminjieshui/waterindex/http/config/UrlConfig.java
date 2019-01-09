@@ -974,4 +974,14 @@ public class UrlConfig {
      */
     public static final String GET_URL="api/home/common/getUrl";
 
+    /**
+     * 修改资金密码
+     */
+    public static final String CHANGE_CAPITAL_PASS = "api/home/user/editSafePw";
+
+    /**
+     * 设置资金密码
+     */
+    public static final String SET_CAPITAL_PASS = "api/home/user/safePw";
+
 }

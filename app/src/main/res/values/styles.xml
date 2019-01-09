@@ -140,7 +140,7 @@
 
     <style name="style_href">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">#ff3daaff</item>
+        <item name="android:textColor">@color/primary_yellow</item>
     </style>
 
     <style name="style_hit">
@@ -189,6 +189,11 @@
     <style name="style_txt_content_gray">
         <item name="android:textSize">28px</item>
         <item name="android:textColor">@color/text_gray</item>
+    </style>
+
+    <style name="style_txt_content_green">
+        <item name="android:textSize">28px</item>
+        <item name="android:textColor">@color/text_green</item>
     </style>
 
     <style name="style_tablayout">

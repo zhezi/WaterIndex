@@ -15,6 +15,17 @@
         android:layout_height="match_parent">
 
         <EditText
+            android:id="@+id/edt_pay_nike"
+            style="@style/style_edt"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="交易昵称 不要与真实姓名相同"
+            android:layout_marginTop="40px"
+            android:maxLength="20"
+            android:maxLines="1"/>
+
+        <EditText
             android:id="@+id/edt_old_pass"
             style="@style/style_edt"
             android:layout_width="match_parent"

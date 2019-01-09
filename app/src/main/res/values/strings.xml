@@ -33,6 +33,8 @@
     <string name="field_invitation">invitation</string>
     <string name="field_sms">sms</string>
 
+    <string name="key_edt_name_nike_name">edt_nike</string>
+
     <string name="hit_edt_mobile">请输入您的手机号</string>
     <string name="hit_edt_password">请输入密码</string>
     <string name="hit_edt_transfer_amonut">划转数量</string>
@@ -43,4 +45,6 @@
         核心优势:依托节水试点+区块链创新基地试点企业双重试点，以线下核心节水项目为依托,(独家专业技术，节约水达95%）+区块链，助
         独家专业技术，节约水达95%）+区块链，助力全民节水。
     </string>
+    <string name="hint_input_capital_old_pwd">请输入原始资金密码</string>
+
 </resources>

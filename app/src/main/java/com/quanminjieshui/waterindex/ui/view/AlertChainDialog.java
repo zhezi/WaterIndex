@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.Display;
@@ -42,7 +43,7 @@ public class AlertChainDialog extends Dialog {
     private boolean showMsg = false;
     private boolean showPosBtn = false;
     private boolean showNegBtn = false;
-
+    private int msgColor = -1,titleColor = -1;
     public AlertChainDialog(Context context) {
         super(context);
         this.context = context;
@@ -83,19 +84,39 @@ public class AlertChainDialog extends Dialog {
         showTitle = true;
         if ("".equals(title)) {
             txt_title.setText("标题");
+        } else if(titleColor!=-1){
+            txt_title.setText(title);
+//            txt_title.setTextSize(DpPxSPUtils.sp2px(context,14));
+            TextPaint tp = txt_title.getPaint();
+            tp.setFakeBoldText(false);
+            txt_title.setTextColor(titleColor);
         } else {
             txt_title.setText(title);
         }
         return this;
     }
 
+    /**
+     * 自定义弹窗样式
+     * @param msgColor
+     * @param titleColor
+
+     */
+    public void setMsgType(int msgColor,int titleColor){
+        this.msgColor = msgColor;
+        this.titleColor = titleColor;
+    }
+
     public AlertChainDialog setMsg(String msg) {
         showMsg = true;
+        SpannableString spannableString = new SpannableString(msg);
         if ("".equals(msg)) {
-            txt_msg.setText("内容");
+            txt_msg.setVisibility(View.GONE);
+        } else if(msgColor!=-1){
+            txt_msg.setText(msg);
+            txt_msg.setTextColor(msgColor);
         } else {
             if(msg.contains("您的订单在")){//特殊处理
-                SpannableString spannableString = new SpannableString(msg);
                 //设置颜色
                 spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FFC42F18")), 5, msg.length()-16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //设置字体，BOLD为粗体

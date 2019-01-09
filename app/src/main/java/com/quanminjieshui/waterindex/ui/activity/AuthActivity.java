@@ -450,26 +450,26 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
     @Override
     public void onCompanyAuthSuccess() {
-        go2SuccessActivity();
+        go2SetCapitalPassActivity();
     }
 
     @Override
     public void onCompanyAuthFailed(String msg) {
-        go2SuccessActivity();
+        go2SetCapitalPassActivity();
     }
 
     @Override
     public void onPersonalAuthSuccess() {
-        go2SuccessActivity();
+        go2SetCapitalPassActivity();
     }
 
     @Override
     public void onPersonalAuthFailed(String msg) {
-        go2SuccessActivity();
+        go2SetCapitalPassActivity();
     }
 
-    private void go2SuccessActivity() {
-        startActivity(new Intent(AuthActivity.this, RegisterSuccessActivity.class));
+    private void go2SetCapitalPassActivity() {
+        startActivity(new Intent(AuthActivity.this, SetCapitalPassActivity.class));
         finish();
     }
 
