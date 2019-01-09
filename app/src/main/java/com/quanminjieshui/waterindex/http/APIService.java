@@ -236,5 +236,8 @@ public interface APIService {
     @POST(UrlConfig.LIST_TRADE)
     Observable<BaseEntity<TradeListBase>> listTrade(@Body RequestBody requestBody);
 
+    @POST(UrlConfig.GET_URL)
+    Observable<BaseEntity>getUrl(@Body RequestBody body);
+
 }
 

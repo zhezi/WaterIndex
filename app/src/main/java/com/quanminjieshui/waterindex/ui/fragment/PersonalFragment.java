@@ -161,19 +161,6 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
     public void onNegativeClicked(String tag) {
 
     }
-//
-//    public void onEventMainThread(LogoutEvent event){
-//        if (event != null && event.getMsg().equals("logout_main_personal_refresh_nickname")) {
-//            tvUserLogin.setText(SPUtil.get(getActivity(), SPUtil.USER_LOGIN, "*** **** ****") + "");
-//        }
-//    }
-//
-//    public void onEventMainThread(LoginEvent event) {
-//        if (event != null && event.getMsg().equals("login_success_main_personal_refresh_nickname")) {
-//                tvUserLogin.setText(SPUtil.get(getActivity(), SPUtil.USER_LOGIN, "*** **** ****") + "");
-//
-//        }
-//    }
 
     public void onEventMainThread(LoginStatusChangedEvent event){
         if(event!=null&&event.getMsg().equals("login_status_changed_main_personal_refresh_nickname")){

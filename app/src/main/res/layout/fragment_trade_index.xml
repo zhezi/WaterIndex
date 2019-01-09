@@ -8,41 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/ll_warning"
-            android:layout_width="match_parent"
-            android:layout_height="70px"
-            android:background="#FFE394"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="26px"
-                android:layout_height="26px"
-                android:layout_gravity="center"
-                android:layout_marginRight="5px"
-                android:src="@mipmap/warn" />
-
-            <TextView
-                android:id="@+id/tv_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="在开始交易前，您需要完善必要的交易信息。"
-                android:textColor="@color/text_black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_go"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="去完善 >"
-                android:textColor="@color/primary_yellow"
-                android:textSize="12sp" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_choice"
@@ -76,6 +42,42 @@
                 android:text="出售节水"
                 android:textColor="@color/primary_yellow"
                 android:textSize="16sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_warning"
+            android:layout_width="match_parent"
+            android:layout_height="70px"
+            android:background="#FFE394"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="26px"
+                android:layout_height="26px"
+                android:layout_gravity="center"
+                android:layout_marginRight="5px"
+                android:src="@mipmap/warn" />
+
+            <TextView
+                android:id="@+id/tv_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="在开始交易前，您需要完善必要的交易信息。"
+                android:textColor="@color/text_black"
+                android:textSize="12sp"
+                android:layout_marginRight="20px"/>
+
+            <TextView
+                android:id="@+id/tv_go"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="去完善 >"
+                android:textColor="@color/primary_yellow"
+                android:textSize="12sp" />
+
         </LinearLayout>
     </FrameLayout>
 

@@ -94,9 +94,9 @@ public class TestActivity extends BaseActivity {
 
             case R.id.btn_request:
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("type",1);
-                params.put("page",1);
-                params.put("page_size",2);
+                params.put("type","1");
+                params.put("page","1");
+                params.put("page_size","2");
                 RetrofitFactory.getInstance().createService()
                         .tradeIndex(RequestUtil.getRequestHashBody(params, false))
                         .compose(TestActivity.this.<BaseEntity<TradeIndexBase>>bindToLifecycle())

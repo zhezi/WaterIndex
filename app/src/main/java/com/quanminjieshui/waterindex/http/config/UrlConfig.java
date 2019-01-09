@@ -969,5 +969,9 @@ public class UrlConfig {
      * 买卖需求 - 列表
      */
     public static final String LIST_TRADE = "api/home/userTrade/listTrade";
+    /**
+     * 获取H5链接
+     */
+    public static final String GET_URL="api/home/common/getUrl";
 
 }

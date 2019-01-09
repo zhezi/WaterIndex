@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -15,10 +14,11 @@ import android.widget.TextView;
 import com.quanminjieshui.waterindex.R;
 import com.quanminjieshui.waterindex.base.ActivityManager;
 import com.quanminjieshui.waterindex.base.BaseActivity;
+import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.event.SelectFragmentEvent;
 import com.quanminjieshui.waterindex.ui.fragment.FindFragment;
 import com.quanminjieshui.waterindex.ui.fragment.PersonalFragment;
-import com.quanminjieshui.waterindex.ui.fragment.TransactionFragment;
+import com.quanminjieshui.waterindex.ui.fragment.TradeIndexFragment;
 import com.quanminjieshui.waterindex.utils.SPUtil;
 import com.quanminjieshui.waterindex.utils.StatusBarUtil;
 import com.quanminjieshui.waterindex.utils.ToastUtils;
@@ -37,8 +37,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
-    @BindView(R.id.img_title_center)
-    ImageView img_title_center;
+//    @BindView(R.id.img_title_center)
+//    ImageView img_title_center;
     @BindView(R.id.ll)
     public LinearLayout ll;
     @BindView(R.id.rg_main)
@@ -88,15 +88,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void createFragments() {
-        showTransaction();
-        left_ll.setVisibility(View.GONE);
-        tv_title_center.setVisibility(View.GONE);
-        img_title_center.setImageResource(R.mipmap.logo);
-        img_title_center.setVisibility(View.VISIBLE);
+        showTradeIndex();
     }
 
 
     private void initView() {
+        left_ll.setVisibility(View.GONE);
         createFragments();
     }
 
@@ -104,7 +101,7 @@ public class MainActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rb3:
-                showTransaction();
+                showTradeIndex();
                 break;
             case R.id.rb4:
                 showFind();
@@ -125,7 +122,8 @@ public class MainActivity extends BaseActivity {
             else
                 transaction.hide(currentFragment).add(R.id.activity_main_ll, targetFragment).commit();
         } else {
-            transaction.hide(currentFragment).show(targetFragment).commit();
+//            transaction.hide(currentFragment).show(targetFragment).commit();//无法接收Event
+            transaction.hide(currentFragment).show(targetFragment).commitAllowingStateLoss();
         }
         currentFragment = targetFragment;
     }
@@ -162,17 +160,18 @@ public class MainActivity extends BaseActivity {
         if (event != null) {
             String title = event.getTitle();
             switch (title) {
-                case "交易":
-                    showTransaction();
+                case "交易市场":
+                    showTradeIndex();
+                    EventBus.getDefault().post(new LoginStatusChangedEvent("login_status_changed_main_trade_index_reconnect"));
                     break;
-                case "发现":
+                case "订单":
                     showFind();
                     break;
                 case "我的":
                     showPersonal();
                     break;
                 default:
-                    showTransaction();
+                    showTradeIndex();
                     break;
             }
         }
@@ -180,22 +179,16 @@ public class MainActivity extends BaseActivity {
 
 
 
-    private void showTransaction() {
+    private void showTradeIndex() {
         rb3.setChecked(true);
-        tv_title_center.setText("交易中心");
-        //by sxt
-        tv_title_center.setVisibility(View.VISIBLE);
-        img_title_center.setVisibility(View.GONE);
-        if(tab1==null)tab1=new TransactionFragment();
+        tv_title_center.setText("交易市场");
+        if(tab1==null)tab1=new TradeIndexFragment();
         switchFragment(tab1);
     }
 
     private void showFind() {
         rb4.setChecked(true);
-        tv_title_center.setText("发现");
-        //by sxt
-        tv_title_center.setVisibility(View.VISIBLE);
-        img_title_center.setVisibility(View.GONE);
+        tv_title_center.setText("订单");
         if(tab2==null)tab2=new FindFragment();
         switchFragment(tab2);
     }
@@ -203,9 +196,6 @@ public class MainActivity extends BaseActivity {
     private void showPersonal() {
         rb5.setChecked(true);
         tv_title_center.setText("我的");
-        //by sxt
-        tv_title_center.setVisibility(View.VISIBLE);
-        img_title_center.setVisibility(View.GONE);
         if(tab3==null)tab3=new PersonalFragment();
         switchFragment(tab3);
     }

@@ -59,10 +59,10 @@
                     android:drawableTop="@drawable/homepage_rb3_icon"
                     android:textColor="@color/homepage_rb_color"
                     android:drawablePadding="10px"
-                    android:paddingBottom="10px"
+                    android:layout_marginBottom="10px"
                     android:paddingTop="17px"
                     android:text="交易"
-                    android:textSize="22px"
+                    android:textSize="12sp"
                     android:gravity="center"
                     android:layout_weight="1"/>
 
@@ -73,12 +73,12 @@
                     android:layout_height="match_parent"
                     android:button="@null"
                     android:drawablePadding="10px"
-                    android:paddingBottom="10px"
+                    android:layout_marginBottom="10px"
                     android:paddingTop="17px"
                     android:drawableTop="@drawable/homepage_rb4_icon"
                     android:textColor="@color/homepage_rb_color"
                     android:text="发现"
-                    android:textSize="22px"
+                    android:textSize="12sp"
                     android:gravity="center"
                     android:layout_weight="1"/>
 
@@ -88,12 +88,12 @@
                     android:layout_height="match_parent"
                     android:button="@null"
                     android:drawablePadding="10px"
-                    android:paddingBottom="10px"
+                    android:layout_marginBottom="10px"
                     android:paddingTop="17px"
                     android:drawableTop="@drawable/homepage_rb5_icon"
                     android:textColor="@color/homepage_rb_color"
                     android:text="我的"
-                    android:textSize="22px"
+                    android:textSize="12sp"
                     android:gravity="center"
                     android:layout_weight="1"/>
             </RadioGroup>

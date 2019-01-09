@@ -56,7 +56,7 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
                 holder.tvPayMin1.setText("最小购买量：");
                 holder.tvDoTrade.setText("去购买");
             }
-            GlidImageManager.getInstance().loadCircleImg(context,tradeIndex.getAvatar(),holder.imgAvatar,R.mipmap.ic_launcher_round,R.mipmap.ic_launcher_round);
+            GlidImageManager.getInstance().loadCircleImg(context,tradeIndex.getAvatar(),holder.imgAvatar,R.mipmap.head,R.mipmap.head);
             holder.tvUserNickname.setText(tradeIndex.getUser_nickname());
             holder.tvSold.setText(tradeIndex.getSold());
             holder.tvSoldRate.setText(tradeIndex.getSold_rate());
@@ -67,6 +67,17 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
             }else if(tradeIndex.getPay_type_bank_card().equals("0")){
                 holder.imgPayTypeBankCard.setVisibility(View.GONE);
             }
+            if(tradeIndex.getPay_type_alipay().equals("1")){
+                holder.imgPayTypeAlipay.setVisibility(View.VISIBLE);
+            }else if(tradeIndex.getPay_type_bank_card().equals("0")){
+                holder.imgPayTypeAlipay.setVisibility(View.GONE);
+            }
+            if (tradeIndex.getPay_type_wechat().equals("1")) {
+                holder.imgPayTypeWechat.setVisibility(View.VISIBLE);
+            } else if (tradeIndex.getPay_type_bank_card().equals("0")) {
+                holder.imgPayTypeWechat.setVisibility(View.GONE);
+            }
+
 
         }
     }
