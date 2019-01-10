@@ -15,7 +15,7 @@ import com.quanminjieshui.waterindex.contract.model.UserDetailModel;
 import com.quanminjieshui.waterindex.contract.presenter.UserDetailPresenter;
 import com.quanminjieshui.waterindex.contract.view.UserDetailViewImpl;
 import com.quanminjieshui.waterindex.event.SelectFragmentEvent;
-import com.quanminjieshui.waterindex.ui.widget.WarningFragment;
+import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
 import com.quanminjieshui.waterindex.utils.SPUtil;
 import com.quanminjieshui.waterindex.utils.StatusBarUtil;
 
@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
-public class UserDetailActivity extends BaseActivity implements UserDetailViewImpl, WarningFragment.OnWarningDialogClickedListener {
+public class UserDetailActivity extends BaseActivity implements UserDetailViewImpl {
 
     @BindView(R.id.title_bar)
     View titleBar;
@@ -51,6 +51,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     Button btnLogout;
 
     private UserDetailPresenter userDetailPresenter;
+    private AlertChainDialog alertChainDialog;
 
     @OnClick({R.id.left_ll, R.id.tv_change_pass, R.id.tv_auth_status, R.id.btn_logout})
     public void onClick(View v) {
@@ -68,8 +69,22 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
                 jump(AuthActivity.class);
                 break;
             case R.id.btn_logout:
-                WarningFragment fragment = new WarningFragment("提示消息", "确认退出当前账号", "确定", "取消", "logout", this);
-                fragment.show(getSupportFragmentManager(), "warning_fragment");
+                if(alertChainDialog!=null){
+                    alertChainDialog.builder().setCancelable(false);
+                    alertChainDialog.setTitle("提示消息")
+                            .setMsg("确认退出当前账号")
+                            .setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    loginOut();
+                                }
+                            }).setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    }).show();
+                }
                 break;
             default:
                 break;
@@ -89,6 +104,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
 
     private void initView() {
         tvTitleCenter.setText("账户信息");
+        alertChainDialog = new AlertChainDialog(this);
     }
 
     private void jump(Class<?> cls) {
@@ -107,35 +123,27 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     }
 
 
-    @Override
-    public void onPositiveClicked(String tag) {
-        if (tag.equals("logout")) {
-            //一起操作
-            //            SPUtil.delete(this,SPUtil.IS_LOGIN);
-            SPUtil.delete(this, SPUtil.TOKEN);
-            SPUtil.insert(UserDetailActivity.this, SPUtil.IS_LOGIN, false);//更改用户登录状态为未登录
+    public void loginOut() {
+        //一起操作
+        //            SPUtil.delete(this,SPUtil.IS_LOGIN);
+        SPUtil.delete(this, SPUtil.TOKEN);
+        SPUtil.insert(UserDetailActivity.this, SPUtil.IS_LOGIN, false);//更改用户登录状态为未登录
 
-            SPUtil.delete(this, SPUtil.USER_LOGIN);
-            SPUtil.delete(this, SPUtil.UID);
+        SPUtil.delete(this, SPUtil.USER_LOGIN);
+        SPUtil.delete(this, SPUtil.UID);
 
-            SPUtil.delete(this, SPUtil.ID);
-            SPUtil.delete(this, SPUtil.IS_BLOCKED);
-            SPUtil.delete(this, SPUtil.USER_LOGIN);
-            SPUtil.delete(this, SPUtil.USER_NICKNAME);
-            SPUtil.delete(this, SPUtil.TOKEN);
+        SPUtil.delete(this, SPUtil.ID);
+        SPUtil.delete(this, SPUtil.IS_BLOCKED);
+        SPUtil.delete(this, SPUtil.USER_LOGIN);
+        SPUtil.delete(this, SPUtil.USER_NICKNAME);
+        SPUtil.delete(this, SPUtil.TOKEN);
 
 
-            jump(MainActivity.class);
-            EventBus.getDefault().post(new SelectFragmentEvent("我的"));//显示personalFragment
+        jump(MainActivity.class);
+        EventBus.getDefault().post(new SelectFragmentEvent("我的"));//显示personalFragment
 //            EventBus.getDefault().post(new LogoutEvent("logout_main_personal_refresh_nickname"));//头像右侧用户名显示
 //            EventBus.getDefault().post(new LogoutEvent("logout_main_transaction_reconnect"));//transaction重新请求刷新
-            finish();
-        }
-    }
-
-    @Override
-    public void onNegativeClicked(String tag) {
-
+        finish();
     }
 
     @Override

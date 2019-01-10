@@ -200,6 +200,14 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
     private void initView() {
         tv_title_center.setText("身份认证");
+        user_type = false;
+        if (companyViews == null || personalViews == null) {
+            initViewArr();
+        }
+        setBtnBlueBgShape(btn_personal);
+        setBtnBlueBorderBgShape(btn_company);
+        setVisiable(personalViews);
+        setGone(companyViews);
     }
 
     private void initAdapter() {
@@ -469,6 +477,10 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     }
 
     private void go2SetCapitalPassActivity() {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+//        bundle.putString();
+//        intent.putExtra()
         startActivity(new Intent(AuthActivity.this, SetCapitalPassActivity.class));
         finish();
     }

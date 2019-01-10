@@ -12,14 +12,13 @@ import com.quanminjieshui.waterindex.R;
 import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.ui.activity.AboutListActivity;
 import com.quanminjieshui.waterindex.ui.activity.ChangePassActivity;
-import com.quanminjieshui.waterindex.ui.activity.GoodsActivity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
 import com.quanminjieshui.waterindex.ui.activity.OrderListsActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserAssetActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserConfirmActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserDetailActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserMessageActivity;
-import com.quanminjieshui.waterindex.ui.widget.WarningFragment;
+import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
 import com.quanminjieshui.waterindex.utils.SPUtil;
 
 import butterknife.BindView;
@@ -32,7 +31,7 @@ import butterknife.Unbinder;
  * Class Note:我的个人中心
  */
 
-public class PersonalFragment extends BaseFragment implements WarningFragment.OnWarningDialogClickedListener {
+public class PersonalFragment extends BaseFragment {
     @BindView(R.id.img_avatar)
     ImageView imgAvatar;
     @BindView(R.id.tv_nickname)
@@ -40,6 +39,7 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
     @BindView(R.id.tv_version)
     TextView tvVersion;
 
+    private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
     /**
      * 是否登录
@@ -95,10 +95,36 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
     private boolean checkLoginStatus() {
        boolean isLogin_ = (boolean) SPUtil.get(getActivity(), SPUtil.IS_LOGIN, false);
         if (!isLogin_) {
-            WarningFragment fragment = new WarningFragment("提示消息", "您当前未登录，请登录", "登录", "取消", "checkLoginStatus", this);
-            fragment.show(getActivity().getSupportFragmentManager(), "warning_fragment");
+            if(alertChainDialog!=null){
+                alertChainDialog.builder().setCancelable(false);
+                alertChainDialog.setTitle("提示消息")
+                        .setMsg("您当前未登录，请登录")
+                        .setPositiveButton("登录", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toLogin();
+                            }
+                        }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+            }
         }
         return isLogin_;
+    }
+
+    private void toLogin() {
+        Intent intent=new Intent();
+        intent.putExtra("target","main_personal");
+        jump(LoginActivity.class,intent);
+
+//        if (tag.equals("checkLoginStatus")) {
+//
+//        }else if(tag.equals("sth.")){
+//
+//        }
     }
 
     private void jump(Class<?> cls) {
@@ -124,6 +150,7 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
 
     private void initView() {
         tvNickname.setText((String)SPUtil.get(getActivity(), SPUtil.USER_NICKNAME, "********"));
+        alertChainDialog = new AlertChainDialog(getBaseActivity());
     }
 
 
@@ -142,24 +169,6 @@ public class PersonalFragment extends BaseFragment implements WarningFragment.On
 
     @Override
     public void onReNetRefreshData(int viewId) {
-    }
-
-
-
-    @Override
-    public void onPositiveClicked(String tag) {
-        if (tag.equals("checkLoginStatus")) {
-            Intent intent=new Intent();
-            intent.putExtra("target","main_personal");
-            jump(LoginActivity.class,intent);
-        }else if(tag.equals("sth.")){
-
-        }
-    }
-
-    @Override
-    public void onNegativeClicked(String tag) {
-
     }
 
     public void onEventMainThread(LoginStatusChangedEvent event){

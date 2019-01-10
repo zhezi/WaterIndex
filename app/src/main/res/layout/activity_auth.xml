@@ -18,6 +18,7 @@
             android:id="@+id/linear_choice"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edt_height"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <Button
