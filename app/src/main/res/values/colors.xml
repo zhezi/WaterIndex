@@ -21,7 +21,7 @@
     <color name="title_black">#2E222E</color>
     <color name="primary_yellow">#EEB35C</color>
 
-    <color name="btn_bg_yellow_selected">#EEB35C</color>
+    <color name="btn_bg_yellow_selected">#FFBC8B43</color>
     <color name="btn_bg_yellow">#ffeeb35c</color>
 
     <color name="tint_blue">#FFE6F4FD</color>

@@ -1,7 +1,10 @@
 package com.quanminjieshui.waterindex.ui.fragment;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -221,6 +224,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             if (!TextUtils.isEmpty(tradeIndexBase.getTip())) {
                 llWarning.setVisibility(View.VISIBLE);
                 tvTip.setText(tradeIndexBase.getTip());
+            }else{
+                llWarning.setVisibility(View.GONE);
             }
             if (type.equals("2")) {
                 buyCounter += 1;
@@ -255,24 +260,26 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreateOrder(TradeIndex tradeIndex) {
         if (is_login.equals("0")) {
-            showDialog("交易信息",tip,"去登陆");
+            showDialog("交易信息", tip, "去登陆");
             return;
         }
         if (is_auth == 0) {
-            showDialog("交易信息",tip,"去认证");
+            showDialog("交易信息", tip, "去认证");
             return;
-        }else if(is_auth==1){
-            showDialog("交易信息",tip,"知道了");
+        } else if (is_auth == 1) {
+            showDialog("交易信息", tip, "知道了");
             return;
         }
-        if(is_login.equals("1")&&is_auth==3){
-            Intent intent = new Intent();
+        if (is_login.equals("1") && is_auth == 3) {
+            Intent intent = new Intent(getActivity(), UserOrderActivity.class);
             intent.putExtra("trade_index", tradeIndex);
             intent.putExtra("type", type);
             jump(UserOrderActivity.class, intent);
+            getActivity().overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
         }
 
     }
@@ -291,7 +298,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                             dialog.dismiss();
                         } else if (positive.equals("去认证")) {
                             jump(AuthActivity.class, null);
-                        }else if(positive.equals("去登陆")){
+                        } else if (positive.equals("去登陆")) {
                             jumpLogin();
                         }
                     }

@@ -940,8 +940,18 @@ public class UrlConfig {
 
     /**
      * 用户下单
+     *     │ {
+     *     │     "code":1,
+     *     │     "msg":"下单成功！",
+     *     │     "data":"57"
+     *     │ }
      */
     public static final String USER_ORDER="api/home/trade/userOrder";
+
+    /**
+     *基础信息    节水指标单价
+     */
+    public static final String SYS_CONFIG="api/home/common/sysConfig";
 
     /**
      * 身份认证

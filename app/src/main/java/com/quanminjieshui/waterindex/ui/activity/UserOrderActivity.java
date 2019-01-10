@@ -1,8 +1,14 @@
 package com.quanminjieshui.waterindex.ui.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,16 +22,28 @@ import android.widget.TextView;
 
 import com.quanminjieshui.waterindex.R;
 import com.quanminjieshui.waterindex.base.BaseActivity;
+import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeIndex;
+import com.quanminjieshui.waterindex.contract.model.UserOrderModel;
+import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
+import com.quanminjieshui.waterindex.contract.presenter.SysConfigPresenter;
+import com.quanminjieshui.waterindex.contract.presenter.UserOrderPresenter;
+import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
+import com.quanminjieshui.waterindex.contract.view.SecondRequstViewImpl;
+import com.quanminjieshui.waterindex.http.bean.BaseEntity;
+import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
+import com.quanminjieshui.waterindex.utils.LogUtils;
 import com.quanminjieshui.waterindex.utils.StatusBarUtil;
+import com.quanminjieshui.waterindex.utils.ToastUtils;
 import com.quanminjieshui.waterindex.utils.image.GlidImageManager;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class UserOrderActivity extends BaseActivity {
+public class UserOrderActivity extends BaseActivity implements CommonViewImpl, SecondRequstViewImpl, TextWatcher {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_total)
@@ -46,25 +64,31 @@ public class UserOrderActivity extends BaseActivity {
     EditText edtTotal;
     @BindView(R.id.ll_total)
     LinearLayout llTotal;
-    @BindView(R.id.edt_safe_pw)
-    EditText edtSafePw;
+    //    @BindView(R.id.edt_safe_pw)
+//    EditText edtSafePw;
     @BindView(R.id.tv_total_price)
     TextView tvTotalPrice;
-    @BindView(R.id.btn_cancel)
-    Button btnCancel;
     @BindView(R.id.tv_pay_timeout)
     TextView tvPayTimeout;
-    @BindView(R.id.btn_order)
-    Button btnOrder;
     @BindView(R.id.container)
     LinearLayout container;
     @BindView(R.id.trans_container)
     FrameLayout transContainer;
 
+    @BindDrawable(R.drawable.gray_border_bg_shape)
+    Drawable edt_border;
+    @BindDrawable(R.drawable.red_border_illegal_bg_shape)
+    Drawable edt_border_illegal;
+
     Unbinder unbinder;
     private TradeIndex tradeIndex;
     private String type;
     private String trade_id;
+    private String total;
+    private UserOrderPresenter userOrderPresenter;
+    private AlertChainDialog dialog;
+    private SysConfigPresenter sysConfigPresenter;
+    private float ds_price = 3.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +101,11 @@ public class UserOrderActivity extends BaseActivity {
         if (tradeIndex != null) {
             trade_id = String.valueOf(tradeIndex.getTrade_id());
         }
+        userOrderPresenter = new UserOrderPresenter(new UserOrderModel());
+        userOrderPresenter.attachView(this);
+        sysConfigPresenter = new SysConfigPresenter(new UserOrderModel());
+        sysConfigPresenter.attachView(this);
+        sysConfigPresenter.getSysConfig(this);
     }
 
     private void setFullScreen() {
@@ -92,22 +121,25 @@ public class UserOrderActivity extends BaseActivity {
 
 
     private void initView() {
+
         if (!TextUtils.isEmpty(type) && tradeIndex != null) {
             if (type.equals("2")) {
                 tvTitle.setText("购买节水指标");
                 tvPayMin.setText(new StringBuilder("最小购买量：").append(tradeIndex.getPay_min()).toString());
-                edtSafePw.setVisibility(View.GONE);
-                edtSafePw.setText("");
-                tvPayTimeout.setVisibility(View.GONE);
+//                edtSafePw.setVisibility(View.GONE);
+//                edtSafePw.setText("");
+                tvPayTimeout.setText(new StringBuilder("该订单付款时限为  ").append(tradeIndex.getPay_timeout()).append("  分钟").toString());
+
 
             } else if (type.equals("1")) {
                 tvTitle.setText("出售节水指标");
                 tvPayMin.setText(new StringBuilder("最小购买量：").append(tradeIndex.getPay_min()).toString());
-                edtSafePw.setVisibility(View.VISIBLE);
-                tvPayTimeout.setText(tradeIndex.getPay_timeout());
+//                edtSafePw.setVisibility(View.VISIBLE);
+                tvPayTimeout.setVisibility(View.GONE);
             }
             tvTotal.setText(new StringBuilder("数量：").append(tradeIndex.getTotal()).toString());
             edtTotal.setHint(new StringBuilder("最大可买").append(tradeIndex.getTotal()).toString());
+            edtTotal.addTextChangedListener(this);
             GlidImageManager.getInstance().loadCircleImg(this, tradeIndex.getAvatar(), imgAvatar, R.mipmap.head, R.mipmap.head);
             tvUserNickname.setText(tradeIndex.getUser_nickname());
             if (tradeIndex.getPay_type_bank_card().equals("1")) {
@@ -125,8 +157,7 @@ public class UserOrderActivity extends BaseActivity {
             } else if (tradeIndex.getPay_type_bank_card().equals("0")) {
                 imgPayTypeWechat.setVisibility(View.GONE);
             }
-            //todo tvTotalPrice接口返回并无该字段
-            //tvTotalPrice.setText(new StringBuilder("总价：").append("").toString());
+            tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
 
         }
     }
@@ -142,13 +173,26 @@ public class UserOrderActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.img_cancle})
+    @OnClick({R.id.img_cancle, R.id.btn_cancel, R.id.btn_create_order, R.id.trans_container})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.img_cancle:
                 finish();
                 break;
+
+            case R.id.btn_cancel:
+                finish();
+                break;
+
+            case R.id.btn_create_order:
+                createOrder();
+                break;
+
+//            case R.id.trans_container:
+//                if (tvCustomDialog.getVisibility() == View.GONE) break;
+//                dismissCustomDialog();
+//                break;
             default:
                 break;
         }
@@ -160,6 +204,44 @@ public class UserOrderActivity extends BaseActivity {
         finish();
     }
 
+    private void createOrder() {
+        if (userOrderPresenter == null) {
+            userOrderPresenter = new UserOrderPresenter(new UserOrderModel());
+            userOrderPresenter.attachView(this);
+        }
+        total = edtTotal.getText().toString();
+        String total1 = tradeIndex.getTotal().replace("T", "").trim();
+        if (!TextUtils.isEmpty(total) && !TextUtils.isEmpty(total1)) {
+            float floatTotal = Float.valueOf(total);
+            float floatTotal1 = Float.valueOf(total1);
+            if (floatTotal <= 0) {
+                edtTotal.setText("");
+                edtTotal.setHint("输入值需大于0！");
+                llTotal.setBackground(edt_border_illegal);
+                tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
+//                showCustomDialog("输入值需大于0！");
+                return;
+            } else if (floatTotal > floatTotal1) {
+                edtTotal.setText("");
+                edtTotal.setHint(new StringBuilder("输入值不能大于").append(tradeIndex.getTotal().toString()).toString());
+                llTotal.setBackground(edt_border_illegal);
+                tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
+//                showCustomDialog(new StringBuilder("输入值不能大于").append(tradeIndex.getTotal().toString()).toString());
+                return;
+            }
+            userOrderPresenter.createOrder(this, trade_id, total);
+        }
+    }
+
+
+    @Override
+    public void finish() {
+        super.finish();
+        // 参数1：MainActivity进场动画，参数2：SecondActivity出场动画
+        overridePendingTransition(0, R.anim.actionsheet_dialog_out);
+    }
+
+
     private void getIntentExtra() {
         Intent intent = getIntent();
         tradeIndex = intent.getParcelableExtra("trade_index");
@@ -170,5 +252,67 @@ public class UserOrderActivity extends BaseActivity {
     protected void onDestroy() {
         unbinder.unbind();
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestSuccess(Object bean) {
+
+    }
+
+    @Override
+    public void onRequestFailed(String msg) {
+
+    }
+
+    private void showDialog() {
+        if (dialog == null) {
+            dialog = new AlertChainDialog(this);
+        }
+    }
+
+//    private void showCustomDialog(String msg) {
+//        if (tvCustomDialog.getVisibility() != View.VISIBLE) {
+//            tvCustomDialog.setVisibility(View.VISIBLE);
+//            tvCustomDialog.setText(msg);
+//        }
+//    }
+//
+//    private void dismissCustomDialog() {
+//        if (tvCustomDialog.getVisibility() == View.VISIBLE) {
+//            tvCustomDialog.setVisibility(View.GONE);
+//            tvCustomDialog.setText("");
+//        }
+//    }
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        total = edtTotal.getText().toString();
+        if (!TextUtils.isEmpty(total)) {
+            final Float aFloat = Float.valueOf(total);
+            //todo 暂时定单价为3   后期接口给返回具体单价
+            tvTotalPrice.setText(new StringBuilder("总价：").append(aFloat * ds_price).append("元").toString());
+        }
+    }
+
+    @Override
+    public void onSecondRequstSuccess(SysConfigResponseBean o) {
+        if (o != null&&!TextUtils.isEmpty(o.getPrice())) {
+            ds_price=Float.valueOf(o.getPrice());
+        }
+    }
+
+
+    @Override
+    public void onSecondRequstFailed(String msg) {
+
     }
 }

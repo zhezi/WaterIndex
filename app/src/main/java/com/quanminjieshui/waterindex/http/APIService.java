@@ -16,6 +16,7 @@ import com.quanminjieshui.waterindex.beans.OrderListsResponseBean;
 import com.quanminjieshui.waterindex.beans.RegisterResponseBean;
 import com.quanminjieshui.waterindex.beans.SellResponseBean;
 import com.quanminjieshui.waterindex.beans.ServiceListResponseBean;
+import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
 import com.quanminjieshui.waterindex.beans.SysMsgBase;
 import com.quanminjieshui.waterindex.beans.TotalPriceResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeCenterResponseBean;
@@ -203,6 +204,15 @@ public interface APIService {
      */
     @POST(UrlConfig.USER_ORDER)
     Observable<BaseEntity> userOrder(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "param", "ds_price";
+     */
+    @POST(UrlConfig.SYS_CONFIG)
+    Observable<BaseEntity<SysConfigResponseBean>> sysConfig(@Body RequestBody body);
+
 
     /**
      * "token", token;
