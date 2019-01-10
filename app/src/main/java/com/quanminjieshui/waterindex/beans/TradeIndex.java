@@ -1,6 +1,9 @@
 package com.quanminjieshui.waterindex.beans;
 
-public class TradeIndex {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class TradeIndex implements Parcelable {
 	private int trade_id;
 	private int trade_uid;
 	private String avatar;
@@ -109,4 +112,55 @@ public class TradeIndex {
 	public int getPay_timeout() {
 		return pay_timeout;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(this.trade_id);
+		dest.writeInt(this.trade_uid);
+		dest.writeString(this.avatar);
+		dest.writeString(this.user_nickname);
+		dest.writeString(this.sold);
+		dest.writeString(this.sold_rate);
+		dest.writeString(this.total);
+		dest.writeString(this.pay_type_bank_card);
+		dest.writeString(this.pay_type_alipay);
+		dest.writeString(this.pay_type_wechat);
+		dest.writeString(this.pay_min);
+		dest.writeInt(this.pay_timeout);
+	}
+
+	public TradeIndex() {
+	}
+
+	protected TradeIndex(Parcel in) {
+		this.trade_id = in.readInt();
+		this.trade_uid = in.readInt();
+		this.avatar = in.readString();
+		this.user_nickname = in.readString();
+		this.sold = in.readString();
+		this.sold_rate = in.readString();
+		this.total = in.readString();
+		this.pay_type_bank_card = in.readString();
+		this.pay_type_alipay = in.readString();
+		this.pay_type_wechat = in.readString();
+		this.pay_min = in.readString();
+		this.pay_timeout = in.readInt();
+	}
+
+	public static final Parcelable.Creator<TradeIndex> CREATOR = new Parcelable.Creator<TradeIndex>() {
+		@Override
+		public TradeIndex createFromParcel(Parcel source) {
+			return new TradeIndex(source);
+		}
+
+		@Override
+		public TradeIndex[] newArray(int size) {
+			return new TradeIndex[size];
+		}
+	};
 }

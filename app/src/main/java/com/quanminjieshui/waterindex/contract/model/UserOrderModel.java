@@ -1,9 +1,6 @@
 package com.quanminjieshui.waterindex.contract.model;
 
-import android.text.TextUtils;
-
 import com.quanminjieshui.waterindex.base.BaseActivity;
-import com.quanminjieshui.waterindex.beans.TradeIndexBase;
 import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
 import com.quanminjieshui.waterindex.http.BaseObserver;
 import com.quanminjieshui.waterindex.http.RetrofitFactory;
@@ -15,27 +12,23 @@ import com.quanminjieshui.waterindex.utils.LogUtils;
 
 import java.util.HashMap;
 
-public class TradeIndexModel {
+public class UserOrderModel {
 
-    public void getTradeIndex(BaseActivity activity,String type,String page, String page_size,final CommomCallback callback){
-        HashMap<String,Object>params=new HashMap<>();
-        if(!TextUtils.isEmpty(type)){
-            params.put("type",type);
-        }
-        if(!TextUtils.isEmpty(type)){
-            params.put("page",page);
-        }
-        if (!TextUtils.isEmpty(type)) {
-            params.put("page_size", page_size);
-        }
+    public void createOrder(BaseActivity activity, String trade_id, String total, final CommomCallback callback) {
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("trade_id", trade_id);
+        params.put("total", total);
         RetrofitFactory.getInstance().createService()
-                .tradeIndex(RequestUtil.getRequestHashBody(params,false))
-                .compose(activity.<BaseEntity<TradeIndexBase>>bindToLifecycle())
-                .compose(ObservableTransformerUtils.<BaseEntity<TradeIndexBase>>io())
-                .subscribe(new BaseObserver<TradeIndexBase>(activity) {
+                .userOrder(RequestUtil.getRequestHashBody(params, false))
+                .compose(activity.<BaseEntity>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity>io())
+                .subscribe(new BaseObserver(activity) {
+
+
                     @Override
-                    protected void onSuccess(TradeIndexBase tradeIndexBase) throws Exception {
-                        callback.onRequestSuccess(tradeIndexBase);
+                    protected void onSuccess(Object o) throws Exception {
+                        callback.onRequestSuccess(o);
                     }
 
                     @Override
@@ -59,6 +52,5 @@ public class TradeIndexModel {
                         callback.onRequestFailed(msg);
                     }
                 });
-
     }
 }

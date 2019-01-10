@@ -64,7 +64,7 @@ import butterknife.OnClick;
  * @Version: 1.0
  */
 public class TestActivity extends BaseActivity {
-//    @BindView(R.id.btn_request)
+    //    @BindView(R.id.btn_request)
     Button btnRequest;
 
 
@@ -78,8 +78,6 @@ public class TestActivity extends BaseActivity {
     @Override
     public void initContentView() {
         setContentView(R.layout.activity_test);
-
-
     }
 
     @Override
@@ -94,17 +92,16 @@ public class TestActivity extends BaseActivity {
 
             case R.id.btn_request:
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("type","1");
-                params.put("page","1");
-                params.put("page_size","2");
+                params.put("trade_id","39");
+                params.put("total","1");
                 RetrofitFactory.getInstance().createService()
-                        .tradeIndex(RequestUtil.getRequestHashBody(params, false))
-                        .compose(TestActivity.this.<BaseEntity<TradeIndexBase>>bindToLifecycle())
-                        .compose(ObservableTransformerUtils.<BaseEntity<TradeIndexBase>>io())
-                        .subscribe(new BaseObserver<TradeIndexBase>(TestActivity.this) {
+                        .userOrder(RequestUtil.getRequestHashBody(params, false))
+                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity>io())
+                        .subscribe(new BaseObserver(TestActivity.this) {
 
                             @Override
-                            protected void onSuccess(TradeIndexBase bean) throws Exception {
+                            protected void onSuccess(Object bean) throws Exception {
 //                                LogUtils.e("tag",
 //                                        bean.getLists().get(0).getContent());
                             }

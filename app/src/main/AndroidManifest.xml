@@ -53,12 +53,12 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"/>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"/>
+            android:screenOrientation="behind" />
         <!--alipay end -->
 
         <activity android:name=".ui.activity.TestActivity" /><!-- <intent-filter>
@@ -187,12 +187,19 @@
         <activity
             android:name=".ui.activity.TradeDetaiActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.WebViewActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TransferActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.SetCapitalPassActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TransferActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SetCapitalPassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.UserOrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialogstyle" />
     </application>
 
 </manifest>

@@ -2,7 +2,7 @@ package com.quanminjieshui.waterindex.contract.presenter;
 
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.contract.BasePresenter;
-import com.quanminjieshui.waterindex.contract.model.CommomCallback;
+import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
 import com.quanminjieshui.waterindex.contract.model.TradeIndexModel;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 

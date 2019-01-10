@@ -938,6 +938,10 @@ public class UrlConfig {
      */
     public static final String TRADE_INDEX="api/home/trade/index";
 
+    /**
+     * 用户下单
+     */
+    public static final String USER_ORDER="api/home/trade/userOrder";
 
     /**
      * 身份认证

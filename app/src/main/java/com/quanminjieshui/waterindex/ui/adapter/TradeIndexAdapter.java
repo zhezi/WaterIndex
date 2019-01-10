@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.quanminjieshui.waterindex.R;
@@ -25,8 +26,9 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
     private Context context;
     private List<TradeIndex> list;
     private String type;//2购买节水 1出售节水
+    private OnUserOrderListener listener;
 
-    public TradeIndexAdapter(Context context,List<TradeIndex> list,String type) {
+    public TradeIndexAdapter(Context context,List<TradeIndex> list,String type,OnUserOrderListener listener) {
         this.context = context;
         if (list == null) {
             list = new ArrayList<>();
@@ -34,6 +36,7 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
             this.list = list;
         }
         this.type=type;
+        this.listener=listener;
     }
 
     @NonNull
@@ -77,6 +80,12 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
             } else if (tradeIndex.getPay_type_bank_card().equals("0")) {
                 holder.imgPayTypeWechat.setVisibility(View.GONE);
             }
+            holder.llGo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onCreateOrder(tradeIndex);
+                }
+            });
 
 
         }
@@ -114,13 +123,17 @@ public class TradeIndexAdapter extends RecyclerView.Adapter<TradeIndexAdapter.Tr
         TextView tvPayMin1;
         @BindView(R.id.tv_pay_min)
         TextView tvPayMin;
-        @BindView(R.id.img_go)
-        ImageView imgGo;
+        @BindView(R.id.ll_go)
+        LinearLayout llGo;
         @BindView(R.id.tv_do_trade)
         TextView tvDoTrade;
         public TradeIndexHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface OnUserOrderListener{
+        void onCreateOrder(TradeIndex tradeIndex);
     }
 }

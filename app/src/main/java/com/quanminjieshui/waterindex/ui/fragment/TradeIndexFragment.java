@@ -21,7 +21,9 @@ import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.ui.activity.AuthActivity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
+import com.quanminjieshui.waterindex.ui.activity.UserOrderActivity;
 import com.quanminjieshui.waterindex.ui.adapter.TradeIndexAdapter;
+import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
 import com.quanminjieshui.waterindex.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
+public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, TradeIndexAdapter.OnUserOrderListener {
 
     @BindView(R.id.tv_tip)
     TextView tvTip;
@@ -57,6 +59,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
     private TradeIndexAdapter sellAdapter;
     private String is_login;//是否登录   "1"登录   "0"未登录
     private int is_auth;//是否注册  1是认证中 3是已认证 0是未认证
+    private String tip;
+    private AlertChainDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +75,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
     }
 
     private void initView() {
-        buyAdapter = new TradeIndexAdapter(getActivity(), buyList, "2");
-        sellAdapter = new TradeIndexAdapter(getActivity(), sellList, "1");
+        buyAdapter = new TradeIndexAdapter(getActivity(), buyList, "2", this);
+        sellAdapter = new TradeIndexAdapter(getActivity(), sellList, "1", this);
         xrvBuy.setLayoutManager(new LinearLayoutManager(getActivity()));
         xrvSell.setLayoutManager(new LinearLayoutManager(getActivity()));
         xrvBuy.setPullRefreshEnabled(true);
@@ -152,9 +156,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
 
             case R.id.ll_warning:
                 if (is_login.equals("0")) {
-                    Intent intent = new Intent();
-                    intent.putExtra("target", "main_trade_index");
-                    jump(LoginActivity.class, intent);
+                    jumpLogin();
                     break;
                 }
                 if (is_auth == 0) {
@@ -215,6 +217,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
         if (bean != null) {
             is_login = tradeIndexBase.getIs_login();
             is_auth = tradeIndexBase.getIs_auth();
+            tip = tradeIndexBase.getTip();
             if (!TextUtils.isEmpty(tradeIndexBase.getTip())) {
                 llWarning.setVisibility(View.VISIBLE);
                 tvTip.setText(tradeIndexBase.getTip());
@@ -251,4 +254,56 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl {
             doRequest();
         }
     }
+
+    @Override
+    public void onCreateOrder(TradeIndex tradeIndex) {
+        if (is_login.equals("0")) {
+            showDialog("交易信息",tip,"去登陆");
+            return;
+        }
+        if (is_auth == 0) {
+            showDialog("交易信息",tip,"去认证");
+            return;
+        }else if(is_auth==1){
+            showDialog("交易信息",tip,"知道了");
+            return;
+        }
+        if(is_login.equals("1")&&is_auth==3){
+            Intent intent = new Intent();
+            intent.putExtra("trade_index", tradeIndex);
+            intent.putExtra("type", type);
+            jump(UserOrderActivity.class, intent);
+        }
+
+    }
+
+    private void showDialog(String title, String msg, final String positive) {
+        if (dialog == null) {
+            dialog = new AlertChainDialog(getActivity());
+        }
+        dialog.builder().setCancelable(true);
+        dialog.setTitle(title)
+                .setMsg(msg)
+                .setPositiveButton(positive, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (positive.equals("知道了")) {
+                            dialog.dismiss();
+                        } else if (positive.equals("去认证")) {
+                            jump(AuthActivity.class, null);
+                        }else if(positive.equals("去登陆")){
+                            jumpLogin();
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void jumpLogin() {
+        Intent intent = new Intent();
+        intent.putExtra("target", "main_trade_index");
+        jump(LoginActivity.class, intent);
+    }
+
+
 }

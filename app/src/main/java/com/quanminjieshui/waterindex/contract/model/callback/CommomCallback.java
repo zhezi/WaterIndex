@@ -1,4 +1,4 @@
-package com.quanminjieshui.waterindex.contract.model;
+package com.quanminjieshui.waterindex.contract.model.callback;
 
 public interface CommomCallback {
 

@@ -198,6 +198,15 @@ public interface APIService {
     /**
      * "token", token;
      * "device_type", "android";
+     * "trade_id", "1";
+     * "total", "1";
+     */
+    @POST(UrlConfig.USER_ORDER)
+    Observable<BaseEntity> userOrder(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
      */
     @POST(UrlConfig.USER_AUTH_INFO)
     Observable<BaseEntity<UserAuthInfo>> userAuthInfo(@Body RequestBody requestBody);
