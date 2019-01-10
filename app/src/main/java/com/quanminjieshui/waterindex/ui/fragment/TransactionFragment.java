@@ -169,6 +169,7 @@ public class TransactionFragment extends BaseFragment implements
         tradeLinePresenter = new TradeLinePresenter(new TradeLineModel());
         tradeLinePresenter.attachView(this);
         alertChainDialog = new AlertChainDialog(getBaseActivity());
+
         doTradeCenter();
         doTradeLine(tradeLineType);
 
