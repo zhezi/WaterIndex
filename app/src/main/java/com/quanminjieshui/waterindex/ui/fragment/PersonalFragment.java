@@ -94,7 +94,7 @@ public class PersonalFragment extends BaseFragment {
 
     private boolean checkLoginStatus() {
        boolean isLogin_ = (boolean) SPUtil.get(getActivity(), SPUtil.IS_LOGIN, false);
-        if (!isLogin_) {
+       if (!isLogin_) {
             if(alertChainDialog!=null){
                 alertChainDialog.builder().setCancelable(false);
                 alertChainDialog.setTitle("提示消息")

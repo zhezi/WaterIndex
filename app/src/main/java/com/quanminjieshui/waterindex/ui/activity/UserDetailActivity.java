@@ -85,6 +85,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
                         }
                     }).show();
                 }
+
                 break;
             default:
                 break;

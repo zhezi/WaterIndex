@@ -20,6 +20,7 @@ import butterknife.OnClick;
  * @Author: fushizhe
  */
 public class UserAssetActivity extends BaseActivity implements AccountDetailViewImpl {
+
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
     @BindView(R.id.title_bar)
