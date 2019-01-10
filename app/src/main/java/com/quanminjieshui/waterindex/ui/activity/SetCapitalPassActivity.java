@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.quanminjieshui.waterindex.R;
 import com.quanminjieshui.waterindex.base.BaseActivity;
+import com.quanminjieshui.waterindex.beans.request.PersonalAuthReqParams;
 import com.quanminjieshui.waterindex.beans.request.SetCaptialPassReqParams;
 import com.quanminjieshui.waterindex.contract.presenter.SetCapitalPassPresenter;
 import com.quanminjieshui.waterindex.contract.view.SetCapitalPassViewImpl;
@@ -41,7 +42,7 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     EditText edtPayNike;
     @BindView(R.id.btn_find)
     Button btnAuth;
-
+    SetCaptialPassReqParams requestParams = new SetCaptialPassReqParams();
     private SetCapitalPassPresenter setCapitalPassPresenter;
 
     @OnClick({R.id.left_ll,R.id.btn_find})
@@ -54,13 +55,12 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
                 break;
 
             case R.id.btn_find:
-                SetCaptialPassReqParams params = new SetCaptialPassReqParams();
-                params.setDevice_type("android");
-                params.setSafe_pw(edtNewPass.getText().toString());
-                params.setSafe_pw_re(edtConfirmPass.getText().toString());
-                params.setToken((String)SPUtil.get(this,SPUtil.TOKEN,""));
-                // TODO: 2019/1/10 添加请求参数
-                setCapitalPassPresenter.SetCapitalPass(this,params);
+                // TODO: 2019/1/11  
+                requestParams.setDevice_type("android");
+                requestParams.setSafe_pw(edtNewPass.getText().toString());
+                requestParams.setSafe_pw_re(edtConfirmPass.getText().toString());
+                requestParams.setToken((String)SPUtil.get(this,SPUtil.TOKEN,""));
+                setCapitalPassPresenter.SetCapitalPass(this,requestParams);
                 break;
         }
     }
@@ -72,7 +72,20 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
         setCapitalPassPresenter.attachView(this);
 
         StatusBarUtil.setImmersionStatus(this, titleBar);
+        initData();
         initView();
+    }
+
+    private void initData() {
+        if(getIntent()!=null){
+            PersonalAuthReqParams params = new PersonalAuthReqParams();
+            requestParams.setCity(params.getCity());
+            requestParams.setCity(params.getProvince());
+            requestParams.setCity(params.getUser_name());
+            requestParams.setCity(params.getId_no());
+            requestParams.setCity(params.getId_img_a());
+            requestParams.setCity(params.getId_img_b());
+        }
     }
 
     private void initView() {

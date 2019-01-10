@@ -1,8 +1,11 @@
 package com.quanminjieshui.waterindex.beans.request;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.quanminjieshui.waterindex.beans.BaseBean;
 
-public class PersonalAuthReqParams extends BaseBean {
+public class PersonalAuthReqParams extends BaseBean implements Parcelable {
     private String nationality;
     private String province;
     private String city;
@@ -16,6 +19,7 @@ public class PersonalAuthReqParams extends BaseBean {
     public PersonalAuthReqParams(String nationality, String province, String city,
                                  String user_name,
                                  String id_no, String id_img_a, String id_img_b) {
+        super();
         this.nationality = nationality;
         this.province = province;
         this.city = city;
@@ -24,6 +28,28 @@ public class PersonalAuthReqParams extends BaseBean {
         this.id_img_a = id_img_a;
         this.id_img_b = id_img_b;
     }
+
+    protected PersonalAuthReqParams(Parcel in) {
+        nationality = in.readString();
+        province = in.readString();
+        city = in.readString();
+        user_name = in.readString();
+        id_no = in.readString();
+        id_img_a = in.readString();
+        id_img_b = in.readString();
+    }
+
+    public static final Creator<PersonalAuthReqParams> CREATOR = new Creator<PersonalAuthReqParams>() {
+        @Override
+        public PersonalAuthReqParams createFromParcel(Parcel in) {
+            return new PersonalAuthReqParams(in);
+        }
+
+        @Override
+        public PersonalAuthReqParams[] newArray(int size) {
+            return new PersonalAuthReqParams[size];
+        }
+    };
 
     public String getNationality() {
         return nationality;
@@ -79,5 +105,21 @@ public class PersonalAuthReqParams extends BaseBean {
 
     public void setId_img_b(String id_img_b) {
         this.id_img_b = id_img_b;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(nationality);
+        parcel.writeString(province);
+        parcel.writeString(city);
+        parcel.writeString(user_name);
+        parcel.writeString(id_no);
+        parcel.writeString(id_img_a);
+        parcel.writeString(id_img_b);
     }
 }
