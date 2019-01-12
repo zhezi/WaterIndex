@@ -11,22 +11,26 @@ import com.quanminjieshui.waterindex.beans.GoodsResposeBean;
 import com.quanminjieshui.waterindex.beans.InfoListsResponseBean;
 import com.quanminjieshui.waterindex.beans.ListOrder;
 import com.quanminjieshui.waterindex.beans.LoginResponseBean;
+import com.quanminjieshui.waterindex.beans.MoveMoneryBean;
 import com.quanminjieshui.waterindex.beans.OrderDetailResponseBean;
 import com.quanminjieshui.waterindex.beans.OrderListsResponseBean;
+import com.quanminjieshui.waterindex.beans.PayMentResponseBean;
 import com.quanminjieshui.waterindex.beans.RegisterResponseBean;
 import com.quanminjieshui.waterindex.beans.SellResponseBean;
 import com.quanminjieshui.waterindex.beans.ServiceListResponseBean;
 import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
 import com.quanminjieshui.waterindex.beans.SysMsgBase;
+import com.quanminjieshui.waterindex.beans.SystemMsgResponseBean;
 import com.quanminjieshui.waterindex.beans.TotalPriceResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeCenterResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeIndexBase;
 import com.quanminjieshui.waterindex.beans.TradeLineResponseBean;
-import com.quanminjieshui.waterindex.beans.TradeListBase;
+import com.quanminjieshui.waterindex.beans.ListTradeResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeListsResponseBean;
 import com.quanminjieshui.waterindex.beans.UploadOne;
 import com.quanminjieshui.waterindex.beans.UserAuthInfo;
 import com.quanminjieshui.waterindex.beans.UserDetailResponseBean;
+import com.quanminjieshui.waterindex.beans.UserIndexResponseBean;
 import com.quanminjieshui.waterindex.beans.UserInfo;
 import com.quanminjieshui.waterindex.beans.UserMoney;
 import com.quanminjieshui.waterindex.http.bean.BaseEntity;
@@ -183,8 +187,8 @@ public interface APIService {
      * "token", token;
      * "device_type", "android";
      */
-    @POST(UrlConfig.MONEY)
-    Observable<BaseEntity<UserMoney>> money(@Body RequestBody requestBody);
+    @POST(UrlConfig.USER_MONEY)
+    Observable<BaseEntity<UserMoney>> userMoney(@Body RequestBody requestBody);
 
     /**
      * "token", token;
@@ -250,9 +254,10 @@ public interface APIService {
      * "type", "0";
      * "page", "1";
      * "page_size", "10";
+     * 买卖需求列表
      */
     @POST(UrlConfig.LIST_TRADE)
-    Observable<BaseEntity<TradeListBase>> listTrade(@Body RequestBody requestBody);
+    Observable<BaseEntity<ListTradeResponseBean>> listTrade(@Body RequestBody requestBody);
 
     @POST(UrlConfig.GET_URL)
     Observable<BaseEntity>getUrl(@Body RequestBody body);
@@ -272,5 +277,68 @@ public interface APIService {
      */
     @POST(UrlConfig.SET_CAPITAL_PASS)
     Observable<BaseEntity> setCapitalPass(@Body RequestBody requestBody);
+
+    /**
+     * 用户首页
+     */
+    @POST(UrlConfig.USER_INDEX)
+    Observable<BaseEntity<UserIndexResponseBean>> userIndex(@Body RequestBody requestBody);
+
+    /**
+     * 资产划转
+     */
+    @POST(UrlConfig.MOVE_MONERY)
+    Observable<BaseEntity<MoveMoneryBean>> moveMonery(@Body RequestBody requestBody);
+
+    /**
+     * 收款方式--首页
+     * token
+     * device_type
+     */
+    @POST(UrlConfig.PAYMENT_TYPE)
+    Observable<BaseEntity<PayMentResponseBean>> payMentType(@Body RequestBody requestBody);
+
+    /**
+     * 添加收款方式
+     */
+    @POST(UrlConfig.ADD_PAYMENT_TYPE)
+    Observable<BaseEntity> addPayMentType(@Body RequestBody requestBody);
+
+    /**
+     * 收款方式 开启|禁用
+     */
+    @POST(UrlConfig.PAYMENT_TYPE_SWITCH)
+    Observable<BaseEntity> payMentTypeSwitch(@Body RequestBody requestBody);
+
+    /**
+     * 收款方式 修改
+     */
+    @POST(UrlConfig.CHANGE_PAYMENT_TYPE)
+    Observable<BaseEntity> changePayMentType(@Body RequestBody requestBody);
+
+    /**
+     * 买卖需求列表--发布
+     */
+    @POST(UrlConfig.ADD_TRADE)
+    Observable<BaseEntity> addTrade(@Body RequestBody requestBody);
+
+    /**
+     * 买卖需求列表--发布
+     */
+    @POST(UrlConfig.DELETE_TRADE)
+    Observable<BaseEntity> delTrade(@Body RequestBody requestBody);
+
+    /**
+     * 系统消息
+     */
+    @POST(UrlConfig.SYSTEM_MSSAGE)
+    Observable<BaseEntity<SystemMsgResponseBean>> systemMsg(@Body RequestBody requestBody);
+
+    /**
+     * 资金划转钱确认:资产划转-划转前确认 参数和返回与资产划转一样!!!
+     */
+    @POST(UrlConfig.BEFORE_MOVE_MONERY)
+    Observable<BaseEntity<MoveMoneryBean>> beforeMvMoney(@Body RequestBody requestBody);
+
 }
 

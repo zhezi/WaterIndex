@@ -890,7 +890,7 @@ public class UrlConfig {
     /**
      * 我的资产
      */
-    public static final String MONEY="api/home/user/money";
+    public static final String USER_MONEY="api/home/user/money";
 
     /**
      * 交易市场
@@ -998,4 +998,53 @@ public class UrlConfig {
      */
     public static final String SET_CAPITAL_PASS = "api/home/user/safePw";
 
+    /**
+     * 用户首页
+     */
+    public static final String USER_INDEX = "api/home/user/index";
+
+    /**
+     * 移交资产
+     */
+    public static final String MOVE_MONERY = "api/home/user/mvMoney";
+
+    /**
+     * 收款方式
+     */
+    public static final String PAYMENT_TYPE = "api/home/userPayInfo/index";
+
+    /**
+     * 添加收款方式
+     */
+    public static final String ADD_PAYMENT_TYPE = "api/home/userPayinfo/addPayInfo";
+
+    /**
+     * 收款方式 - 开启|禁用
+     */
+    public static final String PAYMENT_TYPE_SWITCH = "api/home/userPayinfo/switchPayInfo";
+
+    /**
+     * 收款方式 - 修改
+     */
+    public static final String CHANGE_PAYMENT_TYPE = "api/home/userPayinfo/editPayInfo";
+
+    /**
+     * 买卖需求-发布
+     */
+    public static final String ADD_TRADE = "api/home/userTrade/addTrade";
+
+    /**
+     * 买卖需求-下架
+     */
+    public static final String DELETE_TRADE = "api/home/userTrade/delTrade";
+
+    /**
+     * 系统消息
+     */
+    public static final String SYSTEM_MSSAGE = "api/home/user/sysMsg";
+
+    /**
+     * 资产划转-划转前确认
+     */
+    public static final String BEFORE_MOVE_MONERY = "api/home/user/beforeMvMoney";
 }

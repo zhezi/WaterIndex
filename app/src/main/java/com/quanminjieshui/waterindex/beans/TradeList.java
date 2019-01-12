@@ -1,31 +1,35 @@
 package com.quanminjieshui.waterindex.beans;
 
 public class TradeList {
-	private int id;
+
+	private String id;
 	private String t_sn;
+	private String add_time;
+	private String action_type_text;
+	private String old_total;
+	private String done;
+	private String pay_min;
+	private String status_text;
+	private int can_del;
+
+
 	private int uid;
 	private int action_type;
 	private String price;
-	private String old_total;
 	private String total;
 	private String pay_type;
-	private String pay_min;
 	private int cond_user;
 	private int cond_trade_count;
 	private int cond_pay_timeout;
 	private int status;
-	private String add_time;
-	private String action_type_text;
-	private String done;
-	private String status_text;
-	private int can_del;
 
-	public void setId(int id) {
-		this.id = id;
+
+	public String getId() {
+		return id;
 	}
 
-	public int getId() {
-		return id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public void setT_sn(String t_sn) {
