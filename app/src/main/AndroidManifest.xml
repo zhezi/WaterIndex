@@ -119,9 +119,6 @@
         <activity
             android:name=".ui.activity.EnterpriseActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.OrderListsActivity"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.activity.OrderDetailActivity"

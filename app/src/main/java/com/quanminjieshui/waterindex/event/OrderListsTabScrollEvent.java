@@ -1,14 +1,15 @@
 package com.quanminjieshui.waterindex.event;
 
+import com.quanminjieshui.waterindex.beans.ListOrder;
 import com.quanminjieshui.waterindex.beans.OrderListsResponseBean;
 
 import java.util.List;
 
 public class OrderListsTabScrollEvent {
     private String status;
-    private List<OrderListsResponseBean.OrderListEntity>list;
+    private List<ListOrder>list;
 
-    public OrderListsTabScrollEvent(String status, List<OrderListsResponseBean.OrderListEntity>list) {
+    public OrderListsTabScrollEvent(String status, List<ListOrder>list) {
         this.status = status;
         this.list=list;
     }
@@ -21,11 +22,11 @@ public class OrderListsTabScrollEvent {
         this.status = status;
     }
 
-    public List<OrderListsResponseBean.OrderListEntity> getList() {
+    public List<ListOrder> getList() {
         return list;
     }
 
-    public void setList(List<OrderListsResponseBean.OrderListEntity> list) {
+    public void setList(List<ListOrder> list) {
         this.list = list;
     }
 }

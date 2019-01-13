@@ -13,7 +13,6 @@ import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.ui.activity.AboutListActivity;
 import com.quanminjieshui.waterindex.ui.activity.ChangePassActivity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
-import com.quanminjieshui.waterindex.ui.activity.OrderListsActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserAssetActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserConfirmActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserDetailActivity;
@@ -71,10 +70,10 @@ public class PersonalFragment extends BaseFragment {
                 if (checkLoginStatus())
                     showToast("nothing!");
                 break;
-            case R.id.relative_order_lists:
-                if (checkLoginStatus())
-                    jump(OrderListsActivity.class);
-                break;
+//            case R.id.relative_order_lists:
+//                if (checkLoginStatus())
+//                    jump(OrderListsActivity.class);
+//                break;
             case R.id.relative_sys_msg:
                 if (checkLoginStatus())
                     jump(UserMessageActivity.class);

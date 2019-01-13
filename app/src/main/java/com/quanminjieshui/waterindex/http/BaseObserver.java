@@ -9,6 +9,7 @@ import com.quanminjieshui.waterindex.base.ActivityManager;
 import com.quanminjieshui.waterindex.http.bean.BaseEntity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
 import com.quanminjieshui.waterindex.utils.LogUtils;
+import com.quanminjieshui.waterindex.utils.Util;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -48,8 +49,12 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
             }
         } else {
             try {
-
-                onCodeError(tBaseEntity.getCode(), tBaseEntity.getMsg());
+                //by sxt
+                if (Util.isEmpty(tBaseEntity.getData()) && tBaseEntity.getData().equals("")) {
+                    onCodeError(tBaseEntity.getCode(), tBaseEntity.getMsg());
+                } else if (!Util.isEmpty(tBaseEntity.getData())) {
+                    onCodeError(tBaseEntity.getCode(), tBaseEntity.getData().toString());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

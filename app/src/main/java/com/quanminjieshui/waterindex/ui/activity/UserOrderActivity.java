@@ -2,18 +2,14 @@ package com.quanminjieshui.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,25 +21,29 @@ import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeIndex;
 import com.quanminjieshui.waterindex.contract.model.UserOrderModel;
-import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
 import com.quanminjieshui.waterindex.contract.presenter.SysConfigPresenter;
 import com.quanminjieshui.waterindex.contract.presenter.UserOrderPresenter;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 import com.quanminjieshui.waterindex.contract.view.SecondRequstViewImpl;
-import com.quanminjieshui.waterindex.http.bean.BaseEntity;
-import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
+import com.quanminjieshui.waterindex.event.CreateOrderResultEvent;
 import com.quanminjieshui.waterindex.utils.LogUtils;
 import com.quanminjieshui.waterindex.utils.StatusBarUtil;
-import com.quanminjieshui.waterindex.utils.ToastUtils;
 import com.quanminjieshui.waterindex.utils.image.GlidImageManager;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.greenrobot.event.EventBus;
 
-public class UserOrderActivity extends BaseActivity implements CommonViewImpl, SecondRequstViewImpl, TextWatcher {
+public class UserOrderActivity extends BaseActivity implements
+        CommonViewImpl,
+        SecondRequstViewImpl,
+        TextWatcher {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_total)
@@ -86,7 +86,6 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
     private String trade_id;
     private String total;
     private UserOrderPresenter userOrderPresenter;
-    private AlertChainDialog dialog;
     private SysConfigPresenter sysConfigPresenter;
     private float ds_price = 3.0f;
 
@@ -103,6 +102,7 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
         }
         userOrderPresenter = new UserOrderPresenter(new UserOrderModel());
         userOrderPresenter.attachView(this);
+
         sysConfigPresenter = new SysConfigPresenter(new UserOrderModel());
         sysConfigPresenter.attachView(this);
         sysConfigPresenter.getSysConfig(this);
@@ -189,10 +189,6 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
                 createOrder();
                 break;
 
-//            case R.id.trans_container:
-//                if (tvCustomDialog.getVisibility() == View.GONE) break;
-//                dismissCustomDialog();
-//                break;
             default:
                 break;
         }
@@ -210,26 +206,57 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
             userOrderPresenter.attachView(this);
         }
         total = edtTotal.getText().toString();
-        String total1 = tradeIndex.getTotal().replace("T", "").trim();
-        if (!TextUtils.isEmpty(total) && !TextUtils.isEmpty(total1)) {
-            float floatTotal = Float.valueOf(total);
-            float floatTotal1 = Float.valueOf(total1);
-            if (floatTotal <= 0) {
+        if (checkTime()) {
+            if (checkEdt()) {
+                userOrderPresenter.createOrder(this, trade_id, total);
+            } else {
                 edtTotal.setText("");
-                edtTotal.setHint("输入值需大于0！");
                 llTotal.setBackground(edt_border_illegal);
                 tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
-//                showCustomDialog("输入值需大于0！");
-                return;
-            } else if (floatTotal > floatTotal1) {
-                edtTotal.setText("");
-                edtTotal.setHint(new StringBuilder("输入值不能大于").append(tradeIndex.getTotal().toString()).toString());
-                llTotal.setBackground(edt_border_illegal);
-                tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
-//                showCustomDialog(new StringBuilder("输入值不能大于").append(tradeIndex.getTotal().toString()).toString());
-                return;
             }
-            userOrderPresenter.createOrder(this, trade_id, total);
+        } else {
+            EventBus.getDefault().post(new CreateOrderResultEvent("time_too_late"));
+            finish();
+        }
+    }
+
+    private boolean checkEdt() {
+        String total1 = "0";
+        String min = "0";
+        if (!TextUtils.isEmpty(tradeIndex.getTotal()) && tradeIndex.getTotal().contains("T")) {
+            total1 = tradeIndex.getTotal().replace("T", "").trim();
+        }
+        if (!TextUtils.isEmpty(tradeIndex.getPay_min()) && tradeIndex.getPay_min().contains("T")) {
+            min = tradeIndex.getPay_min().replace("T", "").trim();
+        }
+        if (!TextUtils.isEmpty(total) && !TextUtils.isEmpty(total1) && !TextUtils.isEmpty(min)) {
+            float floatTotal = Float.valueOf(total);//用户输入
+            float floatMax = Float.valueOf(total1);//后台返回最大
+            float floatMin = Float.valueOf(min);//后台返回最小
+
+            if (floatTotal <= 0) {
+                edtTotal.setHint("输入值需大于0！");
+                return false;
+            } else if (floatTotal > 0 && floatTotal < floatMin) {
+                edtTotal.setHint(new StringBuilder("输入值不能小于").append(tradeIndex.getPay_min().toString()).toString());
+                return false;
+            } else if (floatTotal > floatMax) {
+                edtTotal.setHint(new StringBuilder("输入值不能大于").append(tradeIndex.getTotal().toString()).toString());
+                return false;
+            } else if (floatTotal > 0 && floatTotal <= floatMax) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkTime() {
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+08:00"));    //获取东八区时间
+        int hour = c.get(Calendar.HOUR_OF_DAY);       //获取当前小时
+        if (hour > 10 && hour < 22) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -256,34 +283,14 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
 
     @Override
     public void onRequestSuccess(Object bean) {
-
+        finish();
+        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_success"));
     }
 
     @Override
     public void onRequestFailed(String msg) {
 
     }
-
-    private void showDialog() {
-        if (dialog == null) {
-            dialog = new AlertChainDialog(this);
-        }
-    }
-
-//    private void showCustomDialog(String msg) {
-//        if (tvCustomDialog.getVisibility() != View.VISIBLE) {
-//            tvCustomDialog.setVisibility(View.VISIBLE);
-//            tvCustomDialog.setText(msg);
-//        }
-//    }
-//
-//    private void dismissCustomDialog() {
-//        if (tvCustomDialog.getVisibility() == View.VISIBLE) {
-//            tvCustomDialog.setVisibility(View.GONE);
-//            tvCustomDialog.setText("");
-//        }
-//    }
-
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -298,21 +305,20 @@ public class UserOrderActivity extends BaseActivity implements CommonViewImpl, S
         total = edtTotal.getText().toString();
         if (!TextUtils.isEmpty(total)) {
             final Float aFloat = Float.valueOf(total);
-            //todo 暂时定单价为3   后期接口给返回具体单价
             tvTotalPrice.setText(new StringBuilder("总价：").append(aFloat * ds_price).append("元").toString());
         }
     }
 
     @Override
     public void onSecondRequstSuccess(SysConfigResponseBean o) {
-        if (o != null&&!TextUtils.isEmpty(o.getPrice())) {
-            ds_price=Float.valueOf(o.getPrice());
+        if (o != null && !TextUtils.isEmpty(o.getPrice())) {
+            ds_price = Float.valueOf(o.getPrice());
         }
     }
 
 
     @Override
     public void onSecondRequstFailed(String msg) {
-
+        LogUtils.e("tag", "******------" + msg);
     }
 }

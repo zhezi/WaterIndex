@@ -16,7 +16,7 @@ import com.quanminjieshui.waterindex.base.ActivityManager;
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.event.SelectFragmentEvent;
-import com.quanminjieshui.waterindex.ui.fragment.FindFragment;
+import com.quanminjieshui.waterindex.ui.fragment.OrderListsFragment;
 import com.quanminjieshui.waterindex.ui.fragment.PersonalFragment;
 import com.quanminjieshui.waterindex.ui.fragment.TradeIndexFragment;
 import com.quanminjieshui.waterindex.utils.SPUtil;
@@ -37,8 +37,6 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
-//    @BindView(R.id.img_title_center)
-//    ImageView img_title_center;
     @BindView(R.id.ll)
     public LinearLayout ll;
     @BindView(R.id.rg_main)
@@ -104,7 +102,7 @@ public class MainActivity extends BaseActivity {
                 showTradeIndex();
                 break;
             case R.id.rb4:
-                showFind();
+                showOrderLists();
                 break;
             case R.id.rb5:
                 showPersonal();
@@ -165,7 +163,7 @@ public class MainActivity extends BaseActivity {
                     EventBus.getDefault().post(new LoginStatusChangedEvent("login_status_changed_main_trade_index_reconnect"));
                     break;
                 case "订单":
-                    showFind();
+                    showOrderLists();
                     break;
                 case "我的":
                     showPersonal();
@@ -186,10 +184,10 @@ public class MainActivity extends BaseActivity {
         switchFragment(tab1);
     }
 
-    private void showFind() {
+    private void showOrderLists() {
         rb4.setChecked(true);
         tv_title_center.setText("订单");
-        if(tab2==null)tab2=new FindFragment();
+        if(tab2==null)tab2=new OrderListsFragment();
         switchFragment(tab2);
     }
 

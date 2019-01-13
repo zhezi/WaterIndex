@@ -106,7 +106,7 @@ public class UrlConfig {
     public static final String CREATE_ORDER = "api/home/factory/addOrder";
     //洗涤企业列表
     /**
-     * 交易中心
+     *
      *     无token
      *      {
      *          "code":1,
@@ -884,6 +884,22 @@ public class UrlConfig {
 
     /**
      * 订单列表
+     *     │ {
+     *     │     "code":1,
+     *     │     "msg":"订单列表",
+     *     │     "data":[
+     *     │         {
+     *     │             "my_action":"出售",
+     *     │             "other_uid":8,
+     *     │             "other_nickname":"bb",
+     *     │             "other_avatar":"222",
+     *     │             "createtime":"2018-12-13 18:55:00",
+     *     │             "status_text":"已完成",
+     *     │             "total":"3.10000T",
+     *     │             "rmb":"9.30000元",
+     *     │             "order_id":1,
+     *     │             "next_step":"sellerSucc"
+     *     │         },
      */
     public static final String LISTORDER="api/home/userOrder/listOrder";
 

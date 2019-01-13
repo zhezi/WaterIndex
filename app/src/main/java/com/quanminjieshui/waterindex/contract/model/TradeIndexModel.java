@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.beans.TradeIndexBase;
-import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
 import com.quanminjieshui.waterindex.http.BaseObserver;
 import com.quanminjieshui.waterindex.http.RetrofitFactory;
 import com.quanminjieshui.waterindex.http.bean.BaseEntity;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class TradeIndexModel {
 
-    public void getTradeIndex(BaseActivity activity,String type,String page, String page_size,final CommomCallback callback){
+    public void getTradeIndex(BaseActivity activity,String type,String page, String page_size,final CommonCallback callback){
         HashMap<String,Object>params=new HashMap<>();
         if(!TextUtils.isEmpty(type)){
             params.put("type",type);

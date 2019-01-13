@@ -1,7 +1,11 @@
 package com.quanminjieshui.waterindex.contract.model;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.quanminjieshui.waterindex.base.BaseActivity;
-import com.quanminjieshui.waterindex.beans.OrderListsResponseBean;
+import com.quanminjieshui.waterindex.beans.ListOrder;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
 import com.quanminjieshui.waterindex.http.BaseObserver;
 import com.quanminjieshui.waterindex.http.RetrofitFactory;
 import com.quanminjieshui.waterindex.http.bean.BaseEntity;
@@ -10,31 +14,37 @@ import com.quanminjieshui.waterindex.http.utils.ObservableTransformerUtils;
 import com.quanminjieshui.waterindex.http.utils.RequestUtil;
 import com.quanminjieshui.waterindex.utils.LogUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by WanghongHe on 2018/12/12 17:27.
- * 洗地订单
+ * Created by sxt
+ *
  */
 
 public class OrderListsModel {
 
-    public void orderList(BaseActivity activity, final OrderListCallBack callBack){
+    public void orderList(BaseActivity activity, String type, String page, String page_size, final CommonCallback callback) {
+        HashMap<String, Object> params = new HashMap<>();
+        if (!TextUtils.isEmpty(type)) {
+            params.put("type", type);
+        }
+        if (!TextUtils.isEmpty(page)) {
+            params.put("page", page);
+        }
+        if (!TextUtils.isEmpty(page_size)) {
+            params.put("page_size", page_size);
+        }
+        Log.e("TAG","是否为空"+(activity==null));
         RetrofitFactory.getInstance().createService()
-                .orderList(RequestUtil.getRequestHashBody(null,false))
-                .compose(activity.<BaseEntity<OrderListsResponseBean>>bindToLifecycle())
-                .compose(ObservableTransformerUtils.<BaseEntity<OrderListsResponseBean>>io())
-                .subscribe(new BaseObserver<OrderListsResponseBean>() {
+                .listOrder(RequestUtil.getRequestHashBody(params, false))
+                .compose(activity.<BaseEntity<List<ListOrder>>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<List<ListOrder>>>io())
+                .subscribe(new BaseObserver<List<ListOrder>>() {
 
-                    /**
-                     * 返回成功
-                     *
-                     * @param orderListsResponseBean
-                     * @throws Exception
-                     */
                     @Override
-                    protected void onSuccess(OrderListsResponseBean orderListsResponseBean) throws Exception {
-                        callBack.success(orderListsResponseBean);
+                    protected void onSuccess(List<ListOrder> list) throws Exception {
+                        callback.onRequestSuccess(list);
                     }
 
                     /**
@@ -49,26 +59,21 @@ public class OrderListsModel {
                         if (e != null && e.getMessage() != null) {
                             if (isNetWorkError) {
                                 LogUtils.e(e.getMessage());
-                                callBack.failed(HttpConfig.ERROR_MSG);
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
                             } else {
-                                callBack.failed(e.getMessage());
+                                callback.onRequestFailed(e.getMessage());
                             }
                         } else {
-                            callBack.failed("");
+                            callback.onRequestFailed("");
                         }
                     }
 
                     @Override
                     protected void onCodeError(String code, String msg) throws Exception {
                         super.onCodeError(code, msg);
-                        callBack.failed(msg);
+                        callback.onRequestFailed(msg);
                     }
                 });
 
-    }
-
-    public interface OrderListCallBack{
-        void success(OrderListsResponseBean orderListBean);
-        void failed(String msg);
     }
 }

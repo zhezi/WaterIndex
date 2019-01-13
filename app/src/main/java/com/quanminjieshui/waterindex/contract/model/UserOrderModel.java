@@ -2,7 +2,7 @@ package com.quanminjieshui.waterindex.contract.model;
 
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
-import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
 import com.quanminjieshui.waterindex.contract.model.callback.SencondRequestCallback;
 import com.quanminjieshui.waterindex.http.BaseObserver;
 import com.quanminjieshui.waterindex.http.RetrofitFactory;
@@ -18,7 +18,7 @@ public class UserOrderModel {
     public UserOrderModel() {
     }
 
-    public void createOrder(BaseActivity activity, String trade_id, String total, final CommomCallback callback) {
+    public void createOrder(BaseActivity activity, String trade_id, String total, final CommonCallback callback) {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("trade_id", trade_id);

@@ -48,13 +48,13 @@ public class PaySuceessActivity extends BaseActivity {
                 startActivity(new Intent(PaySuceessActivity.this,MainActivity.class));
                 break;
             case R.id.btn_viewOrder:
-                startActivity(new Intent(PaySuceessActivity.this,OrderListsActivity.class));
+//                startActivity(new Intent(PaySuceessActivity.this,OrderListsActivity.class));
                 break;
             case R.id.left_ll:
                 goBack(view);
                 finish();
                 break;
-                default:break;
+            default:break;
         }
     }
     @Override

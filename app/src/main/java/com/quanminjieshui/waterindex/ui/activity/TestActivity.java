@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.quanminjieshui.waterindex.R;
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.beans.InfoListsResponseBean;
+import com.quanminjieshui.waterindex.beans.ListOrder;
 import com.quanminjieshui.waterindex.beans.OrderDetailResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeCenterResponseBean;
 import com.quanminjieshui.waterindex.beans.TradeIndexBase;
@@ -91,17 +92,17 @@ public class TestActivity extends BaseActivity {
         switch (id) {
 
             case R.id.btn_request:
-                HashMap<String, Object> params = new HashMap<>();
-                params.put("trade_id","39");
-                params.put("total","1");
+//                HashMap<String, Object> params = new HashMap<>();
+//                params.put("type","0");
+//                params.put("total","1");
                 RetrofitFactory.getInstance().createService()
-                        .userOrder(RequestUtil.getRequestHashBody(params, false))
-                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
-                        .compose(ObservableTransformerUtils.<BaseEntity>io())
-                        .subscribe(new BaseObserver(TestActivity.this) {
+                        .listOrder(RequestUtil.getRequestHashBody(null, false))
+                        .compose(TestActivity.this.<BaseEntity<List<ListOrder>>>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity<List<ListOrder>>>io())
+                        .subscribe(new BaseObserver<List<ListOrder>>(TestActivity.this) {
 
                             @Override
-                            protected void onSuccess(Object bean) throws Exception {
+                            protected void onSuccess(List bean) throws Exception {
 //                                LogUtils.e("tag",
 //                                        bean.getLists().get(0).getContent());
                             }

@@ -43,8 +43,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailView
     RelativeLayout rl1;
     @BindView(R.id.img)
     ImageView img;
-    @BindView(R.id.tv_service)
-    TextView tvService;
     @BindView(R.id.tv_total_price)
     TextView tvTotalPrice;
     @BindView(R.id.tv_status)
@@ -221,7 +219,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailView
 
         tvFactoryName.setText(f_name);
         GlidImageManager.getInstance().loadImageView(this, bean.getImg(), img, R.mipmap.default_img);
-        tvService.setText(bean.getS_name());
         tvTotalPrice.setText(bean.getTotal_price());
 
         serviceCateEntries.clear();

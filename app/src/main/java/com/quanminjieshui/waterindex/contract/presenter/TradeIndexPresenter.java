@@ -2,7 +2,7 @@ package com.quanminjieshui.waterindex.contract.presenter;
 
 import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.contract.BasePresenter;
-import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
 import com.quanminjieshui.waterindex.contract.model.TradeIndexModel;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 
@@ -17,7 +17,7 @@ public class TradeIndexPresenter extends BasePresenter<CommonViewImpl> {
         if(tradeIndexModel==null){
             tradeIndexModel=new TradeIndexModel();
         }
-        tradeIndexModel.getTradeIndex(activity, type, page, page_size, new CommomCallback() {
+        tradeIndexModel.getTradeIndex(activity, type, page, page_size, new CommonCallback() {
             @Override
             public void onRequestSuccess(Object bean) {
                 if(mView!=null){

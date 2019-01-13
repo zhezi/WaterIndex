@@ -4,38 +4,39 @@ import com.quanminjieshui.waterindex.base.BaseActivity;
 import com.quanminjieshui.waterindex.beans.OrderListsResponseBean;
 import com.quanminjieshui.waterindex.contract.BasePresenter;
 import com.quanminjieshui.waterindex.contract.model.OrderListsModel;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
+import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 import com.quanminjieshui.waterindex.contract.view.OrderListsViewImpl;
 
 /**
  * Created by WanghongHe on 2018/12/12 17:39.
  */
 
-public class OrderListsPresenter extends BasePresenter<OrderListsViewImpl> {
+public class OrderListsPresenter extends BasePresenter<CommonViewImpl> {
 
     private OrderListsModel orderListsModel;
 
-    public OrderListsPresenter(){}
-
-    public OrderListsPresenter(OrderListsModel orderListsModel){
+    public OrderListsPresenter(OrderListsModel orderListsModel) {
         this.orderListsModel = orderListsModel;
     }
 
-    public void getOrderList(BaseActivity activity){
-        if(orderListsModel == null){
+    public void getOrderList(BaseActivity activity, String type, String page, String page_size) {
+        if (orderListsModel == null) {
             orderListsModel = new OrderListsModel();
         }
-        orderListsModel.orderList(activity, new OrderListsModel.OrderListCallBack() {
+        orderListsModel.orderList(activity, type, page, page_size, new CommonCallback() {
+
             @Override
-            public void success(OrderListsResponseBean orderListBean) {
-                if(mView!=null){
-                    mView.onOrderListSuccess(orderListBean);
+            public void onRequestSuccess(Object bean) {
+                if (mView != null) {
+                    mView.onRequestSuccess(bean);
                 }
             }
 
             @Override
-            public void failed(String msg) {
-                if(mView!=null){
-                    mView.onOrderListFailed(msg);
+            public void onRequestFailed(String msg) {
+                if (mView != null) {
+                    mView.onRequestFailed(msg);
                 }
             }
         });

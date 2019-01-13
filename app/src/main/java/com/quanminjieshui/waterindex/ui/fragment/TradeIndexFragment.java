@@ -21,12 +21,14 @@ import com.quanminjieshui.waterindex.beans.TradeIndexBase;
 import com.quanminjieshui.waterindex.contract.model.TradeIndexModel;
 import com.quanminjieshui.waterindex.contract.presenter.TradeIndexPresenter;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
+import com.quanminjieshui.waterindex.event.CreateOrderResultEvent;
 import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.ui.activity.AuthActivity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserOrderActivity;
 import com.quanminjieshui.waterindex.ui.adapter.TradeIndexAdapter;
 import com.quanminjieshui.waterindex.ui.view.AlertChainDialog;
+import com.quanminjieshui.waterindex.utils.LogUtils;
 import com.quanminjieshui.waterindex.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -71,6 +73,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         unbinder = ButterKnife.bind(this, rootView);
         tradeIndexPresenter = new TradeIndexPresenter(new TradeIndexModel());
         tradeIndexPresenter.attachView(this);
+        showLoadingDialog();
         doRequest();
 
         initView();
@@ -93,6 +96,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             public void onRefresh() {
                 buyCounter = 0;
                 buyList.clear();
+                showLoadingDialog();
                 doRequest();
                 xrvBuy.refreshComplete();
             }
@@ -108,6 +112,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             public void onRefresh() {
                 sellCounter = 0;
                 sellList.clear();
+                showLoadingDialog();
                 doRequest();
                 xrvSell.refreshComplete();
             }
@@ -145,7 +150,10 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                 xrvSell.setVisibility(View.GONE);
                 setBtnYellowBgShape(btnBuy);
                 setBtnYellowBorderBgShape(btnSell);
-                if (buyList.size() == 0) doRequest();
+                if (buyList.size() == 0) {
+                    showLoadingDialog();
+                    doRequest();
+                }
                 break;
 
             case R.id.btn_sell:
@@ -154,7 +162,10 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                 xrvSell.setVisibility(View.VISIBLE);
                 setBtnYellowBgShape(btnSell);
                 setBtnYellowBorderBgShape(btnBuy);
-                if (sellList.size() == 0) doRequest();
+                if (sellList.size() == 0) {
+                    showLoadingDialog();
+                    doRequest();
+                }
                 break;
 
             case R.id.ll_warning:
@@ -196,7 +207,6 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         if (tradeIndexPresenter == null) {
             tradeIndexPresenter = new TradeIndexPresenter(new TradeIndexModel());
         }
-        showLoadingDialog();
         if (type.equals("2")) {
             tradeIndexPresenter.getTradeIndex(getBaseActivity(), type, String.valueOf(buyCounter), null);
         } else if (type.equals("1")) {
@@ -224,7 +234,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             if (!TextUtils.isEmpty(tradeIndexBase.getTip())) {
                 llWarning.setVisibility(View.VISIBLE);
                 tvTip.setText(tradeIndexBase.getTip());
-            }else{
+            } else {
                 llWarning.setVisibility(View.GONE);
             }
             if (type.equals("2")) {
@@ -256,8 +266,21 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             buyList.clear();
             sellCounter = 0;
             sellList.clear();
+            showLoadingDialog();
             doRequest();
         }
+    }
+
+    public void onEventMainThread(CreateOrderResultEvent event) {
+        if (event != null) {
+            LogUtils.e("tag", "******------" + event.getMsg());
+            if (event.getMsg().equals("creat_order_success")) {
+                showDialog("提示", "下单成功！", "确定");
+            } else if (event.getMsg().equals("time_too_late")) {
+                showDialog("提示", "非交易时间，禁止交易", "queding");
+            }
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -284,7 +307,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
 
     }
 
-    private void showDialog(String title, String msg, final String positive) {
+    private void showDialog(final String title, String msg, final String positive) {
         if (dialog == null) {
             dialog = new AlertChainDialog(getActivity());
         }
@@ -294,7 +317,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                 .setPositiveButton(positive, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (positive.equals("知道了")) {
+                        if (positive.equals("知道了") || title.equals("提示")) {
                             dialog.dismiss();
                         } else if (positive.equals("去认证")) {
                             jump(AuthActivity.class, null);
@@ -304,6 +327,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                     }
                 })
                 .show();
+
     }
 
     private void jumpLogin() {

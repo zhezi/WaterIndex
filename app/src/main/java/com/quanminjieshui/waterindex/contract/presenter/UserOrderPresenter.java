@@ -1,11 +1,9 @@
 package com.quanminjieshui.waterindex.contract.presenter;
 
 import com.quanminjieshui.waterindex.base.BaseActivity;
-import com.quanminjieshui.waterindex.beans.SysConfigResponseBean;
 import com.quanminjieshui.waterindex.contract.BasePresenter;
 import com.quanminjieshui.waterindex.contract.model.UserOrderModel;
-import com.quanminjieshui.waterindex.contract.model.callback.CommomCallback;
-import com.quanminjieshui.waterindex.contract.model.callback.SencondRequestCallback;
+import com.quanminjieshui.waterindex.contract.model.callback.CommonCallback;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 
 public class UserOrderPresenter extends BasePresenter<CommonViewImpl> {
@@ -20,7 +18,7 @@ public class UserOrderPresenter extends BasePresenter<CommonViewImpl> {
             userOrderModel = new UserOrderModel();
         }
 
-        userOrderModel.createOrder(activity, trade_id, total, new CommomCallback() {
+        userOrderModel.createOrder(activity, trade_id, total, new CommonCallback() {
             @Override
             public void onRequestSuccess(Object bean) {
                 if (mView != null) {
