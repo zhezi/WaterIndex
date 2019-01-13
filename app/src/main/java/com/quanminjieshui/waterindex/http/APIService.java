@@ -176,16 +176,6 @@ public interface APIService {
     /**
      * "token", token;
      * "device_type", "android";
-     * "type", "0";
-     * "page", "1";
-     * "page_size", "10";
-     */
-    @POST(UrlConfig.LISTORDER)
-    Observable<BaseEntity<List<ListOrder>>> listOrder(@Body RequestBody requestBody);
-
-    /**
-     * "token", token;
-     * "device_type", "android";
      */
     @POST(UrlConfig.USER_MONEY)
     Observable<BaseEntity<UserMoney>> userMoney(@Body RequestBody requestBody);
@@ -208,6 +198,24 @@ public interface APIService {
      */
     @POST(UrlConfig.USER_ORDER)
     Observable<BaseEntity> userOrder(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "type", "0";
+     * "page", "1";
+     * "page_size", "10";
+     */
+    @POST(UrlConfig.LISTORDER)
+    Observable<BaseEntity<List<ListOrder>>> listOrder(@Body RequestBody requestBody);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.BUYER_UNPAY)
+    Observable<BaseEntity>buyerUnpay(@Body RequestBody body);
 
     /**
      * "token", token;

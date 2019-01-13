@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,12 +69,15 @@ public class TestActivity extends BaseActivity {
     //    @BindView(R.id.btn_request)
     Button btnRequest;
 
-
+int order_id;
+String next_step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         btnRequest = findViewById(R.id.btn_request);
+        order_id=getIntent().getIntExtra("order_id",0);
+        next_step=getIntent().getStringExtra("next_step");
     }
 
     @Override
@@ -92,17 +96,16 @@ public class TestActivity extends BaseActivity {
         switch (id) {
 
             case R.id.btn_request:
-//                HashMap<String, Object> params = new HashMap<>();
-//                params.put("type","0");
-//                params.put("total","1");
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("order_id",order_id);
                 RetrofitFactory.getInstance().createService()
-                        .listOrder(RequestUtil.getRequestHashBody(null, false))
-                        .compose(TestActivity.this.<BaseEntity<List<ListOrder>>>bindToLifecycle())
-                        .compose(ObservableTransformerUtils.<BaseEntity<List<ListOrder>>>io())
-                        .subscribe(new BaseObserver<List<ListOrder>>(TestActivity.this) {
+                        .buyerUnpay(RequestUtil.getRequestHashBody(params, false))
+                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity>io())
+                        .subscribe(new BaseObserver(TestActivity.this) {
 
                             @Override
-                            protected void onSuccess(List bean) throws Exception {
+                            protected void onSuccess(Object bean) throws Exception {
 //                                LogUtils.e("tag",
 //                                        bean.getLists().get(0).getContent());
                             }

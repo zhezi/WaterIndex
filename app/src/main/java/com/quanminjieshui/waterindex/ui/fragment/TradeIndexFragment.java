@@ -274,11 +274,14 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     public void onEventMainThread(CreateOrderResultEvent event) {
         if (event != null) {
             LogUtils.e("tag", "******------" + event.getMsg());
-            if (event.getMsg().equals("creat_order_success")) {
+            if (event.getTitle().equals("creat_order_success")) {
                 showDialog("提示", "下单成功！", "确定");
-            } else if (event.getMsg().equals("time_too_late")) {
+            } else if (event.getTitle().equals("creat_order_failed")) {
+                if (!TextUtils.isEmpty(event.getMsg())) showDialog("提示", event.getMsg(), "确定");
+                else showDialog("提示", "下单失败！", "确定");
+            }/*else if (event.getTitle().equals("time_too_late")) {
                 showDialog("提示", "非交易时间，禁止交易", "queding");
-            }
+            }*/
         }
 
     }

@@ -50,11 +50,12 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
         } else {
             try {
                 //by sxt
-                if (Util.isEmpty(tBaseEntity.getData()) && tBaseEntity.getData().equals("")) {
-                    onCodeError(tBaseEntity.getCode(), tBaseEntity.getMsg());
-                } else if (!Util.isEmpty(tBaseEntity.getData())) {
+                if (!Util.isEmpty(tBaseEntity.getData())) {
                     onCodeError(tBaseEntity.getCode(), tBaseEntity.getData().toString());
+                    return;
                 }
+
+                onCodeError(tBaseEntity.getCode(), tBaseEntity.getMsg());
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -206,7 +206,7 @@ public class UserOrderActivity extends BaseActivity implements
             userOrderPresenter.attachView(this);
         }
         total = edtTotal.getText().toString();
-        if (checkTime()) {
+//        if (checkTime()) {
             if (checkEdt()) {
                 userOrderPresenter.createOrder(this, trade_id, total);
             } else {
@@ -214,10 +214,10 @@ public class UserOrderActivity extends BaseActivity implements
                 llTotal.setBackground(edt_border_illegal);
                 tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
             }
-        } else {
-            EventBus.getDefault().post(new CreateOrderResultEvent("time_too_late"));
-            finish();
-        }
+//        } else {
+//            EventBus.getDefault().post(new CreateOrderResultEvent("time_too_late",null));
+//            finish();
+//        }
     }
 
     private boolean checkEdt() {
@@ -284,12 +284,13 @@ public class UserOrderActivity extends BaseActivity implements
     @Override
     public void onRequestSuccess(Object bean) {
         finish();
-        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_success"));
+        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_success",null));
     }
 
     @Override
     public void onRequestFailed(String msg) {
-
+        finish();
+        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_failed",msg));
     }
 
     @Override

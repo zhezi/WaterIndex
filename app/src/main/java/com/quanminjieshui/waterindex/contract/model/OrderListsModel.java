@@ -35,7 +35,6 @@ public class OrderListsModel {
         if (!TextUtils.isEmpty(page_size)) {
             params.put("page_size", page_size);
         }
-        Log.e("TAG","是否为空"+(activity==null));
         RetrofitFactory.getInstance().createService()
                 .listOrder(RequestUtil.getRequestHashBody(params, false))
                 .compose(activity.<BaseEntity<List<ListOrder>>>bindToLifecycle())

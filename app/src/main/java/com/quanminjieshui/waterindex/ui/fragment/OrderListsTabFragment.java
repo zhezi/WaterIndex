@@ -3,6 +3,7 @@ package com.quanminjieshui.waterindex.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.quanminjieshui.waterindex.contract.model.OrderListsModel;
 import com.quanminjieshui.waterindex.contract.presenter.OrderListsPresenter;
 import com.quanminjieshui.waterindex.contract.view.CommonViewImpl;
 import com.quanminjieshui.waterindex.event.ShouldRefreshEvent;
+import com.quanminjieshui.waterindex.ui.activity.TestActivity;
 import com.quanminjieshui.waterindex.ui.adapter.OrderListsAdapter;
 import com.quanminjieshui.waterindex.utils.ToastUtils;
 
@@ -45,7 +47,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     private String type = "0";//0 全部 1 进行中 2 已完成 3 已取消 4 申诉处理
     private String page = "1";//页码
     private int intPage = 1;//loadMore执行成功时+1    refresh时归位至1
-    private String page_size = "5";//每页数量
+    private String page_size = "10";//每页数量
     private OrderListsAdapter orderListsAdapter;
     private List<ListOrder> list = new ArrayList<>();
 
@@ -118,7 +120,12 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public void onItemClicked(ListOrder order) {
         if (order != null) {
             final int order_id = order.getOrder_id();
+            final String next_step = order.getNext_step();
             //todo jump
+            Intent intent=new Intent(baseActivity,TestActivity.class);
+            intent.putExtra("order_id",order_id);
+            intent.putExtra("next_step",next_step);
+            startActivity(intent);
         }
     }
 

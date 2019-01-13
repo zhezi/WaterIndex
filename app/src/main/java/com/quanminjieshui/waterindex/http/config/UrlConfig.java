@@ -883,86 +883,187 @@ public class UrlConfig {
     public static final String SYSMSG="api/home/user/sysMsg";
 
     /**
-     * 订单列表
-     *     │ {
-     *     │     "code":1,
-     *     │     "msg":"订单列表",
-     *     │     "data":[
-     *     │         {
-     *     │             "my_action":"出售",
-     *     │             "other_uid":8,
-     *     │             "other_nickname":"bb",
-     *     │             "other_avatar":"222",
-     *     │             "createtime":"2018-12-13 18:55:00",
-     *     │             "status_text":"已完成",
-     *     │             "total":"3.10000T",
-     *     │             "rmb":"9.30000元",
-     *     │             "order_id":1,
-     *     │             "next_step":"sellerSucc"
-     *     │         },
-     */
-    public static final String LISTORDER="api/home/userOrder/listOrder";
-
-    /**
      * 我的资产
      */
     public static final String USER_MONEY="api/home/user/money";
 
     /**
      * 交易市场
-     *     │ {
-     *     │     "code":1,
-     *     │     "msg":"操作成功！",
-     *     │     "data":{
-     *     │         "total":17,
-     *     │         "page":1,
-     *     │         "list":[
-     *     │             {
-     *     │                 "trade_id":7,
-     *     │                 "trade_uid":37,
-     *     │                 "avatar":"",
-     *     │                 "user_nickname":"看你不爽",
-     *     │                 "sold":"0",
-     *     │                 "sold_rate":"0%",
-     *     │                 "total":"300.00000T",
-     *     │                 "pay_type_bank_card":"1",
-     *     │                 "pay_type_alipay":"0",
-     *     │                 "pay_type_wechat":"1",
-     *     │                 "pay_min":"10.00000T",
-     *     │                 "pay_timeout":0
-     *     │             },
-     *     │             {
-     *     │                 "trade_id":12,
-     *     │                 "trade_uid":52,
-     *     │                 "avatar":"admin\/20190108\/907251bff177cd8052086d3e497e013a.jpg",
-     *     │                 "user_nickname":"小白",
-     *     │                 "sold":"0",
-     *     │                 "sold_rate":"0%",
-     *     │                 "total":"1.00000T",
-     *     │                 "pay_type_bank_card":"1",
-     *     │                 "pay_type_alipay":"1",
-     *     │                 "pay_type_wechat":"1",
-     *     │                 "pay_min":"2.00000T",
-     *     │                 "pay_timeout":0
-     *     │             }
-     *     │         ],
-     *     │         "is_login":"0",
-     *     │         "is_auth":0,
-     *     │         "tip":"在开始交易之前，您需要完善必要的交易信息"
-     *     │     }
-     *     │ }
+     *      {
+     *          "code":1,
+     *          "msg":"操作成功！",
+     *          "data":{
+     *              "total":17,
+     *              "page":1,
+     *              "list":[
+     *                  {
+     *                      "trade_id":7,
+     *                      "trade_uid":37,
+     *                      "avatar":"",
+     *                      "user_nickname":"看你不爽",
+     *                      "sold":"0",
+     *                      "sold_rate":"0%",
+     *                      "total":"300.00000T",
+     *                      "pay_type_bank_card":"1",
+     *                      "pay_type_alipay":"0",
+     *                      "pay_type_wechat":"1",
+     *                      "pay_min":"10.00000T",
+     *                      "pay_timeout":0
+     *                  },
+     *                  {
+     *                      "trade_id":12,
+     *                      "trade_uid":52,
+     *                      "avatar":"admin\/20190108\/907251bff177cd8052086d3e497e013a.jpg",
+     *                      "user_nickname":"小白",
+     *                      "sold":"0",
+     *                      "sold_rate":"0%",
+     *                      "total":"1.00000T",
+     *                      "pay_type_bank_card":"1",
+     *                      "pay_type_alipay":"1",
+     *                      "pay_type_wechat":"1",
+     *                      "pay_min":"2.00000T",
+     *                      "pay_timeout":0
+     *                  }
+     *              ],
+     *              "is_login":"0",
+     *              "is_auth":0,
+     *              "tip":"在开始交易之前，您需要完善必要的交易信息"
+     *          }
+     *      }
      */
     public static final String TRADE_INDEX="api/home/trade/index";
 
     /**
      * 用户下单
-     *     │ {
-     *     │     "code":1,
-     *     │     "msg":"下单成功！",
-     *     │     "data":"57"
-     *     │ }
+     *      {
+     *          "code":1,
+     *          "msg":"下单成功！",
+     *          "data":"57"
+     *      }
      */
     public static final String USER_ORDER="api/home/trade/userOrder";
+
+    /**
+     * 订单列表
+     *      {
+     *          "code":1,
+     *          "msg":"订单列表",
+     *          "data":[
+     *              {
+     *                  "my_action":"出售",
+     *                  "other_uid":8,
+     *                  "other_nickname":"bb",
+     *                  "other_avatar":"222",
+     *                  "createtime":"2018-12-13 18:55:00",
+     *                  "status_text":"已完成",
+     *                  "total":"3.10000T",
+     *                  "rmb":"9.30000元",
+     *                  "order_id":1,
+     *                  "next_step":"sellerSucc"
+     *              },
+     *              {
+     *                  "my_action":"出售",
+     *                  "other_uid":8,
+     *                  "other_nickname":"bb",
+     *                  "other_avatar":"222",
+     *                  "createtime":"2018-12-14 17:29:54",
+     *                  "status_text":"已取消",
+     *                  "total":"3.00000T",
+     *                  "rmb":"9.00000元",
+     *                  "order_id":3,
+     *                  "next_step":"sellerCancel"
+     *              },
+     *              {
+     *                  "my_action":"出售",
+     *                  "other_uid":8,
+     *                  "other_nickname":"bb",
+     *                  "other_avatar":"222",
+     *                  "createtime":"2018-12-17 19:44:55",
+     *                  "status_text":"进行中",
+     *                  "total":"3.00000T",
+     *                  "rmb":"9.00000元",
+     *                  "order_id":5,
+     *                  "next_step":"sellerPaid"
+     *              },
+     *              {
+     *                  "my_action":"出售",
+     *                  "other_uid":52,
+     *                  "other_nickname":"小白",
+     *                  "other_avatar":"admin\/20190109\/25f10b6a8d35bf46968f42cb4acaa290.jpg",
+     *                  "createtime":"2019-01-05 13:25:27",
+     *                  "status_text":"申诉处理",
+     *                  "total":"3.00000T",
+     *                  "rmb":"9.00000元",
+     *                  "order_id":21,
+     *                  "next_step":"sellerAppeal"
+     *              },
+     *              {
+     *                  "my_action":"购买",
+     *                  "other_uid":8,
+     *                  "other_nickname":"bb",
+     *                  "other_avatar":"222",
+     *                  "createtime":"2018-12-21 15:46:25",
+     *                  "status_text":"已取消",
+     *                  "total":"3.00000T",
+     *                  "rmb":"9.00000元",
+     *                  "order_id":6,
+     *                  "next_step":"buyerCancel"
+     *              }
+     *          ]
+     *      }
+     */
+    public static final String LISTORDER="api/home/userOrder/listOrder";
+
+    /**
+     * 买家-未付款
+      {
+          "code":1,
+          "msg":"订单详情",
+          "data":{
+              "order_info":{
+                  "title":"购买节水指标",
+                  "expire_time":"不限制",
+                  "rmb":"9.00000元",
+                  "total":"3.00000T",
+                  "price":"3.00000元\/T",
+                  "order_sn":"20190110182211322408",
+                  "pay_code":"322408",
+                  "createtime":"2019-01-10 18:22:11",
+                  "seller_avatar":"https:\/\/www.jieshuizhibiao.com\/upload\/admin\/20190109\/277a2b3341ebbf2a70bf755c0774361e.jpg",
+                  "seller_nickname":"丁香满文轩",
+                  "order_id":"59"
+              },
+              "pay_info_list":[
+                  {
+                      "id":10,
+                      "uid":39,
+                      "type":2,
+                      "user_name":"萨文轩",
+                      "bank_name":"",
+                      "bank_detail_name":"",
+                      "account_name":"18658900249",
+                      "qrcode":"admin\/20190108\/ddbded5a8c787ea8108d77aadc25de2f.jpeg",
+                      "add_time":1546142739,
+                      "status":1
+                  },
+                  {
+                      "id":14,
+                      "uid":39,
+                      "type":1,
+                      "user_name":"萨文轩",
+                      "bank_name":"北京银行",
+                      "bank_detail_name":"朝阳支行",
+                      "account_name":"6227001142040082275",
+                      "qrcode":"",
+                      "add_time":1546917730,
+                      "status":1
+                  }
+              ]
+          }
+      }
+     *
+     */
+    public static final String BUYER_UNPAY ="api/home/userOrder/buyerUnpay";
 
     /**
      *基础信息    节水指标单价
