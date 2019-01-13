@@ -1,4 +1,4 @@
-///**
+package com.quanminjieshui.waterindex.event;///**
 // * Copyright (C), 2015-2019, XXX有限公司
 // * FileName: LoginEvent
 // * Author: sxt

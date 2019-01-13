@@ -13,6 +13,7 @@ import com.quanminjieshui.waterindex.event.LoginStatusChangedEvent;
 import com.quanminjieshui.waterindex.ui.activity.AboutListActivity;
 import com.quanminjieshui.waterindex.ui.activity.ChangePassActivity;
 import com.quanminjieshui.waterindex.ui.activity.LoginActivity;
+import com.quanminjieshui.waterindex.ui.activity.PaymentTypeActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserAssetActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserConfirmActivity;
 import com.quanminjieshui.waterindex.ui.activity.UserDetailActivity;
@@ -48,7 +49,7 @@ public class PersonalFragment extends BaseFragment {
     private String user_login;//用户登录手机号，作用同isLogin
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
-            R.id.relative_trade_lists, R.id.relative_order_lists,
+            R.id.relative_payment_type, R.id.relative_order_lists,
             R.id.relative_sys_msg, R.id.relative_change_pass, R.id.relative_about_us})
     public void onClick(View v) {
 
@@ -66,9 +67,9 @@ public class PersonalFragment extends BaseFragment {
                 if (checkLoginStatus())
                     jump(UserConfirmActivity.class);
                 break;
-            case R.id.relative_trade_lists:
+            case R.id.relative_payment_type:
                 if (checkLoginStatus())
-                    showToast("nothing!");
+                    jump(PaymentTypeActivity.class);
                 break;
 //            case R.id.relative_order_lists:
 //                if (checkLoginStatus())

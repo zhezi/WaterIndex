@@ -124,7 +124,7 @@
             android:background="@color/divider_gray" />
 
         <RelativeLayout
-            android:id="@+id/relative_trade_lists"
+            android:id="@+id/relative_payment_type"
             style="@style/PaddinLeftRight"
             android:layout_width="match_parent"
             android:layout_height="@dimen/commit_btn_height">
@@ -137,7 +137,7 @@
                 android:src="@mipmap/clock" />
 
             <TextView
-                android:id="@+id/tv_trade_lists"
+                android:id="@+id/tv_payment_type"
                 style="@style/style_txt_confirm_order1"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/img3"

@@ -144,7 +144,7 @@ public class WebViewActivity extends BaseActivity {
         }
 
         @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams
                 fileChooserParams) {
             return true;
         }

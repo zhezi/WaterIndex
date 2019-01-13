@@ -39,14 +39,14 @@ public class CreateOrderListAdapter extends RecyclerView.Adapter<CreateOrderList
 
     @NonNull
     @Override
-    public CreateOrderListAdapter.OrderListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrderListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.poppupwindow_create_order_item, parent, false);
         AutoUtils.auto(v);
-        return new CreateOrderListAdapter.OrderListViewHolder(v);
+        return new OrderListViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CreateOrderListAdapter.OrderListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderListViewHolder holder, int position) {
         final CreateOrderListBean entity = list.get(position);
         if(entity==null) return;
 

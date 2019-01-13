@@ -197,6 +197,18 @@
             android:name=".ui.activity.UserOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialogstyle" />
+
+        <activity android:name=".ui.activity.PaymentTypeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.AddBankPaymetActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.AddWXPaymetActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.AddZFBPaymetActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

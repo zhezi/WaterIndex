@@ -44,6 +44,14 @@ public class GlidImageManager {
         return instance;
     }
 
+    public void loadImageFile(Context context, File file, ImageView imageView) {
+
+        Glide.with(context)                             //配置上下文
+                .load(file)      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存全尺寸
+                .into(imageView);
+    }
+
     public void loadImageUri(Context context, String img_url, ImageView imageView, int default_img) {
 
         Glide.with(context)                             //配置上下文

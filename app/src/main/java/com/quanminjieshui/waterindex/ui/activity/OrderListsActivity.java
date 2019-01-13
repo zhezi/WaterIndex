@@ -1,4 +1,4 @@
-//package com.quanminjieshui.waterindex.ui.activity;
+package com.quanminjieshui.waterindex.ui.activity;//package com.quanminjieshui.waterindex.ui.activity;
 //
 //
 //import android.content.Intent;
