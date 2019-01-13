@@ -42,7 +42,7 @@ public class PayMentResponseBean {
         String type; 	//类型 	字符串(string) 		1银行卡 2支付宝 3微信
         String type_text; 	//type文案 	字符串(string)
         String account_name; 	//账号 	字符串(string)
-        String switch_pay; 	//todo 后台改一下 开关 	字符串(string) 		1开 0关
+        String isopen; 	//开关 	字符串(string) 		1开 0关
         String link_text; 	//操作文字 	字符串(string) 		添加|编辑
 
         public String getId() {
@@ -77,12 +77,12 @@ public class PayMentResponseBean {
             this.account_name = account_name;
         }
 
-        public String getSwitch_pay() {
-            return switch_pay;
+        public String getIsopen() {
+            return isopen;
         }
 
-        public void setSwitch_pay(String switch_pay) {
-            this.switch_pay = switch_pay;
+        public void setIsopen(String isopen) {
+            this.isopen = isopen;
         }
 
         public String getLink_text() {
