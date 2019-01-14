@@ -1,4 +1,4 @@
-//package com.quanminjieshui.waterindex.event;
+package com.quanminjieshui.waterindex.event;//package com.quanminjieshui.waterindex.event;
 //
 ///**
 // * create by sxt

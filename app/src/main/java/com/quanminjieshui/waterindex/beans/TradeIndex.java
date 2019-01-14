@@ -152,7 +152,7 @@ public class TradeIndex implements Parcelable {
 		this.pay_timeout = in.readInt();
 	}
 
-	public static final Parcelable.Creator<TradeIndex> CREATOR = new Parcelable.Creator<TradeIndex>() {
+	public static final Creator<TradeIndex> CREATOR = new Creator<TradeIndex>() {
 		@Override
 		public TradeIndex createFromParcel(Parcel source) {
 			return new TradeIndex(source);

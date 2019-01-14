@@ -46,5 +46,16 @@
         独家专业技术，节约水达95%）+区块链，助力全民节水。
     </string>
     <string name="hint_input_capital_old_pwd">请输入原始资金密码</string>
-
+    <string name="hint_input_payment_name">请输入姓名</string>
+    <string name="hint_input_payment_bank_name">请输入开户银行</string>
+    <string name="hint_input_payment_bank_branch_name">请输入开户银行支行（选填）</string>
+    <string name="hint_input_payment_bank_number">请输入银行卡号</string>
+    <string name="hint_input_payment_capital_pass">请输入资金密码</string>
+    <string name="hint_input_payment_zfb_account">请输入支付宝账号</string>
+    <string name="hint_input_payment_wx_account">请输入微信账号</string>
+    <string name="hint_upload_payment_zfb_img">请上传您的支付宝收款二维码图片</string>
+    <string name="hint_upload_payment_wx_img">请上传您的微信收款二维码图片</string>
+    <string name="rationale_camera">本应用程序需要使用你的相机，这样你就可以拍照了或者扫描二维码</string>
+    <string name="rationale_storage">本应用程序需要读取和写入存储，这样你就可以选择本地文件了</string>
+    <string name="rationale_ask_again">没有该权限，此应用程序可能无法正常工作。打开应用程序设置来修改应用程序权限。</string>
 </resources>
