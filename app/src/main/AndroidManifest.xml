@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.quanminjieshui.waterindex">
+    package="com.jieshuizhibiao.waterindex">
 
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,10 +15,12 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
 
 
     <application
-        android:name="com.quanminjieshui.waterindex.WaterIndexApplication"
+        android:name="com.jieshuizhibiao.waterindex.WaterIndexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo3"
         android:label="@string/app_name"
@@ -40,7 +42,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.quanminjieshui.waterindex.fileProvider"
+            android:authorities="com.jieshuizhibiao.waterindex.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -61,14 +63,14 @@
             android:screenOrientation="behind" />
         <!--alipay end -->
 
-        <activity android:name=".ui.activity.TestActivity" /> <!--<intent-filter>
+        <activity android:name="com.jieshuizhibiao.waterindex.ui.activity.TestActivity" /> <!--<intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>-->
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -79,71 +81,71 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.GuideActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.GuideActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash" />
 
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.LoginActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.RegisterActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.RegisterActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.AuthActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.AuthActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.PictureSettingActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.PictureSettingActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.RegisterSuccessActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.RegisterSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.FindPassActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.FindPassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.ChangePassActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.ChangePassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserDetailActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.UserDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.EnterpriseActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.OrderDetailActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.EnterpriseActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.FactoryServiceActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.OrderDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.FactoryServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.AboutListActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.AboutListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.AboutActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserAssetActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.UserAssetActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserConfirmActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.UserConfirmActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserMessageActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.UserMessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GoodsActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.GoodsActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -151,63 +153,63 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
         <activity
-            android:name=".ui.activity.ConfirmOrderActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.ConfirmOrderActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.WashDemandActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.WashDemandActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.DistributionInfoActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.DistributionInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.ChangeInfoActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.ChangeInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.PaySuceessActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.PaySuceessActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.InfoDetailActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.InfoDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GoodsListsActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.GoodsListsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.TradeListsActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.TradeListsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.TradeDetaiActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.TradeDetaiActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.WebViewActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.TransferActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.TransferActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SetCapitalPassActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.SetCapitalPassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserOrderActivity"
+            android:name="com.jieshuizhibiao.waterindex.ui.activity.UserOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialogstyle" />
 
-        <activity android:name=".ui.activity.PaymentTypeActivity"
+        <activity android:name="com.jieshuizhibiao.waterindex.ui.activity.PaymentTypeActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddBankPaymetActivity"
+        <activity android:name="com.jieshuizhibiao.waterindex.ui.activity.AddBankPaymetActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddWXPaymetActivity"
+        <activity android:name="com.jieshuizhibiao.waterindex.ui.activity.AddWXPaymetActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddZFBPaymetActivity"
+        <activity android:name="com.jieshuizhibiao.waterindex.ui.activity.AddZFBPaymetActivity"
             android:screenOrientation="portrait"/>
     </application>
 
