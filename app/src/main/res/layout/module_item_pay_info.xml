@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--付款信息(仅字)-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_pay_info"
     style="@style/PaddinLeftRight"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--付款参考号-->
+<!--收款人-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_pay_code"
+    android:id="@+id/ll_user_name"
     style="@style/PaddinLeftRight"
     android:layout_width="match_parent"
     android:layout_height="@dimen/commit_btn_height"
@@ -11,17 +11,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="付款参考号"
+        android:text="收款人"
         android:textColor="@color/text_black"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/tv_pay_code"
+        android:id="@+id/tv_user_name"
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"
         android:textColor="@color/text_gray"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
 </LinearLayout>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--购买数量、出售数量-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_total"
     style="@style/PaddinLeftRight"
