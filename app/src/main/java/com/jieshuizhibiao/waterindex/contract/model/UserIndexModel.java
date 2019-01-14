@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -18,9 +17,9 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class UserIndexModel {
 
-    public void usetIndex(BaseActivity activity, BaseBean params,final UserIndexCallBack callBack){
+    public void usetIndex(BaseActivity activity,final UserIndexCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .userIndex(RequestUtil.getRequestBeanBody(params,false))
+                .userIndex(RequestUtil.getRequestBeanBody(null,false))
                 .compose(activity.<BaseEntity<UserIndexResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<UserIndexResponseBean>>io())
                 .subscribe(new BaseObserver<UserIndexResponseBean>() {

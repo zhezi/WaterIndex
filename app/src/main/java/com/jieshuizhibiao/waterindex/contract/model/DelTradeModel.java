@@ -20,7 +20,7 @@ public class DelTradeModel {
 
     public void delTrade(BaseActivity activity, DelTradeReqParams params,final DelTradeCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .delTrade(RequestUtil.getRequestBeanBody(params,false))
+                .delTrade(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.presenter;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.AuthModel;
 import com.jieshuizhibiao.waterindex.contract.view.AuthViewImpl;
@@ -16,11 +15,11 @@ public class AuthPresenter extends BasePresenter<AuthViewImpl> {
         this.model = model;
     }
 
-    public void auth(BaseActivity activity, boolean user_type, BaseBean params){
+    public void auth(BaseActivity activity, boolean user_type){
         if(model==null){
             model=new AuthModel();
         }
-        model.auth(activity, user_type, params, new AuthModel.AuthCallback() {
+        model.auth(activity, user_type, new AuthModel.AuthCallback() {
             @Override
             public void onEdtContentsLegal() {
                 if(mView!=null){

@@ -19,7 +19,7 @@ public class ChangePaymentTypeModel {
 
     public void changePaymentType(BaseActivity activity, ChangePayMentTypeReqParams params,final ChangePayMentTypeCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .changePayMentType(RequestUtil.getRequestBeanBody(params,false))
+                .changePayMentType(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

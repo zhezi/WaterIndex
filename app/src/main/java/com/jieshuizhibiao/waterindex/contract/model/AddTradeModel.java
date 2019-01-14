@@ -18,7 +18,7 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 public class AddTradeModel {
     public void addTrade(BaseActivity activity, AddTradeReqParams params,final AddTradeCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .addTrade(RequestUtil.getRequestBeanBody(params,false))
+                .addTrade(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

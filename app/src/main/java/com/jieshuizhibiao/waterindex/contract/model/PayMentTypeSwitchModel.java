@@ -19,7 +19,7 @@ public class PayMentTypeSwitchModel {
 
     public void payMentTypeSwitch(BaseActivity activity, PayMentTypeSwitchReqParams params,final PayMentTypeSwitchCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .payMentTypeSwitch(RequestUtil.getRequestBeanBody(params,false))
+                .payMentTypeSwitch(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

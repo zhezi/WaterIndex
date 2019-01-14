@@ -198,7 +198,7 @@
             android:background="@color/divider_gray" />
 
         <RelativeLayout
-            android:id="@+id/relative_change_pass"
+            android:id="@+id/relative_safe_center"
             style="@style/PaddinLeftRight"
             android:layout_width="match_parent"
             android:layout_height="@dimen/commit_btn_height">
@@ -211,7 +211,7 @@
                 android:src="@mipmap/umbrella" />
 
             <TextView
-                android:id="@+id/tv_change_pass"
+                android:id="@+id/tv_safe_center"
                 style="@style/style_txt_confirm_order1"
                 android:layout_centerVertical="true"
                 android:paddingLeft="26px"

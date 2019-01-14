@@ -2,6 +2,7 @@ package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.jieshuizhibiao.waterindex.event.SelectFragmentEvent;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,6 +54,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
 
     private UserDetailPresenter userDetailPresenter;
     private AlertChainDialog alertChainDialog;
+    private String userLogin = "";
 
     @OnClick({R.id.left_ll, R.id.tv_change_pass, R.id.tv_auth_status, R.id.btn_logout})
     public void onClick(View v) {
@@ -105,6 +108,8 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
 
     private void initView() {
         tvTitleCenter.setText("账户信息");
+        userLogin = (String)SPUtil.get(this,SPUtil.USER_LOGIN,"user_login");
+        tvUserLogin.setText(TextUtils.isEmpty(userLogin) ? "" :Util.hide4Phone(userLogin));
         alertChainDialog = new AlertChainDialog(this);
     }
 
@@ -150,9 +155,9 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     @Override
     public void onUserDetailSuccess(UserDetailResponseBean userDetailResponseBean) {
         if (userDetailResponseBean != null) {
-            tvUserLogin.setText((String)SPUtil.get(this,SPUtil.USER_NICKNAME,"********"));
+
             tvCreateTime.setText(userDetailResponseBean.getCreate_time());
-            tvUserLoginTel.setText(userDetailResponseBean.getUser_login());
+            tvUserLoginTel.setText(TextUtils.isEmpty(userDetailResponseBean.getUser_login()) ? Util.hide4Phone(userLogin): userDetailResponseBean.getUser_login());
             tvUserType.setText(userDetailResponseBean.getUser_type());
             int user_status = userDetailResponseBean.getUser_status();
             if (user_status == 0) {

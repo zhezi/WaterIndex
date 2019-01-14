@@ -48,7 +48,7 @@ public class SetCapitalPassModel {
     public void setCapitalPass(BaseActivity activity, SetCaptialPassReqParams params,final SetCaptialPassCallBack callBack){
 
         RetrofitFactory.getInstance().createService()
-                .setCapitalPass(RequestUtil.getRequestBeanBody(params,false))
+                .setCapitalPass(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

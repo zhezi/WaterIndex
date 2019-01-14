@@ -3,7 +3,6 @@ package com.jieshuizhibiao.waterindex.contract.model;
 import android.util.Log;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.request.CompanyAuthReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.PersonalAuthReqParams;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
@@ -20,11 +19,13 @@ import java.util.Map;
 public class AuthModel {
     private static final String TAG = "AuthModel";
 
-    public void auth(final BaseActivity activity,final boolean user_type, final BaseBean params, AuthCallback callback) {
+    public void auth(final BaseActivity activity,final boolean user_type, AuthCallback callback) {
         if (user_type) {//企业认证
-            companyAuthor(activity, (CompanyAuthReqParams) params, callback);
+            CompanyAuthReqParams params = new CompanyAuthReqParams();
+            companyAuthor(activity, params, callback);
         } else {//个人认证
-            personalAuthor(activity, (PersonalAuthReqParams) params, callback);
+            PersonalAuthReqParams params = new PersonalAuthReqParams();
+            personalAuthor(activity,params, callback);
         }
     }
 

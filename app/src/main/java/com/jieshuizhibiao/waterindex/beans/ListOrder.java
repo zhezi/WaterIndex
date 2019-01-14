@@ -132,7 +132,7 @@ public class ListOrder implements Parcelable {
         this.next_step = in.readString();
     }
 
-    public static final Parcelable.Creator<ListOrder> CREATOR = new Parcelable.Creator<ListOrder>() {
+    public static final Creator<ListOrder> CREATOR = new Creator<ListOrder>() {
         @Override
         public ListOrder createFromParcel(Parcel source) {
             return new ListOrder(source);

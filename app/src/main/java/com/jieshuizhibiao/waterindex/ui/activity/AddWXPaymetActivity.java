@@ -199,6 +199,7 @@ public class AddWXPaymetActivity extends BaseActivity {
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
+            showImgData(mRotateFile);
             ZipImg(AddWXPaymetActivity.this,mRotateFile);
 
             if (mOriginalBitmap != null) {
@@ -209,6 +210,7 @@ public class AddWXPaymetActivity extends BaseActivity {
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
+            showImgData(mFile);
             ZipImg(AddWXPaymetActivity.this,mFile);
         }
     }

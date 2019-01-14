@@ -18,7 +18,7 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 public class SetAvatarModel {
     public void setAvatarImg(BaseActivity activity, SetAvatarReqParams params,final SetAvatarCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .setAvatar(RequestUtil.getRequestBeanBody(params,false))
+                .setAvatar(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

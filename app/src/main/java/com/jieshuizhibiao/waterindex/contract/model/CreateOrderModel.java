@@ -19,7 +19,7 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 public class CreateOrderModel {
     public void createOrder(BaseActivity activity, CreateOrderReqParams params,final CreateOrderCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .createOrder(RequestUtil.getRequestBeanBody(params,false))
+                .createOrder(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity<CreateOrderResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<CreateOrderResponseBean>>io())
                 .subscribe(new BaseObserver<CreateOrderResponseBean>(activity) {

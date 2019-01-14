@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.SystemMsgResponseBean;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -18,9 +17,9 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class SystemtMsgModel {
 
-    public void getSystemMsg(BaseActivity activity, BaseBean params,final SystemMsgCallBack callBack){
+    public void getSystemMsg(BaseActivity activity,final SystemMsgCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .systemMsg(RequestUtil.getRequestBeanBody(params,false))
+                .systemMsg(RequestUtil.getRequestBeanBody(null,false))
                 .compose(activity.<BaseEntity<SystemMsgResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<SystemMsgResponseBean>>io())
                 .subscribe(new BaseObserver<SystemMsgResponseBean>(activity) {

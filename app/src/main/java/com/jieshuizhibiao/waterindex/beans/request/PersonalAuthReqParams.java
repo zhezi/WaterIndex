@@ -3,9 +3,7 @@ package com.jieshuizhibiao.waterindex.beans.request;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
-
-public class PersonalAuthReqParams extends BaseBean implements Parcelable {
+public class PersonalAuthReqParams implements Parcelable {
     private String nationality;
     private String province;
     private String city;

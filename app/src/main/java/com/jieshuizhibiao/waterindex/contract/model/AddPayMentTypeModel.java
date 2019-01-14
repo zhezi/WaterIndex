@@ -20,7 +20,7 @@ public class AddPayMentTypeModel {
     public void addPayMentType(BaseActivity activity, AddPayMentTypeReqParams params, final AddPayMentTypeCallBack callBack){
 
         RetrofitFactory.getInstance().createService()
-                .addPayMentType(RequestUtil.getRequestBeanBody(params,false))
+                .addPayMentType(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {

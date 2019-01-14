@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.presenter;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.SystemMsgResponseBean;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.SystemtMsgModel;
@@ -22,11 +21,11 @@ public class SystemMsgPresenter extends BasePresenter<CommonViewImpl> {
         this.systemtMsgModel = systemtMsgModel;
     }
 
-    public void getSystemMsg(BaseActivity activity, BaseBean params){
+    public void getSystemMsg(BaseActivity activity){
         if (systemtMsgModel == null){
             systemtMsgModel = new SystemtMsgModel();
         }
-        systemtMsgModel.getSystemMsg(activity, params, new SystemtMsgModel.SystemMsgCallBack() {
+        systemtMsgModel.getSystemMsg(activity, new SystemtMsgModel.SystemMsgCallBack() {
             @Override
             public void success(SystemMsgResponseBean systemMsgResponseBean) {
                 if (mView!=null){

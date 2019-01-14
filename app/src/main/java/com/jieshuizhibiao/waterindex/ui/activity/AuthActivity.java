@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.city.CityBean;
 import com.jieshuizhibiao.waterindex.beans.city.ProvinceBean;
 import com.jieshuizhibiao.waterindex.beans.request.CompanyAuthReqParams;
@@ -337,33 +336,32 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
                 break;
 
             case R.id.btn_next:
-                BaseBean params;
                 if (user_type) {
-                    params = new CompanyAuthReqParams();
-                    ((CompanyAuthReqParams) params).setProvince(provinceName);
-                    ((CompanyAuthReqParams) params).setCity(cityName);
-                    ((CompanyAuthReqParams) params).setCompany_name(edt_company_name.getText().toString());
-                    ((CompanyAuthReqParams) params).setCompany_license_no(edt_company_license_no.getText().toString());
-                    ((CompanyAuthReqParams) params).setCompany_license_img(licenseImgStr);
-                    ((CompanyAuthReqParams) params).setCompany_boss_name(edt_company_boss_name.getText().toString());
-                    ((CompanyAuthReqParams) params).setId_img_a(bossIdImgStrA);
-                    ((CompanyAuthReqParams) params).setId_img_b(bossIdImgStrB);
-                    ((CompanyAuthReqParams) params).setCompany_boss_tel(edt_company_boss_tel.getText().toString());
-                    ((CompanyAuthReqParams) params).setCompany_other_name(edt_company_other_name.getText().toString());
-                    ((CompanyAuthReqParams) params).setCompany_other_tel(edt_company_other_tel.getText().toString());
-
+                    CompanyAuthReqParams params = new CompanyAuthReqParams();
+                    params.setProvince(provinceName);
+                    params.setCity(cityName);
+                    params.setCompany_name(edt_company_name.getText().toString());
+                    params.setCompany_license_no(edt_company_license_no.getText().toString());
+                    params.setCompany_license_img(licenseImgStr);
+                    params.setCompany_boss_name(edt_company_boss_name.getText().toString());
+                    params.setId_img_a(bossIdImgStrA);
+                    params.setId_img_b(bossIdImgStrB);
+                    params.setCompany_boss_tel(edt_company_boss_tel.getText().toString());
+                    params.setCompany_other_name(edt_company_other_name.getText().toString());
+                    params.setCompany_other_tel(edt_company_other_tel.getText().toString());
+                    authPresenter.auth(this, user_type);
                 } else {
-                    params = new PersonalAuthReqParams();
-                    ((PersonalAuthReqParams) params).setNationality(nationalityName);
-                    ((PersonalAuthReqParams) params).setProvince(provinceName);
-                    ((PersonalAuthReqParams) params).setCity(cityName);
-                    ((PersonalAuthReqParams) params).setUser_name(edt_user_name.getText().toString());
-                    ((PersonalAuthReqParams) params).setId_no(edt_id_no.getText().toString());
-                    ((PersonalAuthReqParams) params).setId_img_a(personalIdImgStrA);
-                    ((PersonalAuthReqParams) params).setId_img_b(personalIdImgStrB);
-
+                    PersonalAuthReqParams params = new PersonalAuthReqParams();
+                    params.setNationality(nationalityName);
+                    params.setProvince(provinceName);
+                    params.setCity(cityName);
+                    params.setUser_name(edt_user_name.getText().toString());
+                    params.setId_no(edt_id_no.getText().toString());
+                    params.setId_img_a(personalIdImgStrA);
+                    params.setId_img_b(personalIdImgStrB);
+                    authPresenter.auth(this, user_type);
                 }
-                authPresenter.auth(this, user_type, params);
+
                 break;
             case R.id.tv_standing_off:
                 startActivity(new Intent(AuthActivity.this, MainActivity.class));

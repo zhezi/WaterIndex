@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -18,9 +17,9 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class UserMoneryModel {
 
-    public void userMonery(BaseActivity activity, BaseBean params,final UserMoneryCallBack callBack){
+    public void userMonery(BaseActivity activity,final UserMoneryCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .userMoney(RequestUtil.getRequestBeanBody(params,false))
+                .userMoney(RequestUtil.getRequestBeanBody(null,false))
                 .compose(activity.<BaseEntity<UserMoney>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<UserMoney>>io())
                 .subscribe(new BaseObserver<UserMoney>() {

@@ -20,7 +20,7 @@ public class BeforeMoveMoneryModel {
 
     public void beforeMoveMonery(BaseActivity activity, MoveMoneryReqParams params,final MoveMoneryCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .beforeMvMoney(RequestUtil.getRequestBeanBody(params,false))
+                .beforeMvMoney(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity<MoveMoneryBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<MoveMoneryBean>>io())
                 .subscribe(new BaseObserver<MoveMoneryBean>(activity) {

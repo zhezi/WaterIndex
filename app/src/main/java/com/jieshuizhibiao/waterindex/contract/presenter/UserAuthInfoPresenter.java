@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.presenter;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.UserAuthInfoModel;
@@ -22,11 +21,11 @@ public class UserAuthInfoPresenter extends BasePresenter<CommonViewImpl> {
         this.userAuthInfoModel = userAuthInfoModel;
     }
 
-    public void userAuthInfo(BaseActivity activity, BaseBean params){
+    public void userAuthInfo(BaseActivity activity){
         if(userAuthInfoModel == null){
             userAuthInfoModel = new UserAuthInfoModel();
         }
-        userAuthInfoModel.userAuthInfo(activity, params, new UserAuthInfoModel.UserAuthInfoCallBack() {
+        userAuthInfoModel.userAuthInfo(activity, new UserAuthInfoModel.UserAuthInfoCallBack() {
             @Override
             public void success(UserAuthInfo userAuthInfo) {
                 if (mView!=null){

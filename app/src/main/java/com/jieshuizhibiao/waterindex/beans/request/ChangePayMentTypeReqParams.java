@@ -1,13 +1,11 @@
 package com.jieshuizhibiao.waterindex.beans.request;
 
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
-
 /**
  * Created by songxiaotao on 2019/1/13.
  * Class Note:添加收款方式
  */
 
-public class ChangePayMentTypeReqParams extends BaseBean{
+public class ChangePayMentTypeReqParams {
 
     String id; 	//收款方式id 	字符串(string) 	是 		pi_id
     String user_name; 	//姓名 	字符串(string) 	是

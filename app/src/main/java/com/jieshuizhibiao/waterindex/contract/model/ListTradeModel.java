@@ -20,7 +20,7 @@ public class ListTradeModel {
 
     public void getListTrade(BaseActivity activity, ListTradeReqParams params, final ListTradeCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .listTrade(RequestUtil.getRequestBeanBody(params,false))
+                .listTrade(RequestUtil.getRequestBeanBody(params,true))
                 .compose(activity.<BaseEntity<ListTradeResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<ListTradeResponseBean>>io())
                 .subscribe(new BaseObserver<ListTradeResponseBean>(activity) {

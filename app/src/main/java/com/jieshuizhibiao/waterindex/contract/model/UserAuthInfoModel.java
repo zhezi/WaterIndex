@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -18,9 +17,9 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class UserAuthInfoModel {
 
-    public void userAuthInfo(BaseActivity activity, BaseBean params,final UserAuthInfoCallBack callBack){
+    public void userAuthInfo(BaseActivity activity,final UserAuthInfoCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .userAuthInfo(RequestUtil.getRequestBeanBody(params,false))
+                .userAuthInfo(RequestUtil.getRequestBeanBody(null,false))
                 .compose(activity.<BaseEntity<UserAuthInfo>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<UserAuthInfo>>io())
                 .subscribe(new BaseObserver<UserAuthInfo>(activity) {

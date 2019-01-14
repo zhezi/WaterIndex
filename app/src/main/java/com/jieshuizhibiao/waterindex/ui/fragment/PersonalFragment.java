@@ -2,6 +2,7 @@ package com.jieshuizhibiao.waterindex.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
+import com.jieshuizhibiao.waterindex.beans.BaseBean;
+import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
+import com.jieshuizhibiao.waterindex.contract.presenter.UserIndexPresenter;
+import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.event.LoginStatusChangedEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.AboutListActivity;
-import com.jieshuizhibiao.waterindex.ui.activity.ChangePassActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.LoginActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.PaymentTypeActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.SafeCenterActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.SystemMessageActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TradingDemandActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserAssetActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserConfirmActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserDetailActivity;
-import com.jieshuizhibiao.waterindex.ui.activity.UserMessageActivity;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +38,7 @@ import butterknife.Unbinder;
  * Class Note:我的个人中心
  */
 
-public class PersonalFragment extends BaseFragment {
+public class PersonalFragment extends BaseFragment implements CommonViewImpl {
     @BindView(R.id.img_avatar)
     ImageView imgAvatar;
     @BindView(R.id.tv_nickname)
@@ -41,6 +48,7 @@ public class PersonalFragment extends BaseFragment {
 
     private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
+    private UserIndexPresenter userIndexPresenter;
     /**
      * 是否登录
      * 记录当前是否登录，fargment切换后有登录、退出登录操作后，下次再显示时用该变量与本地SP所存结果比对，不一致时做刷新操作
@@ -50,7 +58,7 @@ public class PersonalFragment extends BaseFragment {
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
             R.id.relative_payment_type, R.id.relative_order_lists,
-            R.id.relative_sys_msg, R.id.relative_change_pass, R.id.relative_about_us})
+            R.id.relative_sys_msg, R.id.relative_safe_center, R.id.relative_about_us,R.id.tv_order_lists})
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -77,14 +85,17 @@ public class PersonalFragment extends BaseFragment {
 //                break;
             case R.id.relative_sys_msg:
                 if (checkLoginStatus())
-                    jump(UserMessageActivity.class);
+                    jump(SystemMessageActivity.class);
                 break;
-            case R.id.relative_change_pass:
+            case R.id.relative_safe_center:
                 if (checkLoginStatus())
-                    jump(ChangePassActivity.class);
+                    jump(SafeCenterActivity.class);
                 break;
             case R.id.relative_about_us:
                     jump(AboutListActivity.class);
+                break;
+            case R.id.tv_order_lists:
+                jump(TradingDemandActivity.class);
                 break;
             default:
                 break;
@@ -119,12 +130,6 @@ public class PersonalFragment extends BaseFragment {
         Intent intent=new Intent();
         intent.putExtra("target","main_personal");
         jump(LoginActivity.class,intent);
-
-//        if (tag.equals("checkLoginStatus")) {
-//
-//        }else if(tag.equals("sth.")){
-//
-//        }
     }
 
     private void jump(Class<?> cls) {
@@ -141,6 +146,9 @@ public class PersonalFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_personal, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        userIndexPresenter = new UserIndexPresenter();
+        userIndexPresenter.attachView(this);
+        doRequest();
 
         initView();
         isLogin= (boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
@@ -149,26 +157,34 @@ public class PersonalFragment extends BaseFragment {
     }
 
     private void initView() {
-        tvNickname.setText((String)SPUtil.get(getActivity(), SPUtil.USER_NICKNAME, "********"));
+        tvNickname.setText(TextUtils.isEmpty(user_login) ? "******" :Util.hide4Phone(user_login));
         alertChainDialog = new AlertChainDialog(getBaseActivity());
+
     }
 
+    public void doRequest(){
+        userIndexPresenter.userIndex(getBaseActivity());
+    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-
+            doRequest();
         }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            doRequest();
+        }
     }
 
     @Override
     public void onReNetRefreshData(int viewId) {
+        doRequest();
     }
 
     public void onEventMainThread(LoginStatusChangedEvent event){
@@ -188,5 +204,17 @@ public class PersonalFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onRequestSuccess(Object bean) {
+        if (bean instanceof UserIndexResponseBean){
+
+        }
+    }
+
+    @Override
+    public void onRequestFailed(String msg) {
+
     }
 }

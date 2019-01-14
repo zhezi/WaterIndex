@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.presenter;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.UserIndexModel;
@@ -22,23 +21,24 @@ public class UserIndexPresenter extends BasePresenter<CommonViewImpl> {
         this.userIndexModel = userIndexModel;
     }
 
-    public void userIndex(BaseActivity activity, BaseBean params){
+    public void userIndex(BaseActivity activity){
         if(userIndexModel == null){
-            userIndexModel.usetIndex(activity, params, new UserIndexModel.UserIndexCallBack() {
-                @Override
-                public void success(UserIndexResponseBean bean) {
-                    if (mView!=null){
-                        mView.onRequestSuccess(bean);
-                    }
-                }
-
-                @Override
-                public void failed(String msg) {
-                    if (mView!=null){
-                        mView.onRequestFailed(msg);
-                    }
-                }
-            });
+            userIndexModel = new UserIndexModel();
         }
+        userIndexModel.usetIndex(activity, new UserIndexModel.UserIndexCallBack() {
+            @Override
+            public void success(UserIndexResponseBean bean) {
+                if (mView!=null){
+                    mView.onRequestSuccess(bean);
+                }
+            }
+
+            @Override
+            public void failed(String msg) {
+                if (mView!=null){
+                    mView.onRequestFailed(msg);
+                }
+            }
+        });
     }
 }

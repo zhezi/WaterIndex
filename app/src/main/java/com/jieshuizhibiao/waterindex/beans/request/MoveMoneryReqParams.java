@@ -1,13 +1,11 @@
 package com.jieshuizhibiao.waterindex.beans.request;
 
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
-
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:
  */
 
-public class MoveMoneryReqParams extends BaseBean{
+public class MoveMoneryReqParams {
     String type; 	//方向 	字符串(string) 	是 	placeholder="非必填" 	1 划出(主站到c2c) 2划入
     String total; 	//数量 	字符串(string) 	是
     String safe_pw; 	//资金密码 	字符串(string) 	是

@@ -1,7 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -18,9 +17,9 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class PayMentTypeModel {
 
-    public void payMentType(BaseActivity activity, BaseBean params,final PayMentTypeCallBack callBack){
+    public void payMentType(BaseActivity activity,final PayMentTypeCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .payMentType(RequestUtil.getRequestBeanBody(params,false))
+                .payMentType(RequestUtil.getRequestBeanBody(null,false))
                 .compose(activity.<BaseEntity<PayMentResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<PayMentResponseBean>>io())
                 .subscribe(new BaseObserver<PayMentResponseBean>(activity) {

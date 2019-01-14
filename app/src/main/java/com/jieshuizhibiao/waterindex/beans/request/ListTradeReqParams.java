@@ -1,13 +1,11 @@
 package com.jieshuizhibiao.waterindex.beans.request;
 
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
-
 /**
  * Created by songxiaotao on 2019/1/13.
  * Class Note:
  */
 
-public class ListTradeReqParams extends BaseBean{
+public class ListTradeReqParams {
     String type; 	//需求单类型 	字符串(string) 	否 	0 	0全部 1购买 2出售
     String page; 	//页码 	字符串(string) 	否 	1
     String page_size; 	//每页多少条 	字符串(string) 	否 	10

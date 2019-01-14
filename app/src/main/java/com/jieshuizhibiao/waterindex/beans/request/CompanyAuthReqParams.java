@@ -1,13 +1,11 @@
 package com.jieshuizhibiao.waterindex.beans.request;
 
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
-
 /**
  * sxt
  * 企业认证参数
  */
 
-public class CompanyAuthReqParams extends BaseBean {
+public class CompanyAuthReqParams {
     private String province;
     private String city;
     private String company_name;
