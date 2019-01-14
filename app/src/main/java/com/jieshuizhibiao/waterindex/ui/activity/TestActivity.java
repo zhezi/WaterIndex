@@ -73,24 +73,24 @@ String next_step;
 
             case R.id.btn_request:
                 ToastUtils.showCustomToast("order_id"+order_id+"  next_step:"+next_step);
-//
-//                HashMap<String, Object> params = new HashMap<>();
-//                params.put("order_id",order_id);
-//                RetrofitFactory.getInstance().createService()
-//                        .buyerUnpay(RequestUtil.getRequestHashBody(params, false))
-//                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
-//                        .compose(ObservableTransformerUtils.<BaseEntity>io())
-//                        .subscribe(new BaseObserver(TestActivity.this) {
-//
-//                            @Override
-//                            protected void onSuccess(Object bean) throws Exception {
-//
-//                            }
-//
-//                            @Override
-//                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                            }
-//                        });
+                order_id=59;
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("order_id",order_id);
+                RetrofitFactory.getInstance().createService()
+                        .buyerCancle(RequestUtil.getRequestHashBody(params, false))
+                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity>io())
+                        .subscribe(new BaseObserver(TestActivity.this) {
+
+                            @Override
+                            protected void onSuccess(Object bean) throws Exception {
+
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                            }
+                        });
 
 
                 break;

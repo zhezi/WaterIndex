@@ -18,6 +18,7 @@ import com.jieshuizhibiao.waterindex.contract.presenter.OrderListsPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.event.ShouldRefreshEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.TestActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
@@ -118,13 +119,15 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     @Override
     public void onItemClicked(ListOrder order) {
         if (order != null) {
-            final int order_id = order.getOrder_id();
             final String next_step = order.getNext_step();
             //todo jump
             Intent intent=new Intent(baseActivity,TestActivity.class);
-            intent.putExtra("order_id",order_id);
-            intent.putExtra("next_step",next_step);
-            startActivity(intent);
+            intent.putExtra("ListOrder",order);
+            if(next_step.equals("buyerUnpay")||next_step.equals("sellerUnpay")){
+                jump(TraderUnpayActivity.class,intent);
+            }else{
+
+            }
         }
     }
 
@@ -206,9 +209,10 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     }
 
     private void jump(Class<?> cls, Intent intent) {
-        if (intent == null) {
-            intent = new Intent(getActivity(), cls);
+        if(intent==null){
+            intent=new Intent();
         }
+        intent.setClass(baseActivity,cls);
         startActivity(intent);
     }
 

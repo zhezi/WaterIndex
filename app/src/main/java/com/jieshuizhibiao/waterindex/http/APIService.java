@@ -33,6 +33,8 @@ import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserInfo;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
+import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayResponse;
+import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayResponse;
 import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
 import com.jieshuizhibiao.waterindex.http.config.UrlConfig;
 
@@ -215,7 +217,23 @@ public interface APIService {
      * "order_id", "111";
      */
     @POST(UrlConfig.BUYER_UNPAY)
-    Observable<BaseEntity>buyerUnpay(@Body RequestBody body);
+    Observable<BaseEntity<BuyerUnpayResponse>>buyerUnpay(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.BUYER_CANCEL)
+    Observable<BaseEntity> buyerCancle(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.SELLER_UNPAY)
+    Observable<BaseEntity<SellerUnpayResponse>>sellerUnpay(@Body RequestBody body);
 
     /**
      * "token", token;

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_header_pay_cate"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,6 +22,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="请在  "
@@ -29,12 +30,14 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_expire_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_red"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  内支付"
@@ -46,11 +49,13 @@
     <include layout="@layout/module_include_divider" />
 
     <LinearLayout
+        android:id="@+id/ll_card"
         style="@style/PaddinLeftRight"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commit_btn_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="30px"
@@ -66,7 +71,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tv_bank_detail_name"
+            android:id="@+id/tv_bank_name_detail"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginLeft="62px"
@@ -80,17 +85,23 @@
             android:id="@+id/img_right_bank"
             android:layout_width="30px"
             android:layout_height="30px"
-            android:src="@mipmap/right1" />
+            android:src="@mipmap/right1"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <include layout="@layout/module_include_divider" />
+    <include
+        android:id="@+id/divider_under_card"
+        layout="@layout/module_include_divider"
+        android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/ll_alipay"
         style="@style/PaddinLeftRight"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commit_btn_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="30px"
@@ -111,17 +122,23 @@
             android:id="@+id/img_right_alipay"
             android:layout_width="30px"
             android:layout_height="30px"
-            android:src="@mipmap/right1" />
+            android:src="@mipmap/right1"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <include layout="@layout/module_include_divider" />
+    <include
+        android:id="@+id/divider_under_alipay"
+        layout="@layout/module_include_divider"
+        android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/ll_wechat"
         style="@style/PaddinLeftRight"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commit_btn_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="30px"
@@ -142,7 +159,8 @@
             android:id="@+id/img_right_wechat"
             android:layout_width="30px"
             android:layout_height="30px"
-            android:src="@mipmap/right1" />
+            android:src="@mipmap/right1"
+            android:visibility="gone"/>
     </LinearLayout>
 
 

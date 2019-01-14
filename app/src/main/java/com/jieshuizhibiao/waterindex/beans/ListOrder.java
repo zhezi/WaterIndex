@@ -12,7 +12,7 @@ public class ListOrder implements Parcelable {
     private String status_text;//订单状态     已完成|进行中|已取消|申诉处理
     private String total;//数量    3.10000T
     private String rmb;//交易金额   9.30000元
-    private int order_id;//订单id
+    private long order_id;//订单id
     /**
      * buyerUnpay 买家未付款
      * buyerPaid 卖家未收款//
@@ -83,10 +83,10 @@ public class ListOrder implements Parcelable {
         return rmb;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(long order_id) {
         this.order_id = order_id;
     }
-    public int getOrder_id() {
+    public long getOrder_id() {
         return order_id;
     }
 
@@ -112,7 +112,7 @@ public class ListOrder implements Parcelable {
         dest.writeString(this.status_text);
         dest.writeString(this.total);
         dest.writeString(this.rmb);
-        dest.writeInt(this.order_id);
+        dest.writeLong(this.order_id);
         dest.writeString(this.next_step);
     }
 
@@ -128,7 +128,7 @@ public class ListOrder implements Parcelable {
         this.status_text = in.readString();
         this.total = in.readString();
         this.rmb = in.readString();
-        this.order_id = in.readInt();
+        this.order_id = in.readLong();
         this.next_step = in.readString();
     }
 

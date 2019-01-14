@@ -1066,6 +1066,66 @@ public class UrlConfig {
     public static final String BUYER_UNPAY ="api/home/userOrder/buyerUnpay";
 
     /**
+     * 买家-取消订单
+     *      {
+     *          "code":1,
+     *          "msg":"取消成功",
+     *          "data":""
+     *      }
+     */
+    public static final String BUYER_CANCEL="api/home/userOrder/buyerCancel";
+
+    /**
+     * 卖家未付款
+     *  {
+     *          "code":1,
+     *          "msg":"订单详情",
+     *          "data":{
+     *              "order_info":{
+     *                  "title":"出售节水指标",
+     *                  "expire_time":"不限制",
+     *                  "rmb":"3.00000元",
+     *                  "total":"1.00000T",
+     *                  "price":"3.00000元\/T",
+     *                  "order_sn":"20190110153159246886",
+     *                  "pay_code":"246886",
+     *                  "createtime":"2019-01-10 15:31:59",
+     *                  "buyer_avatar":"https:\/\/www.jieshuizhibiao.com\/upload\/admin\/20190111\/2cb733cf51ef8fe5f9c955bc78919c6c.jpg",
+     *                  "buyer_nickname":"石头",
+     *                  "order_id":"57"
+     *              },
+     *              "pay_info_list":[
+     *                  {
+     *                      "id":2,
+     *                      "uid":6,
+     *                      "type":3,
+     *                      "user_name":"",
+     *                      "bank_name":"",
+     *                      "bank_detail_name":"",
+     *                      "account_name":"",
+     *                      "qrcode":"",
+     *                      "add_time":0,
+     *                      "status":1
+     *                  },
+     *                  {
+     *                      "id":3,
+     *                      "uid":6,
+     *                      "type":1,
+     *                      "user_name":"",
+     *                      "bank_name":"",
+     *                      "bank_detail_name":"",
+     *                      "account_name":"",
+     *                      "qrcode":"",
+     *                      "add_time":0,
+     *                      "status":1
+     *                  }
+     *              ]
+     *          }
+     *      }
+     */
+    public static final String SELLER_UNPAY="api/home/userOrder/sellerUnpay";
+
+    /**
      *基础信息    节水指标单价
      */
     public static final String SYS_CONFIG="api/home/common/sysConfig";
