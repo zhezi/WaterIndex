@@ -21,12 +21,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="从C2C账户"
                 android:textColor="@color/text_black"
                 android:textSize="32px"/>
             <TextView
+                android:id="@+id/tv_ds1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="25px"
@@ -49,12 +51,14 @@
             android:paddingLeft="40px"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="从C2C账户"
                 android:textColor="@color/text_black"
                 android:textSize="32px"/>
             <TextView
+                android:id="@+id/tv_ds2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="25px"
@@ -76,15 +80,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edt_transfer_amonut"
-                style="@style/style_edt"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hit_edt_transfer_amonut"
-                android:maxLength="11" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edt_transfer_amonut"
+                    style="@style/style_edt"
+                    android:gravity="center|left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hit_edt_transfer_amonut"
+                    android:maxLength="11" />
+                <TextView
+                    android:id="@+id/tv_transfer_all_ds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:paddingHorizontal="20px"
+                    android:gravity="center"
+                    android:text="全部划转"
+                    android:textColor="@color/primary_yellow"/>
+
+            </FrameLayout>
 
             <TextView
+                android:id="@+id/tv_able_ds"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="20px"
