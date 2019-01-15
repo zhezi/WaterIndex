@@ -22,6 +22,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
+import com.jieshuizhibiao.waterindex.contract.presenter.AddPayMentTypePresenter;
+import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
+import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -44,6 +49,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -56,7 +62,7 @@ import top.zibin.luban.Luban;
  * Class Note:
  */
 
-public class AddWXPaymetActivity extends BaseActivity {
+public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl {
 
     @BindView(R.id.title_bar)
     View title_bar;
@@ -70,14 +76,16 @@ public class AddWXPaymetActivity extends BaseActivity {
     EditText edtAccount;
 
     private PicturePopupWindow popupWindow;
+    private AddPayMentTypePresenter addPayMentTypePresenter;
     private static final int REQUEST_TAKE_PHOTO = 0x110;//拍照结果回调
-    private String mCurrentPhotoPath;
+    private String mCurrentPhotoPath,stringStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setImmersionStatus(this, title_bar);
-
+        addPayMentTypePresenter = new AddPayMentTypePresenter();
+        addPayMentTypePresenter.attachView(this);
         initView();
     }
 
@@ -109,6 +117,13 @@ public class AddWXPaymetActivity extends BaseActivity {
                 showPopupView();
                 break;
             case R.id.btn_confirm:
+                AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
+                params.setType(HttpConfig.WX_TYPE);
+                params.setUser_name("张三丰");
+                params.setQrcode(stringStream);
+                params.setSafe_pw("920809");
+                params.setAccount_name("bushuijiao");
+                addPayMentTypePresenter.addPayMentType(this,params);
                 break;
 
             default:break;
@@ -199,7 +214,6 @@ public class AddWXPaymetActivity extends BaseActivity {
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
-            showImgData(mRotateFile);
             ZipImg(AddWXPaymetActivity.this,mRotateFile);
 
             if (mOriginalBitmap != null) {
@@ -210,13 +224,12 @@ public class AddWXPaymetActivity extends BaseActivity {
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
-            showImgData(mFile);
             ZipImg(AddWXPaymetActivity.this,mFile);
         }
     }
 
     private void ZipImg(final Activity activity, File mFile) {
-        Observable.just(mFile)
+        Flowable.just(mFile)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<File, File>() {
                     @Override
@@ -229,8 +242,9 @@ public class AddWXPaymetActivity extends BaseActivity {
                     @Override
                     public void accept(File file) throws Exception {
                         //转换字节流 需要上传的字节
-                        String stringStream = ImageFactory.file2String(file);
+                        stringStream = ImageFactory.file2String(file);
                         LogUtils.d("转换字节流"+stringStream);
+                        showImgData(file);
                     }
                 });
     }
@@ -318,5 +332,15 @@ public class AddWXPaymetActivity extends BaseActivity {
                 break;
         }
 
+    }
+
+    @Override
+    public void onAddPaymentTypeSuccess() {
+
+    }
+
+    @Override
+    public void onAddPaymentTypeFailed(String msg) {
+        ToastUtils.showCustomToast(msg);
     }
 }

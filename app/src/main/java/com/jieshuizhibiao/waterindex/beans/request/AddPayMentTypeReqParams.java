@@ -7,8 +7,6 @@ package com.jieshuizhibiao.waterindex.beans.request;
 
 public class AddPayMentTypeReqParams {
 
-    String token; 	//身份码 	字符串(string) 	是
-    String device_type; 	//设备类型 	字符串(string) 	是 		ios android
     String type; 	//卡片类型 	字符串(string) 	是 		1银行卡 2支付宝 3微信
     String user_name; 	//姓名 	字符串(string) 	是
     String account_name; 	//卡号 	字符串(string) 	是
@@ -16,22 +14,6 @@ public class AddPayMentTypeReqParams {
     String bank_name; 	//银行名称 	字符串(string) 	否 		银行必填
     String safe_pw; 	//资金密码 	字符串(string) 	是
     String bank_detail_name; 	//支行信息 	字符串(string) 	是 		支行信息
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getDevice_type() {
-        return device_type;
-    }
-
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
-    }
 
     public String getType() {
         return type;

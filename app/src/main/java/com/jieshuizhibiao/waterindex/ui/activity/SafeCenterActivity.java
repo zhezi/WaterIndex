@@ -78,7 +78,12 @@ public class SafeCenterActivity extends BaseActivity {
                 break;
             case R.id.tv_set_capital_pass:
                 if (!Util.isFastDoubleClick()){
-                    jumpActivity(SetCapitalPassActivity.class);
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action","SafeCenterActivity");
+                    intent.putExtras(bundle);
+                    intent.setClass(SafeCenterActivity.this,SetCapitalPassActivity.class);
+                    startActivity(intent);
                 }
                 break;
 

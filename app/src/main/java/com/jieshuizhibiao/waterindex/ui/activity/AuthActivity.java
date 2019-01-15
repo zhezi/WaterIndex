@@ -479,6 +479,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         Bundle bundle = new Bundle();
         PersonalAuthReqParams personalAuthReqParams = new PersonalAuthReqParams();
         bundle.putParcelable("PersonalAuthReqParams", personalAuthReqParams);
+        bundle.putString("action","AuthActivity");
         intent.putExtras(bundle);
         startActivity(new Intent(AuthActivity.this, SetCapitalPassActivity.class));
         finish();

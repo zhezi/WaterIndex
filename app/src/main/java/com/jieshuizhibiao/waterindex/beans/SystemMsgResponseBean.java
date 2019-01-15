@@ -19,29 +19,38 @@ public class SystemMsgResponseBean {
         this.lists = lists;
     }
 
-    private static class SystemMsgList{
+    public static class SystemMsgList{
+        int id;
         String title;
-        String time;
+        String add_time;
         String content;
 
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
         public String getTitle() {
-            return title;
+            return title == null ? "" : title;
         }
 
         public void setTitle(String title) {
             this.title = title;
         }
 
-        public String getTime() {
-            return time;
+        public String getAdd_time() {
+            return add_time == null ? "" : add_time;
         }
 
-        public void setTime(String time) {
-            this.time = time;
+        public void setAdd_time(String add_time) {
+            this.add_time = add_time;
         }
 
         public String getContent() {
-            return content;
+            return content == null ? "" : content;
         }
 
         public void setContent(String content) {
