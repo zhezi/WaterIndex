@@ -11,6 +11,7 @@ import com.jieshuizhibiao.waterindex.beans.Money;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserMoneryPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
@@ -136,7 +137,7 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
 
         tvJsl.setText(new StringBuilder("可用：").append(((dsc2c <= 0.00) ? "0.00":df.format(dsc2c))).toString()+" T");
         tvJslFreeze.setText(new StringBuilder("冻结：").append(((dsFreezec2c <= 0.00) ? "0.00":df.format(dsFreezec2c))).toString()+" T");
-        tvJslGyj.setText(new StringBuilder("公益金：").append("未知").toString());
+        tvJslGyj.setText(new StringBuilder("公益金：").append(SPUtil.get(this,SPUtil.C2C_TRAMSFER,"0.00")).append(" T").toString());
         tvDsTransferTotalC2c.setText("总资产折合："+ ((rmbc2c <= 0.00) ? "0.00":df.format(rmbc2c)) +" 元" +" ≈ "+((totalc2c <= 0.00) ? "0.00":df.format(totalc2c))+" T");
 
         Double rmbcBb = Double.valueOf(moneryBb.getRmb().substring(0,moneryBb.getRmb().length()-1));
@@ -146,7 +147,7 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
 
         tvDs.setText(new StringBuilder("可用：").append(((dscBb <= 0.00) ? "0.00":df.format(dscBb))).append(" T").toString());
         tvDsFreeze.setText(new StringBuilder("冻结：").append(((dsFreezeBb <= 0.00) ? "0.00":df.format(dsFreezeBb))).append(" T").toString());
-        tvDsTransfer.setText(new StringBuilder("公益金：").append("未知").toString());
+        tvDsTransfer.setText(new StringBuilder("公益金：").append(SPUtil.get(this,SPUtil.BB_TRAMSFER,"0.00")).append(" T").toString());
         tvDsTransferTotalBb.setText("总资产折合："+((rmbcBb <= 0.00) ? "0.00" :df.format(rmbcBb)) +" 元" +" ≈ "+((totalBb <= 0.00) ? "0.00":df.format(totalBb))+" T");
     }
 

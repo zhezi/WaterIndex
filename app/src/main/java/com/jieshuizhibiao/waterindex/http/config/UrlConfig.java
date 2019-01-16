@@ -840,8 +840,10 @@ public class UrlConfig {
      *      }
      */
     public static final String ORDER_DETAIL = "api/home/user/orderDetail";
-    //修改密码
-    public static final String CHANGE_PASS = "api/home/user/changePass";
+    /**
+     * 修改密码--安全中心
+     */
+    public static final String CHANGE_PASS = "api/home/user/editPw";
     //洗涤订单
     /**
      * 我的-兑换记录

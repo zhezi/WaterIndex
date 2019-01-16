@@ -11,12 +11,17 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
+import com.jieshuizhibiao.waterindex.beans.request.MoveMoneryReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.BeforeMvMoneryPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.MoveMoneryPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.BeforeMvMoneryViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
+import com.jieshuizhibiao.waterindex.utils.AccountValidatorUtil;
+import com.jieshuizhibiao.waterindex.utils.LogUtils;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import java.text.DecimalFormat;
 
@@ -56,10 +61,11 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
     @BindDrawable(R.drawable.red_border_illegal_bg_shape)
     Drawable edt_border_illegal;
 
-    private String ableTransferAmount,transferAmount,transferAmountAll;
+    private String ableTransferAmount;
     private AlertChainDialog alertChainDialog;
     private BeforeMvMoneryPresenter beforeMvMoneryPresenter;
     private MoveMoneryPresenter moveMoneryPresenter;
+    private MoveMoneryReqParams params;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
     }
 
     private void initData() {
+        params = new MoveMoneryReqParams();
         if (getIntent()!=null){
             DecimalFormat df = new DecimalFormat("###.00");
             String ds = getIntent().getStringExtra("action");
@@ -82,19 +89,28 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
             Double dsBb = Double.valueOf(ds_Bb.substring(0,ds_Bb.length()-1));
             if (ds.equals("c2c")){
                 tvTitle1.setText("从C2C账号");
-                tvDs1.setText("余额："+df.format(dsc2c) +" T");
+                tvDs1.setText("余额："+(dsc2c <= 0.00 ? "0.00" : df.format(dsc2c)) +" T");
                 tvTitle2.setText("到主站账号");
-                tvDs2.setText("余额："+df.format(dsBb) + " T");
-                tvAbleDs.setText("可划转数量 "+df.format(dsc2c)+" T");
-                ableTransferAmount = df.format(dsc2c);//可划转总额
-
+                tvDs2.setText("余额："+(dsBb <= 0.00 ? "0.00" : df.format(dsBb)) + " T");
+                tvAbleDs.setText("可划转数量 "+(dsc2c <= 0.00 ? "0.00" : df.format(dsc2c))+" T");
+                if (dsc2c <= 0.00){
+                    ableTransferAmount = "0.00";//可划转总额
+                }else {
+                    ableTransferAmount = df.format(dsc2c);//可划转总额
+                }
+                params.setType("2");//划入
             }else{
                 tvTitle1.setText("从主站账号");
-                tvDs1.setText("余额："+df.format(dsBb) + " T");
+                tvDs1.setText("余额："+(dsBb <= 0.00 ? "0.00" : df.format(dsBb)) + " T");
                 tvTitle2.setText("到C2C账号");
-                tvDs2.setText("余额："+df.format(dsc2c) +" T");
-                tvAbleDs.setText("可划转数量 "+df.format(dsBb)+" T");
-                ableTransferAmount = df.format(dsBb);//可划转总额
+                tvDs2.setText("余额："+(dsc2c <= 0.00 ? "0.00" :df.format(dsc2c)) +" T");
+                tvAbleDs.setText("可划转数量 "+(dsBb <= 0.00 ? "0.00" :df.format(dsBb))+" T");
+                if (dsBb <= 0.00){
+                    ableTransferAmount = "0.00";//可划转总额
+                }else {
+                    ableTransferAmount = df.format(dsBb);//可划转总额
+                }
+                params.setType("1");//划出
             }
         }
     }
@@ -127,6 +143,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                 edTransferDs.setSelection(ableTransferAmount.length());
                 break;
             case R.id.btn_jsl_transfer:
+
                 DecimalFormat df = new DecimalFormat("###.00");
                 String msgContent2 = "",msgTitle2 = "";
                 if (!TextUtils.isEmpty(edTransferDs.getText().toString()) &&
@@ -135,13 +152,15 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                     edTransferDs.setBackground(edt_border);
                 }else {
                     edTransferDs.setBackground(edt_border_illegal);
+                    edTransferDs.setText("");
                     return;
                 }
-                if (TextUtils.isEmpty(edTransferPass.getText().toString())){
-                    edTransferPass.setBackground(edt_border_illegal);
-                    return;
-                }else{
+                if (!TextUtils.isEmpty(edTransferPass.getText().toString()) && AccountValidatorUtil.isPassword(edTransferPass.getText().toString())){
                     edTransferPass.setBackground(edt_border);
+                }else{
+                    edTransferPass.setBackground(edt_border_illegal);
+                    edTransferPass.setText("");
+                    return;
                 }
                 if(edTransferDs.getText().toString().equals(ableTransferAmount)){
                     //全额划转，则不显示扣减信息 和 结转 JSL 信息
@@ -149,6 +168,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                     String actualAmount = edTransferDs.getText()+" T";
                     msgContent2 = "划转总金额:"+transferAmount+"\n实际到账:"+actualAmount;
                     msgTitle2 = "确认划转";
+
                 } else {
                     //部分划转
                     String transferAmount = edTransferDs.getText()+" T";
@@ -157,6 +177,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                     String persent = "30%";
                     msgContent2 = "划转总金额:"+transferAmount+"\n实际到账:"+actualAmount+"\n结转JSL:"+balanceAmount;
                     msgTitle2 = "系统将您划转的节水指标的"+persent+"结转到您的平台账号，并兑换为积分作为公益用途，您可以在兑换商城进行消费";
+
                 }
 
                 if(alertChainDialog!=null){
@@ -166,12 +187,15 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                             .setNegativeButton("取消", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    // TODO: 2019/1/16 资金划转确认、资金划转
+
                                 }
                             }).setPositiveButton("确认划转", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            params.setTotal(edTransferDs.getText().toString());
+                            params.setSafe_pw(edTransferPass.getText().toString());
+                            moveMoneryPresenter.moveMonery(TransferActivity.this,params);
+                            showLoadingDialog();
                         }
                     }).show();
                 }
@@ -181,22 +205,39 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
 
     @Override
     public void onRequestSuccess(Object bean) {
-
+        dismissLoadingDialog();
+        DecimalFormat df = new DecimalFormat("###.00");
+        Double transferGyj = 0.00,transferArrive = 0.00,transferTotal = 0.00;
+        if (bean instanceof MoveMoneryBean){
+            transferGyj = Double.valueOf(((MoveMoneryBean) bean).getGyj());
+            transferArrive = Double.valueOf(((MoveMoneryBean) bean).getArrive());
+            transferTotal = Double.valueOf(((MoveMoneryBean) bean).getTotal());
+        }
+        if (params.getType().equals("1")){//c2c公益金
+            SPUtil.insert(this,SPUtil.C2C_TRAMSFER,(transferGyj <= 0.00 ? "0.00":df.format(transferGyj)));
+        }else {
+            SPUtil.insert(this,SPUtil.BB_TRAMSFER,(transferGyj <= 0.00 ? "0.00":df.format(transferGyj)));
+        }
+        LogUtils.d("transferGyj:"+transferGyj+"\n"+"transferArrive:"+transferArrive+"\n"+"transferTotal:"+transferTotal);
+        finish();
     }
 
     @Override
     public void onRequestFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
 
     }
 
     @Override
     public void onBeforeMvMonerySuccess(MoveMoneryBean moveMoneryBean) {
-
+        dismissLoadingDialog();
     }
 
     @Override
     public void onBeforeMvMoneryFailed(String msg) {
-
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
     }
 
     @Override

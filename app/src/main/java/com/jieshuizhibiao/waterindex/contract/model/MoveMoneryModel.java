@@ -1,5 +1,7 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
+import android.text.TextUtils;
+
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
 import com.jieshuizhibiao.waterindex.beans.request.MoveMoneryReqParams;
@@ -11,6 +13,8 @@ import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
+import java.util.HashMap;
+
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:移交资产
@@ -18,9 +22,20 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class MoveMoneryModel {
 
-    public void moveMonery(BaseActivity activity, MoveMoneryReqParams params,final MoveMoneryCallBack callBack){
+    public void moveMonery(BaseActivity activity, MoveMoneryReqParams moveMoneryReqParams,final MoveMoneryCallBack callBack){
+        HashMap<String,Object> params = new HashMap<>();
+        if (!TextUtils.isEmpty(moveMoneryReqParams.getType())){
+            params.put("type",moveMoneryReqParams.getType());
+        }
+        if (!TextUtils.isEmpty(moveMoneryReqParams.getTotal())){
+            params.put("total",moveMoneryReqParams.getTotal());
+        }
+        if (!TextUtils.isEmpty(moveMoneryReqParams.getSafe_pw())){
+            params.put("safe_pw",moveMoneryReqParams.getSafe_pw());
+        }
+
         RetrofitFactory.getInstance().createService()
-                .moveMonery(RequestUtil.getRequestBeanBody(params,true))
+                .moveMonery(RequestUtil.getRequestHashBody(params,false))
                 .compose(activity.<BaseEntity<MoveMoneryBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<MoveMoneryBean>>io())
                 .subscribe(new BaseObserver<MoveMoneryBean>(activity) {

@@ -1,5 +1,6 @@
 package com.jieshuizhibiao.waterindex.ui.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,9 +12,14 @@ import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.contract.model.ChangePassModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.ChangePassPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.ChangePassViewImpl;
-import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
+import java.util.Map;
+
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -29,6 +35,16 @@ public class ChangePassActivity extends BaseActivity implements ChangePassViewIm
     EditText edtOldPass;
     @BindView(R.id.edt_new_pass)
     EditText edtNewPass;
+    @BindView(R.id.edt_confirm_pass)
+    EditText edtNewConfirmPass;
+    @BindDrawable(R.drawable.gray_border_bg_shape)
+    Drawable edt_border;
+    @BindDrawable(R.drawable.red_border_illegal_bg_shape)
+    Drawable edt_border_illegal;
+    @BindString(R.string.key_edt_change_new_pwd)
+    String keyNewPass;
+    @BindString(R.string.key_edt_change_old_pwd)
+    String keyNewConfirmPass;
 
     private ChangePassPresenter changePassPresenter;
 
@@ -42,9 +58,10 @@ public class ChangePassActivity extends BaseActivity implements ChangePassViewIm
                 break;
 
             case R.id.btn_find:
-                changePassPresenter.changePass(this,(String) SPUtil.get(this,SPUtil.USER_LOGIN,""),
-                        edtOldPass.getText().toString(), edtNewPass.getText().toString());
+                changePassPresenter.vertify(edtOldPass.getText().toString(),edtNewPass.getText().toString(),edtNewConfirmPass.getText().toString());
+                changePassPresenter.changePass(this,edtOldPass.getText().toString(), edtNewPass.getText().toString());
                 break;
+            default:break;
         }
     }
 
@@ -73,14 +90,43 @@ public class ChangePassActivity extends BaseActivity implements ChangePassViewIm
     }
 
     @Override
+    public void onEdtContentsLegal() {
+        edtOldPass.setBackground(edt_border);
+        edtNewPass.setBackground(edt_border);
+        edtNewConfirmPass.setBackground(edt_border);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onEdtContentsIllegal(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keyNewPass)) && !verify.get(keyNewPass)) {
+            edtNewPass.setBackground(edt_border_illegal);
+            edtNewConfirmPass.setBackground(edt_border_illegal);
+            edtNewPass.setText("");
+            edtNewConfirmPass.setText("");
+        } else {
+            edtNewPass.setBackground(edt_border);
+            edtNewConfirmPass.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyNewConfirmPass)) && !verify.get(keyNewConfirmPass)){
+            edtOldPass.setBackground(edt_border_illegal);
+            edtOldPass.setText("");
+        } else {
+            edtOldPass.setBackground(edt_border);
+        }
+    }
+
+    @Override
     public void changePassSuccess() {
-        showToast("修改成功！");
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("修改成功！");
         finish();
     }
 
     @Override
     public void changePassFiled(String err) {
-
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(err);
     }
 
     @Override

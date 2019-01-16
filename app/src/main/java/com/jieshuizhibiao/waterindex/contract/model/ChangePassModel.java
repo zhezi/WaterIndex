@@ -2,6 +2,8 @@ package com.jieshuizhibiao.waterindex.contract.model;
 
 import android.text.TextUtils;
 
+import com.jieshuizhibiao.waterindex.R;
+import com.jieshuizhibiao.waterindex.WaterIndexApplication;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
@@ -9,9 +11,11 @@ import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
+import com.jieshuizhibiao.waterindex.utils.AccountValidatorUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by WanghongHe on 2018/12/10 12:57.
@@ -20,11 +24,41 @@ import java.util.HashMap;
 
 public class ChangePassModel {
 
-    public void changePass(BaseActivity activity, String user_login, String old_pass, String new_pass, final ChangePassCallBack callBack){
-        HashMap<String, Object> params = new HashMap<>();
-        if (!TextUtils.isEmpty(user_login)) {
-            params.put("user_login", user_login);
+    private Map<String, Boolean> verifyResult = new HashMap<String, Boolean>();
+    private WaterIndexApplication context = WaterIndexApplication.getInstance();
+
+    public Map<String, Boolean> verify(String old_pass, String new_pass,String new_confirm_pass) {
+        verifyResult.clear();
+        if(!TextUtils.isEmpty(new_pass)&&new_pass.equals(new_confirm_pass)&& AccountValidatorUtil.isPassword(new_pass)&&AccountValidatorUtil.isPassword(new_confirm_pass)){
+            verifyResult.put(context.getString(R.string.key_edt_change_new_pwd), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_change_new_pwd), false);
         }
+
+        if(!TextUtils.isEmpty(old_pass) && AccountValidatorUtil.isPassword(old_pass)){
+            verifyResult.put(context.getString(R.string.key_edt_change_old_pwd), true);
+        }else{
+            verifyResult.put(context.getString(R.string.key_edt_change_old_pwd), false);
+        }
+
+        return verifyResult;
+    }
+
+    public void changePass(BaseActivity activity, String old_pass, String new_pass, final ChangePassCallBack callBack){
+        int Illegal = 0;
+        for (Map.Entry<String, Boolean> entry : verifyResult.entrySet()) {
+            final Boolean value = entry.getValue();
+            if (!value) {
+                Illegal += 1;
+            }
+        }
+        if (Illegal == 0) {
+            callBack.onEdtContentsLegal();
+        } else {
+            callBack.onEdtContentsIllegal(verifyResult);
+            return;
+        }
+        HashMap<String, Object> params = new HashMap<>();
         if (!TextUtils.isEmpty(old_pass)) {
             params.put("old_pass", old_pass);
         }
@@ -78,6 +112,8 @@ public class ChangePassModel {
     }
 
     public interface ChangePassCallBack{
+        void onEdtContentsLegal();
+        void onEdtContentsIllegal(Map<String, Boolean> verify);
         void success();
         void failed(String msg);
     }
