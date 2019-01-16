@@ -7,27 +7,9 @@ package com.jieshuizhibiao.waterindex.beans.request;
 
 public class ChangeCapitalPassReqParams {
 
-    String token; 	//身份码 	字符串(string) 	是
-    String device_type; 	//设备类型 	字符串(string) 	是 		ios android
     String old_safe_pw; 	//旧资金密码 	字符串(string) 	是
     String safe_pw; 	//新资金密码 	字符串(string) 	是
     String safe_pw_re; 	//新资金密码 	字符串(string) 	是
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getDevice_type() {
-        return device_type;
-    }
-
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
-    }
 
     public String getOld_safe_pw() {
         return old_safe_pw;

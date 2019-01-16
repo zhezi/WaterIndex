@@ -15,6 +15,7 @@ import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
 import com.jieshuizhibiao.waterindex.utils.AccountValidatorUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,10 +46,32 @@ public class SetCapitalPassModel {
         return verifyResult;
     }
 
-    public void setCapitalPass(BaseActivity activity, SetCaptialPassReqParams params,final SetCaptialPassCallBack callBack){
-
+    public void setCapitalPass(BaseActivity activity, SetCaptialPassReqParams setCaptialPassReqParams,final SetCaptialPassCallBack callBack){
+        int Illegal = 0;
+        for (Map.Entry<String, Boolean> entry : verifyResult.entrySet()) {
+            final Boolean value = entry.getValue();
+            if (!value) {
+                Illegal += 1;
+            }
+        }
+        if (Illegal == 0) {
+            callBack.onEdtContentsLegal();
+        } else {
+            callBack.onEdtContentsIllegal(verifyResult);
+            return;
+        }
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("province", setCaptialPassReqParams.getProvince());
+        params.put("city", setCaptialPassReqParams.getCity());
+        params.put("user_name", setCaptialPassReqParams.getUser_name());
+        params.put("id_no", setCaptialPassReqParams.getId_no());
+        params.put("id_img_a", setCaptialPassReqParams.getId_img_a());
+        params.put("id_img_b", setCaptialPassReqParams.getId_img_b());
+        params.put("nick_name",setCaptialPassReqParams.getNick_name());
+        params.put("safe_pw",setCaptialPassReqParams.getSafe_pw());
+        params.put("safe_pw_re",setCaptialPassReqParams.getSafe_pw_re());
         RetrofitFactory.getInstance().createService()
-                .setCapitalPass(RequestUtil.getRequestBeanBody(params,true))
+                .setCapitalPass(RequestUtil.getRequestHashBody(params,false))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {
@@ -80,7 +103,13 @@ public class SetCapitalPassModel {
 
     }
 
+    public Map<String, Boolean> getVerifyResult() {
+        return Collections.unmodifiableMap(verifyResult);
+    }
+
     public interface SetCaptialPassCallBack{
+        void onEdtContentsLegal();
+        void onEdtContentsIllegal(Map<String, Boolean> verify);
         void success();
         void failed(String msg);
     }

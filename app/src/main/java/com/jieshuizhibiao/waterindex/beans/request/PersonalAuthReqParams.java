@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PersonalAuthReqParams implements Parcelable {
-    private String nationality;
+
     private String province;
     private String city;
     private String user_name;
@@ -14,11 +14,10 @@ public class PersonalAuthReqParams implements Parcelable {
 
     public PersonalAuthReqParams(){}
 
-    public PersonalAuthReqParams(String nationality, String province, String city,
+    public PersonalAuthReqParams(String province, String city,
                                  String user_name,
                                  String id_no, String id_img_a, String id_img_b) {
         super();
-        this.nationality = nationality;
         this.province = province;
         this.city = city;
         this.user_name = user_name;
@@ -28,7 +27,6 @@ public class PersonalAuthReqParams implements Parcelable {
     }
 
     protected PersonalAuthReqParams(Parcel in) {
-        nationality = in.readString();
         province = in.readString();
         city = in.readString();
         user_name = in.readString();
@@ -48,14 +46,6 @@ public class PersonalAuthReqParams implements Parcelable {
             return new PersonalAuthReqParams[size];
         }
     };
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
 
     public String getProvince() {
         return province;
@@ -112,7 +102,6 @@ public class PersonalAuthReqParams implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(nationality);
         parcel.writeString(province);
         parcel.writeString(city);
         parcel.writeString(user_name);

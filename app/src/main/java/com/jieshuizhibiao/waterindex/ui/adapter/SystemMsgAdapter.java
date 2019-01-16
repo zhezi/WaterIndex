@@ -41,14 +41,14 @@ public class SystemMsgAdapter extends RecyclerView.Adapter<SystemMsgAdapter.View
 
     @NonNull
     @Override
-    public SystemMsgAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.activity_user_message_item, parent, false);
         AutoUtils.auto(view);
-        return new SystemMsgAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SystemMsgAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.tvMessageTitle.setText(TextUtils.isEmpty(list.get(position).getTitle()) ? "标题" :list.get(position).getTitle());
         holder.tvMessageTime.setText(list.get(position).getAdd_time());
         holder.tvMessageContent.setText(list.get(position).getContent());

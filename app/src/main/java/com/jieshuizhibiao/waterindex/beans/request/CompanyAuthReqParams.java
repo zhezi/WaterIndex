@@ -1,11 +1,14 @@
 package com.jieshuizhibiao.waterindex.beans.request;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * sxt
  * 企业认证参数
  */
 
-public class CompanyAuthReqParams {
+public class CompanyAuthReqParams implements Parcelable{
     private String province;
     private String city;
     private String company_name;
@@ -38,6 +41,32 @@ public class CompanyAuthReqParams {
         this.company_other_name = company_other_name;
         this.company_other_tel = company_other_tel;
     }
+
+    protected CompanyAuthReqParams(Parcel in) {
+        province = in.readString();
+        city = in.readString();
+        company_name = in.readString();
+        company_license_no = in.readString();
+        company_license_img = in.readString();
+        company_boss_name = in.readString();
+        company_boss_tel = in.readString();
+        id_img_a = in.readString();
+        id_img_b = in.readString();
+        company_other_name = in.readString();
+        company_other_tel = in.readString();
+    }
+
+    public static final Creator<CompanyAuthReqParams> CREATOR = new Creator<CompanyAuthReqParams>() {
+        @Override
+        public CompanyAuthReqParams createFromParcel(Parcel in) {
+            return new CompanyAuthReqParams(in);
+        }
+
+        @Override
+        public CompanyAuthReqParams[] newArray(int size) {
+            return new CompanyAuthReqParams[size];
+        }
+    };
 
     public String getProvince() {
         return province;
@@ -125,5 +154,42 @@ public class CompanyAuthReqParams {
 
     public void setCompany_other_tel(String company_other_tel) {
         this.company_other_tel = company_other_tel;
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(province);
+        dest.writeString(city);
+        dest.writeString(company_name);
+        dest.writeString(company_license_no);
+        dest.writeString(company_license_img);
+        dest.writeString(company_boss_name);
+        dest.writeString(company_boss_tel);
+        dest.writeString(id_img_a);
+        dest.writeString(id_img_b);
+        dest.writeString(company_other_name);
+        dest.writeString(company_other_tel);
     }
 }

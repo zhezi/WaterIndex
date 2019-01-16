@@ -15,11 +15,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +54,8 @@ import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
 import com.jieshuizhibiao.waterindex.utils.GsonUtil;
 import com.jieshuizhibiao.waterindex.utils.PictureFileUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,6 +64,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -75,7 +82,7 @@ import io.reactivex.schedulers.Schedulers;
  * @Author: sxt
  * @Date: 2018/12/9 8:19 PM
  */
-public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureViewImpl {
+public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureViewImpl {
     @BindView(R.id.title_bar)
     View title_bar;
     @BindView(R.id.left_ll)
@@ -139,12 +146,22 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
     @BindView(R.id.btn_next)
     Button btn_next;
-
+    @BindDrawable(R.drawable.gray_border_bg_shape)
+    Drawable edt_border;
+    @BindDrawable(R.drawable.red_border_illegal_bg_shape)
+    Drawable edt_border_illegal;
     private PicturePopupWindow popupWindow;
+    @BindString(R.string.key_edt_real_name)
+    String keyRealName;
+    @BindString(R.string.key_edt_id_card)
+    String keyIdCard;
+    @BindString(R.string.key_btn_id_img_b)
+    String keyIdImgB;
+    @BindString(R.string.key_btn_id_img_a)
+    String keyIdImgA;
 
     private View[] companyViews;
     private View[] personalViews;
-
     private AuthPresenter authPresenter;
     private PicturePresenter picturePresenter;
 
@@ -168,6 +185,9 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     private ArrayList<ProvinceBean> cities;//从json文件解析而来的provinceBean list
     private ArrayList<String> provinceStr;
     private HashMap<String, ArrayList<String>> cityMap;
+    private CompanyAuthReqParams companyParams = new CompanyAuthReqParams();
+    private PersonalAuthReqParams personalParams = new PersonalAuthReqParams();
+
     private AdapterView.OnItemSelectedListener onCityItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -186,8 +206,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         initCityData();
 
         StatusBarUtil.setImmersionStatus(this, title_bar);
-
-        authPresenter = new AuthPresenter(new AuthModel());
+        authPresenter = new AuthPresenter();
         authPresenter.attachView(this);
         picturePresenter = PicturePresenter.getInstance();
         picturePresenter.attachView(this);
@@ -337,29 +356,29 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
             case R.id.btn_next:
                 if (user_type) {
-                    CompanyAuthReqParams params = new CompanyAuthReqParams();
-                    params.setProvince(provinceName);
-                    params.setCity(cityName);
-                    params.setCompany_name(edt_company_name.getText().toString());
-                    params.setCompany_license_no(edt_company_license_no.getText().toString());
-                    params.setCompany_license_img(licenseImgStr);
-                    params.setCompany_boss_name(edt_company_boss_name.getText().toString());
-                    params.setId_img_a(bossIdImgStrA);
-                    params.setId_img_b(bossIdImgStrB);
-                    params.setCompany_boss_tel(edt_company_boss_tel.getText().toString());
-                    params.setCompany_other_name(edt_company_other_name.getText().toString());
-                    params.setCompany_other_tel(edt_company_other_tel.getText().toString());
-                    authPresenter.auth(this, user_type);
+                    companyParams.setProvince(provinceName);
+                    companyParams.setCity(cityName);
+                    companyParams.setCompany_name(edt_company_name.getText().toString());
+                    companyParams.setCompany_license_no(edt_company_license_no.getText().toString());
+                    companyParams.setCompany_license_img(licenseImgStr);
+                    companyParams.setCompany_boss_name(edt_company_boss_name.getText().toString());
+                    companyParams.setId_img_a(bossIdImgStrA);
+                    companyParams.setId_img_b(bossIdImgStrB);
+                    companyParams.setCompany_boss_tel(edt_company_boss_tel.getText().toString());
+                    companyParams.setCompany_other_name(edt_company_other_name.getText().toString());
+                    companyParams.setCompany_other_tel(edt_company_other_tel.getText().toString());
+                    authPresenter.auth(AuthActivity.this,companyParams);
+                    showLoadingDialog();
                 } else {
-                    PersonalAuthReqParams params = new PersonalAuthReqParams();
-                    params.setNationality(nationalityName);
-                    params.setProvince(provinceName);
-                    params.setCity(cityName);
-                    params.setUser_name(edt_user_name.getText().toString());
-                    params.setId_no(edt_id_no.getText().toString());
-                    params.setId_img_a(personalIdImgStrA);
-                    params.setId_img_b(personalIdImgStrB);
-                    authPresenter.auth(this, user_type);
+                    personalParams.setProvince(provinceName);
+                    personalParams.setCity(cityName);
+                    personalParams.setUser_name(edt_user_name.getText().toString());
+                    personalParams.setId_no(edt_id_no.getText().toString());
+                    personalParams.setId_img_a(personalIdImgStrA);
+                    personalParams.setId_img_b(personalIdImgStrB);
+                    authPresenter.vertify(personalParams);
+                    authPresenter.auth(AuthActivity.this,personalParams);
+                    showLoadingDialog();
                 }
 
                 break;
@@ -443,45 +462,81 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
                     relative_p_id_img};
         }
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onEdtContentsLegal() {
-
+        edt_user_name.setBackground(edt_border);
+        edt_id_no.setBackground(edt_border);
+        btn_upload_boss_id_img_a.setBackground(edt_border);
+        btn_upload_boss_id_img_b.setBackground(edt_border);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onEdtContentsIllegal(Map<String, Boolean> verify) {
-
+        if (!Util.isEmpty(verify.get(keyRealName)) && !verify.get(keyRealName)) {
+            edt_user_name.setBackground(edt_border_illegal);
+            edt_user_name.setText("");
+        } else {
+            edt_user_name.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyIdCard)) && !verify.get(keyIdCard)) {
+            edt_id_no.setBackground(edt_border_illegal);
+            edt_id_no.setText("");
+        } else {
+            edt_id_no.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyIdImgA)) && !verify.get(keyIdImgA)) {
+            btn_upload_boss_id_img_a.setBackground(edt_border_illegal);
+        } else {
+            btn_upload_boss_id_img_a.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyIdImgB)) && !verify.get(keyIdImgB)) {
+            btn_upload_boss_id_img_b.setBackground(edt_border_illegal);
+        } else {
+            btn_upload_boss_id_img_b.setBackground(edt_border);
+        }
     }
 
     @Override
     public void onCompanyAuthSuccess() {
+        dismissLoadingDialog();
         go2SetCapitalPassActivity();
     }
 
     @Override
     public void onCompanyAuthFailed(String msg) {
-        go2SetCapitalPassActivity();
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
     }
 
     @Override
     public void onPersonalAuthSuccess() {
+        dismissLoadingDialog();
         go2SetCapitalPassActivity();
     }
 
     @Override
     public void onPersonalAuthFailed(String msg) {
-        go2SetCapitalPassActivity();
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
     }
 
+    /**
+     * 下一步设置资金密码
+     */
     private void go2SetCapitalPassActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        PersonalAuthReqParams personalAuthReqParams = new PersonalAuthReqParams();
-        bundle.putParcelable("PersonalAuthReqParams", personalAuthReqParams);
+        if(user_type){
+            bundle.putParcelable("CompanyAuthReqParams", companyParams);
+        } else {
+            bundle.putParcelable("PersonalAuthReqParams", personalParams);
+        }
         bundle.putString("action","AuthActivity");
         intent.putExtras(bundle);
-        startActivity(new Intent(AuthActivity.this, SetCapitalPassActivity.class));
+        intent.setClass(AuthActivity.this, SetCapitalPassActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -635,7 +690,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-        authPresenter.detachView();
         picturePresenter.detachView();
+        authPresenter.detachView();
     }
 }

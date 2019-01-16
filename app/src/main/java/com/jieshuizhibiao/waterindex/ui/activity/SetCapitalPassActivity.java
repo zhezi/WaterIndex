@@ -1,6 +1,8 @@
 package com.jieshuizhibiao.waterindex.ui.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,18 +16,23 @@ import com.jieshuizhibiao.waterindex.beans.request.PersonalAuthReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.SetCaptialPassReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.ChangeCapitalPassPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.SetCapitalPassPresenter;
+import com.jieshuizhibiao.waterindex.contract.view.ChangeCapitalPassViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.SetCapitalPassViewImpl;
-import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
+import java.util.Map;
+
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
  * 设置资金密码(修改/设置)
  */
-public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPassViewImpl {
+public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPassViewImpl,ChangeCapitalPassViewImpl {
 
     @BindView(R.id.title_bar)
     View titleBar;
@@ -44,6 +51,19 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     EditText edtPayNike;
     @BindView(R.id.btn_find)
     Button btnAuth;
+    @BindDrawable(R.drawable.gray_border_bg_shape)
+    Drawable edt_border;
+    @BindDrawable(R.drawable.red_border_illegal_bg_shape)
+    Drawable edt_border_illegal;
+    @BindString(R.string.key_edt_name_pwd)
+    String keySafePass;
+    @BindString(R.string.key_edt_name_nike_name)
+    String keyNickName;
+    @BindString(R.string.key_edt_capital_pwd)
+    String keyPass;
+    @BindString(R.string.key_edt_capital_old_pwd)
+    String keyOldPass;
+
     private SetCaptialPassReqParams setCaptialPassReqParams;
     private ChangeCapitalPassReqParams changeCapitalPassReqParams;
     private SetCapitalPassPresenter setCapitalPassPresenter;
@@ -59,16 +79,17 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
 
             case R.id.btn_find:
                 if(getIntent().getStringExtra("action").equals("SafeCenterActivity")){
-                    String oldCapitalPass = edtOldPass.getText().toString();
-                    String oldCapitalNewPass = edtNewPass.getText().toString();
-                    String oldCapitalConfirmPass = edtConfirmPass.getText().toString();
-                    changeCapitalPassReqParams.setSafe_pw(oldCapitalNewPass);
-                    changeCapitalPassReqParams.setSafe_pw_re(oldCapitalConfirmPass);
-
+                    changeCapitalPassReqParams.setOld_safe_pw(edtOldPass.getText().toString());
+                    changeCapitalPassReqParams.setSafe_pw(edtNewPass.getText().toString());
+                    changeCapitalPassReqParams.setSafe_pw_re(edtConfirmPass.getText().toString());
+                    changeCapitalPassPresenter.verfity(changeCapitalPassReqParams);
                     changeCapitalPassPresenter.changeCapitalPass(this,changeCapitalPassReqParams);
+
                 }else if(getIntent().getStringExtra("action").equals("AuthActivity")){
-
-
+                    setCaptialPassReqParams.setNick_name(edtPayNike.getText().toString());
+                    setCaptialPassReqParams.setSafe_pw(edtNewPass.getText().toString());
+                    setCaptialPassReqParams.setSafe_pw_re(edtConfirmPass.getText().toString());
+                    setCapitalPassPresenter.verfity(setCaptialPassReqParams);
                     setCapitalPassPresenter.SetCapitalPass(this,setCaptialPassReqParams);
                 }
 
@@ -81,39 +102,23 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtil.setImmersionStatus(this, titleBar);
         setCapitalPassPresenter=new SetCapitalPassPresenter();
         setCapitalPassPresenter.attachView(this);
         changeCapitalPassPresenter = new ChangeCapitalPassPresenter();
-
-        StatusBarUtil.setImmersionStatus(this, titleBar);
+        changeCapitalPassPresenter.attachView(this);
         initData();
-        initView();
     }
 
-    private void initData() {
-        setCaptialPassReqParams = new SetCaptialPassReqParams();
-        if(getIntent()!=null){
-            PersonalAuthReqParams params = new PersonalAuthReqParams();
-            setCaptialPassReqParams.setCity(params.getCity());
-            setCaptialPassReqParams.setCity(params.getProvince());
-            setCaptialPassReqParams.setCity(params.getUser_name());
-            setCaptialPassReqParams.setCity(params.getId_no());
-            setCaptialPassReqParams.setCity(params.getId_img_a());
-            setCaptialPassReqParams.setCity(params.getId_img_b());
-        }
-    }
 
     /**
      * 修改密码-设置资金密码-修改资金密码 使用的同一xml
-     * <string name="hint_input_capital_old_pwd">原资金密码</string>
-     <string name="hint_input_capital_pwd">设置资金密码</string>
-     <string name="hint_input_capital_new_pwd">设置新资金密码</string>
-     <string name="hint_input_capital_confirm_pwd">确认资金密码</string>
      */
-    private void initView() {
-        if (getIntent()!=null){
+    private void initData() {
+        if (getIntent()!=null && !TextUtils.isEmpty(getIntent().getStringExtra("action"))){
             if(getIntent().getStringExtra("action").equals("SafeCenterActivity")){
                 tvTitleCenter.setText("修改资金密码");
+                edtOldPass.setVisibility(View.VISIBLE);
                 edtOldPass.setHint(R.string.hint_input_capital_old_pwd);
                 edtNewPass.setHint(R.string.hint_input_capital_new_pwd);
                 edtConfirmPass.setHint(R.string.hint_input_capital_confirm_pwd);
@@ -127,6 +132,18 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
                 edtPayNike.setVisibility(View.VISIBLE);
                 btnAuth.setText("提交认证");
             }
+            setCaptialPassReqParams = new SetCaptialPassReqParams();
+            changeCapitalPassReqParams = new ChangeCapitalPassReqParams();
+            if (!Util.isEmpty(getIntent().getParcelableExtra("PersonalAuthReqParams"))){
+                PersonalAuthReqParams params = getIntent().getParcelableExtra("PersonalAuthReqParams");
+                setCaptialPassReqParams.setCity(params.getCity());
+                setCaptialPassReqParams.setProvince(params.getProvince());
+                setCaptialPassReqParams.setUser_name(params.getUser_name());
+                setCaptialPassReqParams.setId_no(params.getId_no());
+                setCaptialPassReqParams.setId_img_a(params.getId_img_a());
+                setCaptialPassReqParams.setId_img_b(params.getId_img_b());
+            }
+
         }
 
 
@@ -143,15 +160,43 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     }
 
 
+    @Override
+    public void onEdtContentsLegal() {
+        edtPayNike.setBackground(edt_border);
+        edtNewPass.setBackground(edt_border);
+        edtConfirmPass.setBackground(edt_border);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onEdtContentsIllegal(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keySafePass)) && !verify.get(keySafePass)) {
+            edtNewPass.setBackground(edt_border_illegal);
+            edtConfirmPass.setBackground(edt_border_illegal);
+            edtNewPass.setText("");
+            edtConfirmPass.setText("");
+        } else {
+            edtNewPass.setBackground(edt_border);
+            edtConfirmPass.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyNickName)) && !verify.get(keyNickName)){
+            edtPayNike.setBackground(edt_border_illegal);
+            edtPayNike.setText("");
+        } else {
+            edtPayNike.setBackground(edt_border);
+        }
+    }
 
     @Override
     public void onSetCapitalPassSuccess() {
-        showToast("修改成功！");
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("设置成功");
         finish();
     }
 
     @Override
     public void onSetCapitalPassFailed(String msg) {
+        dismissLoadingDialog();
         ToastUtils.showCustomToast(msg);
 
     }
@@ -163,4 +208,43 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     }
 
 
+    @Override
+    public void onEdtContentsLegalChange() {
+        edtOldPass.setBackground(edt_border);
+        edtNewPass.setBackground(edt_border);
+        edtConfirmPass.setBackground(edt_border);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onEdtContentsIllegalChange(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keyPass)) && !verify.get(keyPass)) {
+            edtNewPass.setBackground(edt_border_illegal);
+            edtConfirmPass.setBackground(edt_border_illegal);
+            edtNewPass.setText("");
+            edtConfirmPass.setText("");
+        }else {
+            edtNewPass.setBackground(edt_border);
+            edtConfirmPass.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyOldPass)) && !verify.get(keyOldPass)){
+            edtOldPass.setBackground(edt_border_illegal);
+            edtOldPass.setText("");
+        } else {
+            edtOldPass.setBackground(edt_border);
+        }
+    }
+
+    @Override
+    public void onChangeCapitalPassSuccess() {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("修改成功");
+        finish();
+    }
+
+    @Override
+    public void onChangeCapitalPassFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
+    }
 }

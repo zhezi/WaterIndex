@@ -21,7 +21,10 @@
     <string name="agreement">《节水链平台用户协议》</string>
     <string name="existing_account">已有账号，前往登录</string>
 
-
+    <string name="key_edt_real_name">edt_real_name</string>
+    <string name="key_edt_id_card">edt_id_card</string>
+    <string name="key_btn_id_img_a">btn_id_img_a</string>
+    <string name="key_btn_id_img_b">btn_id_img_b</string>
 
     <string name="key_edt_name_mobile">edt_mobile</string>
     <string name="key_edt_name_pwd">edt_pwd</string>
@@ -34,6 +37,9 @@
     <string name="field_sms">sms</string>
 
     <string name="key_edt_name_nike_name">edt_nike</string>
+
+    <string name="key_edt_capital_old_pwd">edt_change_capital_old_pwd</string>
+    <string name="key_edt_capital_pwd">edt_change_capital_pwd</string>
 
     <string name="hit_edt_mobile">请输入您的手机号</string>
     <string name="hit_edt_password">请输入密码</string>

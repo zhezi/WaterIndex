@@ -28,23 +28,43 @@ public class ChangeCapitalPassModel {
     private Map<String, Boolean> verifyResult = new HashMap<String, Boolean>();
     private WaterIndexApplication context = WaterIndexApplication.getInstance();
 
-    public Map<String, Boolean> verify(ChangeCapitalPassReqParams params) {
+    public Map<String, Boolean> vertify(ChangeCapitalPassReqParams params) {
         verifyResult.clear();
-        if(!TextUtils.isEmpty(params.getSafe_pw())&&params.getSafe_pw().equals(params.getSafe_pw_re())&&AccountValidatorUtil.isPassword(params.getSafe_pw())&&AccountValidatorUtil.isPassword(params.getSafe_pw_re())){
-            verifyResult.put(context.getString(R.string.key_edt_name_pwd), true);
+        if(!TextUtils.isEmpty(params.getOld_safe_pw()) && AccountValidatorUtil.isPassword(params.getOld_safe_pw())){
+            verifyResult.put(context.getString(R.string.key_edt_capital_old_pwd), true);
         } else {
-            verifyResult.put(context.getString(R.string.key_edt_name_pwd), false);
+            verifyResult.put(context.getString(R.string.key_edt_capital_old_pwd), false);
         }
-        // TODO: 2019/1/10 校验
-
+        if(!TextUtils.isEmpty(params.getSafe_pw())&&params.getSafe_pw().equals(params.getSafe_pw_re())&&AccountValidatorUtil.isPassword(params.getSafe_pw())&&AccountValidatorUtil.isPassword(params.getSafe_pw_re())){
+            verifyResult.put(context.getString(R.string.key_edt_capital_pwd), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_capital_pwd), false);
+        }
 
         return verifyResult;
     }
 
-    public void changeCapitalPass(BaseActivity activity, ChangeCapitalPassReqParams params,final ChangeCapitalPassCallBack callBack){
+    public void changeCapitalPass(BaseActivity activity, ChangeCapitalPassReqParams capitalPassReqParams,final ChangeCapitalPassCallBack callBack){
+        int Illegal = 0;
+        for (Map.Entry<String, Boolean> entry : verifyResult.entrySet()) {
+            final Boolean value = entry.getValue();
+            if (!value) {
+                Illegal += 1;
+            }
+        }
+        if (Illegal == 0) {
+            callBack.onEdtContentsLegalChange();
+        } else {
+            callBack.onEdtContentsIllegalChange(verifyResult);
+            return;
+        }
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("old_safe_pw",capitalPassReqParams.getOld_safe_pw());
+        params.put("safe_pw",capitalPassReqParams.getSafe_pw());
+        params.put("safe_pw_re",capitalPassReqParams.getSafe_pw_re());
 
         RetrofitFactory.getInstance().createService()
-                .changeCapitalPass(RequestUtil.getRequestBeanBody(params,true))
+                .changeCapitalPass(RequestUtil.getRequestHashBody(params,false))
                 .compose(activity.<BaseEntity>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity>io())
                 .subscribe(new BaseObserver(activity) {
@@ -77,6 +97,8 @@ public class ChangeCapitalPassModel {
     }
 
     public interface ChangeCapitalPassCallBack{
+        void onEdtContentsLegalChange();
+        void onEdtContentsIllegalChange(Map<String, Boolean> verify);
         void success();
         void failed(String msg);
     }
