@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.jieshuizhibiao.waterindex.contract.presenter.AddPayMentTypePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -46,11 +48,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -62,7 +66,7 @@ import top.zibin.luban.Luban;
  * Class Note:
  */
 
-public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl {
+public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl {
 
     @BindView(R.id.title_bar)
     View title_bar;
@@ -74,6 +78,22 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
     Button btnQrcode;
     @BindView(R.id.edt_payment_comment_account)
     EditText edtAccount;
+    @BindView(R.id.edt_capital_pass)
+    EditText edtPayPass;
+    @BindView(R.id.edt_payment_name)
+    EditText edtPayName;
+    @BindDrawable(R.drawable.gray_border_bg_shape)
+    Drawable edt_border;
+    @BindDrawable(R.drawable.red_border_illegal_bg_shape)
+    Drawable edt_border_illegal;
+    @BindString(R.string.key_edt_pay_type_qrcode)
+    String keyPayQcode;
+    @BindString(R.string.key_edt_pay_type_account)
+    String keyPayAccount;
+    @BindString(R.string.key_edt_pay_type_name)
+    String keyPayName;
+    @BindString(R.string.key_edt_pay_type_capital_pwd)
+    String keyPayPass;
 
     private PicturePopupWindow popupWindow;
     private AddPayMentTypePresenter addPayMentTypePresenter;
@@ -90,9 +110,16 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
     }
 
     private void initView() {
-        tv_title_center.setText("微信");
-        btnQrcode.setText(R.string.hint_upload_payment_wx_img);
-        edtAccount.setHint(R.string.hint_input_payment_wx_account);
+        if (getIntent().getStringExtra("payType").equals(HttpConfig.WX_TYPE)){
+            tv_title_center.setText("微信");
+            btnQrcode.setText(R.string.hint_upload_payment_wx_img);
+            edtAccount.setHint(R.string.hint_input_payment_wx_account);
+        }else {
+            tv_title_center.setText("支付宝");
+            btnQrcode.setText(R.string.hint_upload_payment_zfb_img);
+            edtAccount.setHint(R.string.hint_input_payment_zfb_account);
+        }
+
         initPopupView();
     }
 
@@ -118,11 +145,16 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
                 break;
             case R.id.btn_confirm:
                 AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
-                params.setType(HttpConfig.WX_TYPE);
-                params.setUser_name("张三丰");
+                if (getIntent().getStringExtra("payType").equals(HttpConfig.WX_TYPE)){
+                    params.setType(HttpConfig.WX_TYPE);
+                }else {
+                    params.setType(HttpConfig.ZFB_TYPE);
+                }
+                params.setUser_name(edtPayName.getText().toString());
                 params.setQrcode(stringStream);
-                params.setSafe_pw("920809");
-                params.setAccount_name("bushuijiao");
+                params.setSafe_pw(edtPayPass.getText().toString());
+                params.setAccount_name(edtAccount.getText().toString());
+                addPayMentTypePresenter.vertify(params);
                 addPayMentTypePresenter.addPayMentType(this,params);
                 break;
 
@@ -132,7 +164,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
 
     public void initPopupView() {
         if (popupWindow == null) {
-            popupWindow = new PicturePopupWindow(AddWXPaymetActivity.this);
+            popupWindow = new PicturePopupWindow(AddWxOrZfbPaymetActivity.this);
             popupWindow.setOnItemClickListener(new PicturePopupWindow.OnItemClickListener() {
 
                 @Override
@@ -154,7 +186,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
     }
 
     public void showPopupView() {
-        View parent = LayoutInflater.from(AddWXPaymetActivity.this).inflate(R.layout.activity_auth, null);
+        View parent = LayoutInflater.from(AddWxOrZfbPaymetActivity.this).inflate(R.layout.activity_auth, null);
         popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.LEFT, 0, 0);
     }
 
@@ -184,7 +216,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
                     fileUrl = Uri.fromFile(file);
 
                 } else {//包装7.0 Uri--清单文件中智能有一个FileProvider的声明
-                    fileUrl = FileProvider.getUriForFile(AddWXPaymetActivity.this, "com.quanminjieshui.waterindex.fileProvider", file);
+                    fileUrl = FileProvider.getUriForFile(AddWxOrZfbPaymetActivity.this, "com.quanminjieshui.waterindex.fileProvider", file);
 
                     //授权4.4FileProvider content的grantUriPermission 方法
                     List<ResolveInfo> mResolveList = getPackageManager().
@@ -214,7 +246,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
-            ZipImg(AddWXPaymetActivity.this,mRotateFile);
+            ZipImg(AddWxOrZfbPaymetActivity.this,mRotateFile);
 
             if (mOriginalBitmap != null) {
                 mOriginalBitmap.recycle();
@@ -224,7 +256,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
-            ZipImg(AddWXPaymetActivity.this,mFile);
+            ZipImg(AddWxOrZfbPaymetActivity.this,mFile);
         }
     }
 
@@ -234,7 +266,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
                 .map(new Function<File, File>() {
                     @Override
                     public File apply(File file) throws Exception {
-                        return Luban.with(AddWXPaymetActivity.this).load(file).get();
+                        return Luban.with(AddWxOrZfbPaymetActivity.this).load(file).get();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -289,7 +321,7 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
         performCodeWithPermission(getString(R.string.rationale_storage), PermissionConfig.REQUEST_STORAGE_PERM, perms, new PermissionCallback() {
             @Override
             public void hasPermission(List<String> allPerms) {
-                Intent intent = new Intent(AddWXPaymetActivity.this, ImageGridActivity.class);
+                Intent intent = new Intent(AddWxOrZfbPaymetActivity.this, ImageGridActivity.class);
                 startActivityForResult(intent, ImagePicker.RESULT_CODE_ITEMS);
                 LogUtils.i("已获取storage权限");
             }
@@ -335,12 +367,51 @@ public class AddWXPaymetActivity extends BaseActivity implements AddPayMentTypeV
     }
 
     @Override
-    public void onAddPaymentTypeSuccess() {
+    public void onAddEdtContentsLegal() {
+        edtAccount.setBackground(edt_border);
+        edtPayName.setBackground(edt_border);
+        edtPayPass.setBackground(edt_border);
+        btnQrcode.setBackground(edt_border);
+        showLoadingDialog();
+    }
 
+    @Override
+    public void onAddEdtContentsIllegal(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keyPayQcode)) && !verify.get(keyPayQcode)){
+            btnQrcode.setBackground(edt_border_illegal);
+        } else {
+            btnQrcode.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayName)) && !verify.get(keyPayName)) {
+            edtPayName.setBackground(edt_border_illegal);
+            edtPayName.setText("");
+        } else {
+            edtPayName.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayAccount)) && !verify.get(keyPayAccount)){
+            edtAccount.setBackground(edt_border_illegal);
+            edtAccount.setText("");
+        } else {
+            edtAccount.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayPass)) && !verify.get(keyPayPass)){
+            edtPayPass.setBackground(edt_border_illegal);
+            edtPayPass.setText("");
+        } else {
+            edtPayPass.setBackground(edt_border);
+        }
+    }
+
+    @Override
+    public void onAddPaymentTypeSuccess() {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("添加成功！");
+        finish();
     }
 
     @Override
     public void onAddPaymentTypeFailed(String msg) {
+        dismissLoadingDialog();
         ToastUtils.showCustomToast(msg);
     }
 }

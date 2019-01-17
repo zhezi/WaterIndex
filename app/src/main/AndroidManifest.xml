@@ -206,7 +206,7 @@
         <activity android:name=".ui.activity.AddBankPaymetActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddWXPaymetActivity"
+        <activity android:name=".ui.activity.AddWxOrZfbPaymetActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.activity.AddZFBPaymetActivity"

@@ -1,5 +1,9 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
+import android.text.TextUtils;
+
+import com.jieshuizhibiao.waterindex.R;
+import com.jieshuizhibiao.waterindex.WaterIndexApplication;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
@@ -8,7 +12,11 @@ import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
+import com.jieshuizhibiao.waterindex.utils.AccountValidatorUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by songxiaotao on 2019/1/13.
@@ -17,7 +25,49 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class AddPayMentTypeModel {
 
+    private Map<String, Boolean> verifyResult = new HashMap<String, Boolean>();
+    private WaterIndexApplication context = WaterIndexApplication.getInstance();
+
+    public Map<String, Boolean> verify(AddPayMentTypeReqParams params) {
+        verifyResult.clear();
+        if(!TextUtils.isEmpty(params.getQrcode())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_qrcode), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_qrcode), false);
+        }
+        if(!TextUtils.isEmpty(params.getUser_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_name), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_name), false);
+        }
+        if(!TextUtils.isEmpty(params.getAccount_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_account), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_account), false);
+        }
+        if(!TextUtils.isEmpty(params.getSafe_pw()) && AccountValidatorUtil.isPassword(params.getSafe_pw())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_capital_pwd), true);
+        }else{
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_capital_pwd), false);
+        }
+
+        return verifyResult;
+    }
+
     public void addPayMentType(BaseActivity activity, AddPayMentTypeReqParams params, final AddPayMentTypeCallBack callBack){
+        int Illegal = 0;
+        for (Map.Entry<String, Boolean> entry : verifyResult.entrySet()) {
+            final Boolean value = entry.getValue();
+            if (!value) {
+                Illegal += 1;
+            }
+        }
+        if (Illegal == 0) {
+            callBack.onAddEdtContentsLegal();
+        } else {
+            callBack.onAddEdtContentsIllegal(verifyResult);
+            return;
+        }
 
         RetrofitFactory.getInstance().createService()
                 .addPayMentType(RequestUtil.getRequestBeanBody(params,true))
@@ -52,6 +102,8 @@ public class AddPayMentTypeModel {
     }
 
     public interface AddPayMentTypeCallBack{
+        void onAddEdtContentsLegal();
+        void onAddEdtContentsIllegal(Map<String, Boolean> verify);
         void success();
         void failed(String msg);
     }
