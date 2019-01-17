@@ -1017,58 +1017,64 @@ public class UrlConfig {
     public static final String LISTORDER="api/home/userOrder/listOrder";
 
     /**
-     * 买家-未付款
-      {
-          "code":1,
-          "msg":"订单详情",
-          "data":{
-              "order_info":{
-                  "title":"购买节水指标",
-                  "expire_time":"不限制",
-                  "rmb":"9.00000元",
-                  "total":"3.00000T",
-                  "price":"3.00000元\/T",
-                  "order_sn":"20190110182211322408",
-                  "pay_code":"322408",
-                  "createtime":"2019-01-10 18:22:11",
-                  "seller_avatar":"https:\/\/www.jieshuizhibiao.com\/upload\/admin\/20190109\/277a2b3341ebbf2a70bf755c0774361e.jpg",
-                  "seller_nickname":"丁香满文轩",
-                  "order_id":"59"
-              },
-              "pay_info_list":[
-                  {
-                      "id":10,
-                      "uid":39,
-                      "type":2,
-                      "user_name":"萨文轩",
-                      "bank_name":"",
-                      "bank_detail_name":"",
-                      "account_name":"18658900249",
-                      "qrcode":"admin\/20190108\/ddbded5a8c787ea8108d77aadc25de2f.jpeg",
-                      "add_time":1546142739,
-                      "status":1
-                  },
-                  {
-                      "id":14,
-                      "uid":39,
-                      "type":1,
-                      "user_name":"萨文轩",
-                      "bank_name":"北京银行",
-                      "bank_detail_name":"朝阳支行",
-                      "account_name":"6227001142040082275",
-                      "qrcode":"",
-                      "add_time":1546917730,
-                      "status":1
-                  }
-              ]
-          }
-      }
+     * 买家身份-未付款
+     {
+     "code":1,
+     "msg":"订单详情",
+     "data":{
+     "order_info":{
+     "title":"购买节水指标",
+     "expire_time":"不限制",
+     "rmb":"9.00000元",
+     "total":"3.00000T",
+     "price":"3.00000元\/T",
+     "order_sn":"20190110182211322408",
+     "pay_code":"322408",
+     "createtime":"2019-01-10 18:22:11",
+     "seller_avatar":"https:\/\/www.jieshuizhibiao.com\/upload\/admin\/20190109\/277a2b3341ebbf2a70bf755c0774361e.jpg",
+     "seller_nickname":"丁香满文轩",
+     "order_id":"59"
+     },
+     "pay_info_list":[
+     {
+     "id":10,
+     "uid":39,
+     "type":2,
+     "user_name":"萨文轩",
+     "bank_name":"",
+     "bank_detail_name":"",
+     "account_name":"18658900249",
+     "qrcode":"admin\/20190108\/ddbded5a8c787ea8108d77aadc25de2f.jpeg",
+     "add_time":1546142739,
+     "status":1
+     },
+     {
+     "id":14,
+     "uid":39,
+     "type":1,
+     "user_name":"萨文轩",
+     "bank_name":"北京银行",
+     "bank_detail_name":"朝阳支行",
+     "account_name":"6227001142040082275",
+     "qrcode":"",
+     "add_time":1546917730,
+     "status":1
+     }
+     ]
+     }
+     }
      *
      */
     public static final String BUYER_UNPAY ="api/home/userOrder/buyerUnpay";
 
     /**
-     * 买家-取消订单
+     *卖家身份-未收款
+     *
+     */
+    public static final String BUYER_PAID="api/home/userOrder/buyerPaid";
+
+    /**
+     * 买家身份-取消
      *      {
      *          "code":1,
      *          "msg":"取消成功",
@@ -1078,7 +1084,7 @@ public class UrlConfig {
     public static final String BUYER_CANCEL="api/home/userOrder/buyerCancel";
 
     /**
-     * 卖家未付款
+     * 卖家身份-未付款
      *  {
      *          "code":1,
      *          "msg":"订单详情",
@@ -1128,9 +1134,48 @@ public class UrlConfig {
     public static final String SELLER_UNPAY="api/home/userOrder/sellerUnpay";
 
     /**
+     * 卖家身份-确认订单
+     *      {
+     *          "code":1,
+     *          "msg":"订单详情",
+     *          "data":{
+     *              "order_info":{
+     *                  "title":"收款",
+     *                  "rmb":"9.00000元",
+     *                  "total":"3.00000T",
+     *                  "price":"3.00000元\/T",
+     *                  "pay_type":"3",
+     *                  "order_sn":"20181217141135485517",
+     *                  "pay_code":"485517",
+     *                  "createtime":"2018-12-17 19:44:55",
+     *                  "paytime":"2018-12-17 16:12:55",
+     *                  "buyer_avatar":"https:\/\/www.jieshuizhibiao.com\/upload\/222",
+     *                  "buyer_nickname":"bb",
+     *                  "order_id":"5",
+     *                  "pay_snapshot":"https:\/\/www.jieshuizhibiao.com\/upload\/123123123"
+     *              },
+     *              "pay_info":{
+     *                  "id":2,
+     *                  "uid":6,
+     *                  "type":3,
+     *                  "user_name":"",
+     *                  "bank_name":"",
+     *                  "bank_detail_name":"",
+     *                  "account_name":"",
+     *                  "qrcode":"",
+     *                  "add_time":0,
+     *                  "status":1
+     *              }
+     *          }
+     *      }
+     */
+    public static final String SELLER_PAID="api/home/userOrder/sellerPaid";
+
+    /**
      *基础信息    节水指标单价
      */
     public static final String SYS_CONFIG="api/home/common/sysConfig";
+
 
     /**
      * 身份认证

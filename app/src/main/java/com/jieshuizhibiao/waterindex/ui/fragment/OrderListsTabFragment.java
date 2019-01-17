@@ -16,8 +16,10 @@ import com.jieshuizhibiao.waterindex.beans.ListOrder;
 import com.jieshuizhibiao.waterindex.contract.model.OrderListsModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.OrderListsPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.event.ShouldRefreshEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.TestActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderPaidActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
@@ -58,6 +60,19 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
 
     private OrderListsPresenter orderListsPresenter = null;
     private BaseActivity baseActivity;//懒加载需要需用
+    public static final String BUYER_UNPAY = "buyerUnpay";
+    public static final String BUYER_PAID = "buyerPaid";
+    public static final String BUYER_APPEAL = "buyerAppeal";
+    public static final String BUYER_SUCC = "buyerSucc";
+    public static final String BUYER_CANCEL = "buyerCancel";
+    public static final String SELLER_UNPAY = "sellerUnpay";
+    public static final String SELLER_PAID = "sellerPaid";
+    public static final String SELLER_APPEAL = "sellerAppeal";
+    public static final String SELLER_SUCC = "sellerSucc";
+    public static final String SELLER_CANCEL = "sellerCancel";
+
+    public static final String LISTORDER = "ListOrder";
+
 
     /**
      * must perform before onCreateView/doRequest
@@ -120,13 +135,19 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public void onItemClicked(ListOrder order) {
         if (order != null) {
             final String next_step = order.getNext_step();
-            //todo jump
-            Intent intent=new Intent(baseActivity,TestActivity.class);
-            intent.putExtra("ListOrder",order);
-            if(next_step.equals("buyerUnpay")||next_step.equals("sellerUnpay")){
-                jump(TraderUnpayActivity.class,intent);
-            }else{
 
+            Intent intent = new Intent(baseActivity, TestActivity.class);
+            intent.putExtra(LISTORDER, order);
+            if (next_step.equals(BUYER_UNPAY) || next_step.equals(SELLER_UNPAY)) {
+                jump(TraderUnpayActivity.class, intent);
+            } else if (next_step.equals(BUYER_PAID) || next_step.equals(SELLER_PAID)) {
+                jump(TraderPaidActivity.class, intent);
+            } else if (next_step.equals(BUYER_APPEAL) || next_step.equals(SELLER_APPEAL)) {
+                //todo jump
+            } else if (next_step.equals(BUYER_SUCC) || next_step.equals(SELLER_SUCC)) {
+                //todo jump
+            } else if (next_step.equals(BUYER_CANCEL) || next_step.equals(SELLER_CANCEL)) {
+                //todo jump
             }
         }
     }
@@ -144,6 +165,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
                 rlHint.setVisibility(View.GONE);
                 if (isRefresh) list.clear();
                 list.addAll(datas);
+                intPage += 1;
                 orderListsAdapter.notifyDataSetChanged();
             }
         }
@@ -209,21 +231,29 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     }
 
     private void jump(Class<?> cls, Intent intent) {
-        if(intent==null){
-            intent=new Intent();
+        if (intent == null) {
+            intent = new Intent();
         }
-        intent.setClass(baseActivity,cls);
+        intent.setClass(baseActivity, cls);
         startActivity(intent);
     }
 
 
-    public void onEventMainThread(ShouldRefreshEvent event) {
+    public void onEventMainThread(ChangeOrderStatusEvent event) {
         if (event != null) {
-            String eventMsg = event.getTitle();
-            if (eventMsg.equals(this.title)) {
-                isRefresh = true;
-                doRequest();
+            String from = event.getFrom();
+            String msg = event.getMsg();
+            if (from.equals("TraderUnpayActivity")) {
+                if (msg.equals("buyer_cancel")) {
+                    isRefresh = true;//所有页面都要刷新
+                    intPage = 1;
+                }
+                if ("全部，进行中".contains(title) && isVisiable) {
+                    doRequest();//立即刷新
+                    baseActivity.dismissLoadingDialog();
+                }
             }
+
         }
     }
 
@@ -275,7 +305,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public void onLoadMore() {
         if (isVisiable) {
             isLoadMore = true;
-            intPage += 1;
+//            intPage += 1;
             doRequest();
             xrv.loadMoreComplete();
         }

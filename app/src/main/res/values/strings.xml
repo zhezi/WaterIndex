@@ -40,6 +40,8 @@
 
     <string name="key_edt_capital_old_pwd">edt_change_capital_old_pwd</string>
     <string name="key_edt_capital_pwd">edt_change_capital_pwd</string>
+    <string name="key_edt_change_new_pwd">key_edt_change_new_pwd</string>
+    <string name="key_edt_change_old_pwd">key_edt_change_old_pwd</string>
 
     <string name="hit_edt_mobile">请输入您的手机号</string>
     <string name="hit_edt_password">请输入密码</string>

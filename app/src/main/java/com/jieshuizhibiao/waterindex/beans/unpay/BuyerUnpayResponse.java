@@ -3,10 +3,10 @@ package com.jieshuizhibiao.waterindex.beans.unpay;
 import java.util.List;
 
 public class BuyerUnpayResponse {
-    private BuyerOrderInfo order_info;
+    private BuyerUnpayOrderInfo order_info;
     private List<PayInfo> pay_info_list;
 
-    public BuyerOrderInfo getOrder_info() {
+    public BuyerUnpayOrderInfo getOrder_info() {
         return order_info;
     }
 

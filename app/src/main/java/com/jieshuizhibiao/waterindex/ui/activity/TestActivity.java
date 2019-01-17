@@ -10,10 +10,12 @@
  */
 package com.jieshuizhibiao.waterindex.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
@@ -43,17 +45,18 @@ import butterknife.OnClick;
  */
 public class TestActivity extends BaseActivity {
     //    @BindView(R.id.btn_request)
-    Button btnRequest;
+    Button btnRequest, btnGoLogin;
+    EditText edt;
+    private String edtContent;
 
-int order_id;
-String next_step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         btnRequest = findViewById(R.id.btn_request);
-        order_id=getIntent().getIntExtra("order_id",0);
-        next_step=getIntent().getStringExtra("next_step");
+        btnGoLogin = findViewById(R.id.btn_go_login);
+        edt = findViewById(R.id.edt);
+
     }
 
     @Override
@@ -66,18 +69,18 @@ String next_step;
 
     }
 
-    @OnClick({R.id.btn_request})
+    @OnClick({R.id.btn_request, R.id.btn_go_login})
     public void onClick(View v) {
+        edtContent=edt.getText().toString();
         int id = v.getId();
         switch (id) {
 
             case R.id.btn_request:
-                ToastUtils.showCustomToast("order_id"+order_id+"  next_step:"+next_step);
-                order_id=59;
+
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("order_id",order_id);
+                params.put("order_id", edtContent);
                 RetrofitFactory.getInstance().createService()
-                        .buyerCancle(RequestUtil.getRequestHashBody(params, false))
+                        .buyerUnpay(RequestUtil.getRequestHashBody(params, false))
                         .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
                         .compose(ObservableTransformerUtils.<BaseEntity>io())
                         .subscribe(new BaseObserver(TestActivity.this) {
@@ -93,6 +96,10 @@ String next_step;
                         });
 
 
+                break;
+
+            case R.id.btn_go_login:
+                startActivity(new Intent(TestActivity.this, LoginActivity.class));
                 break;
         }
     }

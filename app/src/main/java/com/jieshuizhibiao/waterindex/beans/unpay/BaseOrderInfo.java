@@ -1,6 +1,9 @@
 package com.jieshuizhibiao.waterindex.beans.unpay;
 
-public class BaseOrderInfo {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class BaseOrderInfo implements Parcelable {
     //    "order_info":{
 //     *                  "title":"出售节水指标",
 //     *                  "expire_time":"不限制",
@@ -25,6 +28,18 @@ public class BaseOrderInfo {
 
 
     private String order_id;
+
+    public static final Creator<BaseOrderInfo> CREATOR = new Creator<BaseOrderInfo>() {
+        @Override
+        public BaseOrderInfo createFromParcel(Parcel in) {
+            return new BaseOrderInfo(in);
+        }
+
+        @Override
+        public BaseOrderInfo[] newArray(int size) {
+            return new BaseOrderInfo[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -61,4 +76,38 @@ public class BaseOrderInfo {
     public String getOrder_id() {
         return order_id;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.expire_time);
+        dest.writeString(this.rmb);
+        dest.writeString(this.total);
+        dest.writeString(this.price);
+        dest.writeString(this.order_sn);
+        dest.writeString(this.pay_code);
+        dest.writeString(this.createtime);
+        dest.writeString(this.order_id);
+    }
+
+    public BaseOrderInfo() {
+    }
+
+    protected BaseOrderInfo(Parcel in) {
+        this.title = in.readString();
+        this.expire_time = in.readString();
+        this.rmb = in.readString();
+        this.total = in.readString();
+        this.price = in.readString();
+        this.order_sn = in.readString();
+        this.pay_code = in.readString();
+        this.createtime = in.readString();
+        this.order_id = in.readString();
+    }
+
 }

@@ -339,4 +339,11 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     }
 
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            //TODO 对比登录状态是否改变，改变择刷新
+        }
+    }
 }

@@ -13,36 +13,44 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="left"
             android:text="付款方式"
             android:textColor="@color/text_black"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="请在  "
-            android:textColor="@color/text_black"
-            android:textSize="14sp" />
+        <LinearLayout
+            android:id="@+id/ll_expire_time_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|right">
+            <TextView
+                android:id="@+id/tv_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请在  "
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_expire_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_red"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_expire_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_red"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  内支付"
-            android:textColor="@color/text_black"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  内支付"
+                android:textColor="@color/text_black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -92,7 +100,7 @@
     <include
         android:id="@+id/divider_under_card"
         layout="@layout/module_include_divider"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_alipay"
@@ -129,7 +137,7 @@
     <include
         android:id="@+id/divider_under_alipay"
         layout="@layout/module_include_divider"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_wechat"
@@ -160,7 +168,7 @@
             android:layout_width="30px"
             android:layout_height="30px"
             android:src="@mipmap/right1"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 
 

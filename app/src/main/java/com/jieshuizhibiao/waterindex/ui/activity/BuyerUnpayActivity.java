@@ -12,13 +12,13 @@ import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
 import com.jieshuizhibiao.waterindex.beans.unpay.BaseOrderInfo;
-import com.jieshuizhibiao.waterindex.beans.unpay.BuyerOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayResponse;
 import com.jieshuizhibiao.waterindex.beans.unpay.PayInfo;
-import com.jieshuizhibiao.waterindex.beans.unpay.SellerOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayResponse;
-import com.jieshuizhibiao.waterindex.contract.model.TraderUnpayModel;
-import com.jieshuizhibiao.waterindex.contract.presenter.TraderUnpayPresenter;
+import com.jieshuizhibiao.waterindex.contract.model.TraderModel;
+import com.jieshuizhibiao.waterindex.contract.presenter.TraderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -97,7 +96,7 @@ public class BuyerUnpayActivity extends BaseActivity implements CommonViewImpl {
     private String my_action;
     private String next_step;
     private long order_id;
-    private TraderUnpayPresenter traderUnpayPresenter;
+    private TraderPresenter traderPresenter;
     private CountDownTimer TimeCount;
     private int pay_type=0;//1选择卡   2选择支付宝    3选择微信
 
@@ -107,8 +106,8 @@ public class BuyerUnpayActivity extends BaseActivity implements CommonViewImpl {
         unbinder = ButterKnife.bind(this);
         getIntentExtra();
         initView();
-        traderUnpayPresenter = new TraderUnpayPresenter(new TraderUnpayModel());
-        traderUnpayPresenter.attachView(this);
+        traderPresenter = new TraderPresenter(new TraderModel());
+        traderPresenter.attachView(this);
         doRequest(next_step);
     }
 
@@ -158,24 +157,24 @@ public class BuyerUnpayActivity extends BaseActivity implements CommonViewImpl {
         if (bean != null) {
             List<PayInfo> pay_info_list = null;
             BaseOrderInfo baseOrderInfo = null;
-            BuyerOrderInfo buyerOrderInfo;
-            SellerOrderInfo sellerOrderInfo;
+            BuyerUnpayOrderInfo buyerUnpayOrderInfo;
+            SellerUnpayOrderInfo sellerUnpayOrderInfo;
             String avatarUrl = null;
             String nickname = null;
             if ("buyerUnpay".equals(next_step)) {
                 BuyerUnpayResponse buyerUnpayResponse = (BuyerUnpayResponse) bean;
                 pay_info_list = buyerUnpayResponse.getPay_info_list();
-                buyerOrderInfo = buyerUnpayResponse.getOrder_info();
-                avatarUrl = buyerOrderInfo.getSeller_avatar();
-                nickname = buyerOrderInfo.getSeller_nickname();
-                baseOrderInfo = buyerOrderInfo;
+                buyerUnpayOrderInfo = buyerUnpayResponse.getOrder_info();
+                avatarUrl = buyerUnpayOrderInfo.getSeller_avatar();
+                nickname = buyerUnpayOrderInfo.getSeller_nickname();
+                baseOrderInfo = buyerUnpayOrderInfo;
             } else if ("sellerUnpay".equals(next_step)) {
                 SellerUnpayResponse sellerUnpayResponse = (SellerUnpayResponse) bean;
                 pay_info_list = sellerUnpayResponse.getPay_info_list();
-                sellerOrderInfo = sellerUnpayResponse.getOrder_info();
-                avatarUrl = sellerOrderInfo.getBuyer_avatar();
-                nickname = sellerOrderInfo.getBuyer_nickname();
-                baseOrderInfo = sellerOrderInfo;
+                sellerUnpayOrderInfo = sellerUnpayResponse.getOrder_info();
+                avatarUrl = sellerUnpayOrderInfo.getBuyer_avatar();
+                nickname = sellerUnpayOrderInfo.getBuyer_nickname();
+                baseOrderInfo = sellerUnpayOrderInfo;
             }
             setViews(baseOrderInfo, pay_info_list, avatarUrl, nickname);
         }
@@ -257,13 +256,13 @@ public class BuyerUnpayActivity extends BaseActivity implements CommonViewImpl {
 
     private void doRequest(String next_step) {
         showLoadingDialog();
-        if (traderUnpayPresenter == null) {
-            traderUnpayPresenter = new TraderUnpayPresenter(new TraderUnpayModel());
+        if (traderPresenter == null) {
+            traderPresenter = new TraderPresenter(new TraderModel());
         }
         if ("buyerUnpay".equals(next_step)) {
-            traderUnpayPresenter.buyerUnpay(this, order_id);
+            traderPresenter.buyerUnpay(this, order_id);
         } else if ("sellerUnpay".equals(next_step)) {
-            traderUnpayPresenter.sellerUnpay(this, order_id);
+            traderPresenter.sellerUnpay(this, order_id);
         }
     }
 
@@ -320,8 +319,8 @@ public class BuyerUnpayActivity extends BaseActivity implements CommonViewImpl {
 
     @Override
     protected void onDestroy() {
-        if (traderUnpayPresenter != null) {
-            traderUnpayPresenter.detachView();
+        if (traderPresenter != null) {
+            traderPresenter.detachView();
         }
         super.onDestroy();
     }
