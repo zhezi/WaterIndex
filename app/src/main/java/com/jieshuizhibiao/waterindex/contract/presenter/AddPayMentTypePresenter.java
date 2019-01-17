@@ -5,6 +5,7 @@ import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.AddPayMentTypeModel;
 import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
+import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 
 import java.util.Map;
 
@@ -30,7 +31,14 @@ public class AddPayMentTypePresenter extends BasePresenter<AddPayMentTypeViewImp
         addPayMentTypeModel.verify(params);
     }
 
-    public void addPayMentType(BaseActivity activity, AddPayMentTypeReqParams params){
+    public void vertifyBank(AddPayMentTypeReqParams params){
+        if (addPayMentTypeModel == null){
+            addPayMentTypeModel = new AddPayMentTypeModel();
+        }
+        addPayMentTypeModel.vertifyBank(params);
+    }
+
+    public void addPayMentType(BaseActivity activity, final AddPayMentTypeReqParams params){
         if (addPayMentTypeModel == null){
             addPayMentTypeModel = new AddPayMentTypeModel();
         }
@@ -45,8 +53,15 @@ public class AddPayMentTypePresenter extends BasePresenter<AddPayMentTypeViewImp
 
             @Override
             public void onAddEdtContentsIllegal(Map<String, Boolean> verify) {
-                if (mView!=null){
+                if (mView!=null && (params.getType().equals(HttpConfig.WX_TYPE) || params.getType().equals(HttpConfig.ZFB_TYPE))){
                     mView.onAddEdtContentsIllegal(verify);
+                }
+            }
+
+            @Override
+            public void onAddEdtContentsIllegalBank(Map<String, Boolean> verify) {
+                if (mView!=null && params.getType().equals(HttpConfig.BANK_TYPE)){
+                    mView.onAddEdtContentsIllegalBank(verify);
                 }
             }
 

@@ -47,6 +47,9 @@
     <string name="key_edt_pay_type_name">key_edt_pay_type_name</string>
     <string name="key_edt_pay_type_account">key_edt_pay_type_account</string>
     <string name="key_edt_pay_type_capital_pwd">key_edt_pay_type_capital_pwd</string>
+    <string name="key_edt_pay_type_bank_number">key_edt_pay_type_bank_number</string>
+    <string name="key_edt_pay_type_bank_deposit">key_edt_pay_type_bank_deposit</string>
+    <string name="key_edt_pay_type_bank_deposit_branch">key_edt_pay_type_bank_deposit_branch</string>
 
     <string name="hit_edt_mobile">请输入您的手机号</string>
     <string name="hit_edt_password">请输入密码</string>

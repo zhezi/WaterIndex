@@ -54,6 +54,37 @@ public class AddPayMentTypeModel {
         return verifyResult;
     }
 
+    public Map<String, Boolean> vertifyBank(AddPayMentTypeReqParams params){
+        verifyResult.clear();
+        if(!TextUtils.isEmpty(params.getUser_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_name), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_name), false);
+        }
+        if(!TextUtils.isEmpty(params.getBank_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_deposit), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_deposit), false);
+        }
+        if(!TextUtils.isEmpty(params.getBank_detail_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_deposit_branch), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_deposit_branch), false);
+        }
+        if(!TextUtils.isEmpty(params.getAccount_name())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_number), true);
+        } else {
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_bank_number), false);
+        }
+        if(!TextUtils.isEmpty(params.getSafe_pw()) && AccountValidatorUtil.isPassword(params.getSafe_pw())){
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_capital_pwd), true);
+        }else{
+            verifyResult.put(context.getString(R.string.key_edt_pay_type_capital_pwd), false);
+        }
+
+        return verifyResult;
+    }
+
     public void addPayMentType(BaseActivity activity, AddPayMentTypeReqParams params, final AddPayMentTypeCallBack callBack){
         int Illegal = 0;
         for (Map.Entry<String, Boolean> entry : verifyResult.entrySet()) {
@@ -64,6 +95,9 @@ public class AddPayMentTypeModel {
         }
         if (Illegal == 0) {
             callBack.onAddEdtContentsLegal();
+        } else if(params.getType().equals(HttpConfig.BANK_TYPE)){
+            callBack.onAddEdtContentsIllegalBank(verifyResult);
+            return;
         } else {
             callBack.onAddEdtContentsIllegal(verifyResult);
             return;
@@ -104,6 +138,7 @@ public class AddPayMentTypeModel {
     public interface AddPayMentTypeCallBack{
         void onAddEdtContentsLegal();
         void onAddEdtContentsIllegal(Map<String, Boolean> verify);
+        void onAddEdtContentsIllegalBank(Map<String, Boolean> verify);
         void success();
         void failed(String msg);
     }

@@ -4,14 +4,14 @@ import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.PayMentTypeModel;
-import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.PayMentTypeViewImpl;
 
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:
  */
 
-public class PayMentTypePresenter extends BasePresenter<CommonViewImpl> {
+public class PayMentTypePresenter extends BasePresenter<PayMentTypeViewImpl> {
 
     private PayMentTypeModel payMentTypeModel;
 
@@ -27,16 +27,16 @@ public class PayMentTypePresenter extends BasePresenter<CommonViewImpl> {
         }
         payMentTypeModel.payMentType(activity, new PayMentTypeModel.PayMentTypeCallBack() {
             @Override
-            public void success(PayMentResponseBean payMentResponseBean) {
+            public void success(PayMentResponseBean beanList) {
                 if (mView!=null){
-                    mView.onRequestSuccess(payMentResponseBean);
+                    mView.onPayMentTypeSuccess(beanList);
                 }
             }
 
             @Override
             public void failed(String msg) {
                 if (mView!=null){
-                    mView.onRequestFailed(msg);
+                    mView.onPayMentTypeFailed(msg);
                 }
 
             }

@@ -1,7 +1,5 @@
 package com.jieshuizhibiao.waterindex.beans;
 
-import java.util.List;
-
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:
@@ -9,35 +7,12 @@ import java.util.List;
 
 public class PayMentResponseBean {
 
-    public List<BankCardList> L1;
-    public List<AliPayList> L2;
-    public List<WxPayList> L3;
 
-    public List<BankCardList> getL1() {
-        return L1;
-    }
+    public TypeList L1;
+    public TypeList L2;
+    public TypeList L3;
 
-    public void setL1(List<BankCardList> l1) {
-        L1 = l1;
-    }
-
-    public List<AliPayList> getL2() {
-        return L2;
-    }
-
-    public void setL2(List<AliPayList> l2) {
-        L2 = l2;
-    }
-
-    public List<WxPayList> getL3() {
-        return L3;
-    }
-
-    public void setL3(List<WxPayList> l3) {
-        L3 = l3;
-    }
-
-    public static class BankCardList{
+    public static class TypeList{
         String id; 	//收款id 	字符串(string) 		pi_id
         String type; 	//类型 	字符串(string) 		1银行卡 2支付宝 3微信
         String type_text; 	//type文案 	字符串(string)
@@ -92,14 +67,6 @@ public class PayMentResponseBean {
         public void setLink_text(String link_text) {
             this.link_text = link_text;
         }
-    }
-
-    public static class AliPayList{
-
-    }
-
-    public static class WxPayList{
-
     }
 
 }

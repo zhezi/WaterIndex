@@ -12,6 +12,7 @@ import java.util.Map;
 public interface AddPayMentTypeViewImpl extends IBaseViewImpl {
     void onAddEdtContentsLegal();
     void onAddEdtContentsIllegal(Map<String, Boolean> verify);
+    void onAddEdtContentsIllegalBank(Map<String, Boolean> verify);
     void onAddPaymentTypeSuccess();
     void onAddPaymentTypeFailed(String msg);
 }

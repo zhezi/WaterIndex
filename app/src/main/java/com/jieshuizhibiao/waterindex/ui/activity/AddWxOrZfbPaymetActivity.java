@@ -403,6 +403,11 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
     }
 
     @Override
+    public void onAddEdtContentsIllegalBank(Map<String, Boolean> verify) {
+
+    }
+
+    @Override
     public void onAddPaymentTypeSuccess() {
         dismissLoadingDialog();
         ToastUtils.showCustomToast("添加成功！");

@@ -1234,6 +1234,32 @@ public class UrlConfig {
 
     /**
      * 收款方式
+     * "data":{
+     │         "1":{
+     │             "id":0,
+     │             "type":1,
+     │             "isopen":0,
+     │             "link_text":"添加",
+     │             "type_text":"银行",
+     │             "account_name":"未添加"
+     │         },
+     │         "2":{
+     │             "id":19,
+     │             "type":2,
+     │             "isopen":1,
+     │             "link_text":"编辑",
+     │             "type_text":"支付宝",
+     │             "account_name":"3685269949@qq.com"
+     │         },
+     │         "3":{
+     │             "id":18,
+     │             "type":3,
+     │             "isopen":1,
+     │             "link_text":"编辑",
+     │             "type_text":"微信",
+     │             "account_name":"wx13718478437"
+     │         }
+     │     }
      */
     public static final String PAYMENT_TYPE = "api/home/userPayInfo/index";
 
