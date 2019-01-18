@@ -7,6 +7,15 @@ package com.jieshuizhibiao.waterindex.beans.request;
 
 public class PayMentTypeSwitchReqParams {
     String id; 	//收款信息id 	字符串(string) 	是
+    int status; //开关状态
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public String getId() {
         return id;

@@ -9,9 +9,13 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
+import com.jieshuizhibiao.waterindex.beans.request.ChangePayMentTypeReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.AddPayMentTypePresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.ChangePaymentTypePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ChangePaymentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
@@ -29,7 +33,7 @@ import butterknife.OnClick;
  * Class Note:
  */
 
-public class AddBankPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl{
+public class BankPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl,ChangePaymentTypeViewImpl {
 
     @BindView(R.id.title_bar)
     View title_bar;
@@ -63,19 +67,29 @@ public class AddBankPaymetActivity extends BaseActivity implements AddPayMentTyp
     String keyPayPass;
 
     private AddPayMentTypePresenter addPayMentTypePresenter;
-
+    private ChangePaymentTypePresenter changePaymentTypePresenter;
+    private PayMentResponseBean.TypeList typeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtil.setImmersionStatus(this, title_bar);
         addPayMentTypePresenter = new AddPayMentTypePresenter();
         addPayMentTypePresenter.attachView(this);
-
+        changePaymentTypePresenter = new ChangePaymentTypePresenter();
+        changePaymentTypePresenter.attachView(this);
         initView();
     }
 
     private void initView() {
-        tv_title_center.setText("添加银行卡");
+        if (getIntent().getBooleanExtra("isHasAdd",false)){
+            tv_title_center.setText("编辑银行卡");
+        }else {
+            tv_title_center.setText("添加银行卡");
+        }
+        if (getIntent().getParcelableExtra("TypeList")!=null){
+            typeList = getIntent().getParcelableExtra("TypeList");
+        }
+
     }
 
     @Override
@@ -96,15 +110,28 @@ public class AddBankPaymetActivity extends BaseActivity implements AddPayMentTyp
                 finish();
                 break;
             case R.id.btn_confirm:
-                AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
-                params.setUser_name(etName.getText().toString());
-                params.setAccount_name(etBankNumber.getText().toString());
-                params.setBank_name(etBankName.getText().toString());
-                params.setBank_detail_name(etBankBranchName.getText().toString());
-                params.setSafe_pw(etCapitalPass.getText().toString());
-                params.setType(HttpConfig.BANK_TYPE);
-                addPayMentTypePresenter.vertifyBank(params);
-                addPayMentTypePresenter.addPayMentType(AddBankPaymetActivity.this,params);
+                if (getIntent().getBooleanExtra("isHasAdd",false)){//编辑
+                    ChangePayMentTypeReqParams params = new ChangePayMentTypeReqParams();
+                    params.setUser_name(etName.getText().toString());
+                    params.setAccount_name(etBankNumber.getText().toString());
+                    params.setBank_name(etBankName.getText().toString());
+                    params.setBank_detail_name(etBankBranchName.getText().toString());
+                    params.setSafe_pw(etCapitalPass.getText().toString());
+                    params.setId(typeList.getId());
+                    changePaymentTypePresenter.vertifyBank(params);
+                    changePaymentTypePresenter.changePaymentType(BankPaymetActivity.this,params,HttpConfig.BANK_TYPE);
+                }else {//添加
+                    AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
+                    params.setUser_name(etName.getText().toString());
+                    params.setAccount_name(etBankNumber.getText().toString());
+                    params.setBank_name(etBankName.getText().toString());
+                    params.setBank_detail_name(etBankBranchName.getText().toString());
+                    params.setSafe_pw(etCapitalPass.getText().toString());
+                    params.setType(HttpConfig.BANK_TYPE);
+                    addPayMentTypePresenter.vertifyBank(params);
+                    addPayMentTypePresenter.addPayMentType(BankPaymetActivity.this,params);
+                }
+
                 break;
             default:break;
         }
@@ -176,10 +203,74 @@ public class AddBankPaymetActivity extends BaseActivity implements AddPayMentTyp
     }
 
     @Override
+    public void onChangeContentsLegal() {
+        etName.setBackground(edt_border);
+        etBankName.setBackground(edt_border);
+        etBankBranchName.setBackground(edt_border);
+        etBankNumber.setBackground(edt_border);
+        etCapitalPass.setBackground(edt_border);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onChangeEdtContentsIllegal(Map<String, Boolean> verify) {
+
+    }
+
+    @Override
+    public void onChangeEdtContentsIllegalBank(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keyPayName)) && !verify.get(keyPayName)){
+            etName.setBackground(edt_border_illegal);
+        } else {
+            etName.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyDeposit)) && !verify.get(keyDeposit)) {
+            etBankName.setBackground(edt_border_illegal);
+            etBankName.setText("");
+        } else {
+            etBankName.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyDepositBranch)) && !verify.get(keyDepositBranch)) {
+            etBankBranchName.setBackground(edt_border_illegal);
+            etBankBranchName.setText("");
+        } else {
+            etBankBranchName.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayNumber)) && !verify.get(keyPayNumber)){
+            etBankNumber.setBackground(edt_border_illegal);
+            etBankNumber.setText("");
+        } else {
+            etBankNumber.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayPass)) && !verify.get(keyPayPass)){
+            etCapitalPass.setBackground(edt_border_illegal);
+            etCapitalPass.setText("");
+        } else {
+            etCapitalPass.setBackground(edt_border);
+        }
+    }
+
+    @Override
+    public void onChangePaymentTyoeSuccess() {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("修改成功！");
+        finish();
+    }
+
+    @Override
+    public void onChangePaymentTypeFalied(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (addPayMentTypePresenter!=null){
             addPayMentTypePresenter.detachView();
+        }
+        if (changePaymentTypePresenter!=null){
+            changePaymentTypePresenter.detachView();
         }
     }
 }

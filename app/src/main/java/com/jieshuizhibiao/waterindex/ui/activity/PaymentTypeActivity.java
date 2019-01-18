@@ -2,6 +2,7 @@ package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,6 +51,19 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
     @BindView(R.id.tv_bank_state)
     TextView tvBankState;
 
+    @BindView(R.id.zfh_account)
+    TextView tvZfhAccount;
+    @BindView(R.id.wx_account)
+    TextView tvWxAccount;
+    @BindView(R.id.bank_account)
+    TextView tvBankAccount;
+
+    @BindView(R.id.paytype_zfb_text)
+    TextView tvZfbTitle;
+    @BindView(R.id.paytype_wx_text)
+    TextView tvWxTitle;
+    @BindView(R.id.paytype_bank_text)
+    TextView tvBankTitle;
     private PayMentTypeSwitchPresenter payMentTypeSwitchPresenter;
     private PayMentTypePresenter payMentTypePresenter;
     private PayMentResponseBean.TypeList bankCardLists;
@@ -68,21 +82,6 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
 
     private void initView() {
         tv_title_center.setText("收款方式");
-        if ((Boolean) SPUtil.get(this,"isOpenZFB",false)) {
-            zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-        }else {
-            zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-        }
-        if ((Boolean) SPUtil.get(this,"isOpenWX",false)) {
-            wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-        }else {
-            wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-        }
-        if ((Boolean) SPUtil.get(this,"isOpenBANK",false)) {
-            bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-        }else {
-            bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-        }
     }
 
     @Override
@@ -105,6 +104,7 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
             R.id.payment_switch_wx_img,R.id.payment_switch_bank_img})
     public void onClick(View v) {
         Bundle bundle = new Bundle();
+        int status = -1;
         switch (v.getId()) {
             case R.id.left_ll:
                 goBack(v);
@@ -113,49 +113,64 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
             case R.id.zfb_ll:
                 if (!Util.isFastDoubleClick()) {
                     bundle.putString("payType", HttpConfig.ZFB_TYPE);
-                    jumpActivity(bundle);
+                    putBundleState(bundle,tvAliPayState,aliPayLists);
+                    jumpActivity(bundle,WxOrZfbPaymetActivity.class);
                 }
                 break;
             case R.id.wx_ll:
                 if (!Util.isFastDoubleClick()) {
                     bundle.putString("payType", HttpConfig.WX_TYPE);
-                    jumpActivity(bundle);
+                    putBundleState(bundle,tvWxpayState,wxPayLists);
+                    jumpActivity(bundle,WxOrZfbPaymetActivity.class);
                 }
                 break;
             case R.id.bank_ll:
                 if (!Util.isFastDoubleClick()) {
-                    jumpActivity(AddBankPaymetActivity.class);
+                    putBundleState(bundle,tvBankState,bankCardLists);
+                    jumpActivity(bundle,BankPaymetActivity.class);
                 }
                 break;
             case R.id.payment_switch_zfb_img:
-                if (!Util.isFastDoubleClick() && (Boolean) SPUtil.get(this,"isOpenZFB",false)) {
-                    zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-                    SPUtil.insert(this,"isOpenZFB",false);
-                }else {
-                    zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-                    SPUtil.insert(this,"isOpenZFB",true);
+                if (!Util.isFastDoubleClick()) {
+                    if ((Boolean) SPUtil.get(this,"isOpenZFB",false)) {
+                        zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+                        SPUtil.insert(this,"isOpenZFB",false);
+                        status = 0;
+                    }else {
+                        zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+                        SPUtil.insert(this,"isOpenZFB",true);
+                        status = 1;
+                    }
+                    doRequestSwitch(String.valueOf(aliPayLists.getId()),status);
                 }
-                doRequestSwitch(HttpConfig.ZFB_TYPE);
                 break;
             case R.id.payment_switch_wx_img:
-                if (!Util.isFastDoubleClick() && (Boolean) SPUtil.get(this,"isOpenWX",false)) {
-                    wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-                    SPUtil.insert(this,"isOpenWX",false);
-                }else {
-                    wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-                    SPUtil.insert(this,"isOpenWX",true);
+                if (!Util.isFastDoubleClick()) {
+                    if ((Boolean) SPUtil.get(this,"isOpenWX",false)) {
+                        wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+                        SPUtil.insert(this,"isOpenWX",false);
+                        status = 0;
+                    }else {
+                        wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+                        SPUtil.insert(this,"isOpenWX",true);
+                        status = 1;
+                    }
+                    doRequestSwitch(String.valueOf(wxPayLists.getId()),status);
                 }
-                doRequestSwitch(HttpConfig.WX_TYPE);
                 break;
             case R.id.payment_switch_bank_img:
-                if (!Util.isFastDoubleClick() && (Boolean) SPUtil.get(this,"isOpenBANK",false)) {
-                    bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
-                    SPUtil.insert(this,"isOpenBANK",false);
-                }else {
-                    bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
-                    SPUtil.insert(this,"isOpenBANK",true);
+                if (!Util.isFastDoubleClick()) {
+                    if ((Boolean) SPUtil.get(this,"isOpenBANK",false)) {
+                        bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+                        SPUtil.insert(this,"isOpenBANK",false);
+                        status = 0;
+                    }else {
+                        bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+                        SPUtil.insert(this,"isOpenBANK",true);
+                        status = 1;
+                    }
+                    doRequestSwitch(String.valueOf(bankCardLists.getId()),status);
                 }
-                doRequestSwitch((String) SPUtil.get(this,SPUtil.ID,"-1"));
                 break;
             default:break;
         }
@@ -166,9 +181,10 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
         showLoadingDialog();
     }
 
-    public void doRequestSwitch(String id){
+    public void doRequestSwitch(String id,int status){
         PayMentTypeSwitchReqParams params = new PayMentTypeSwitchReqParams();
         params.setId(id);
+        params.setStatus(status);
         payMentTypeSwitchPresenter.setPayMentTypeSwitch(PaymentTypeActivity.this,params);
         showLoadingDialog();
     }
@@ -177,13 +193,24 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
         startActivity(new Intent(PaymentTypeActivity.this,cla));
     }
 
-    public void jumpActivity(Bundle bundle){
+    public void jumpActivity(Bundle bundle,Class<?> cla){
         Intent intent = new Intent();
-        intent.setClass(PaymentTypeActivity.this,AddWxOrZfbPaymetActivity.class);
+        intent.setClass(PaymentTypeActivity.this,cla);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
+    /**
+     * 判断此支付方式是否已添加过
+     */
+    public void putBundleState(Bundle bundle,TextView tvState,PayMentResponseBean.TypeList typeList){
+        if (!TextUtils.isEmpty(tvState.getText().toString()) && tvState.getText().equals("添加")){
+            bundle.putBoolean("isHasAdd",false);
+        }else {
+            bundle.putBoolean("isHasAdd",true);
+        }
+        bundle.putParcelable("TypeList",typeList);
+    }
     @Override
     public void onPaymentTypeSwitchSuccess() {
         dismissLoadingDialog();
@@ -191,19 +218,46 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
 
     @Override
     public void onPaymentTypeSwitcFailed(String msg) {
+        //失败时 状态要回归原来的状态
         dismissLoadingDialog();
         ToastUtils.showCustomToast(msg);
     }
 
     @Override
-    public void onPayMentTypeSuccess(PayMentResponseBean beanList) {
+    public void onPayMentTypeSuccess(PayMentResponseBean payMentResponseBean) {
         dismissLoadingDialog();
-        bankCardLists = beanList.L1;
-        aliPayLists = beanList.L2;
-        wxPayLists = beanList.L3;
+        bankCardLists = payMentResponseBean.bank;//此方式使用了注解直接获取的解析后的对象
+        aliPayLists = payMentResponseBean.getAlipay();//此方式为传统get set方式
+        wxPayLists = payMentResponseBean.getWechat();
+
         tvAliPayState.setText(aliPayLists.getLink_text());
         tvWxpayState.setText(wxPayLists.getLink_text());
         tvBankState.setText(bankCardLists.getLink_text());
+
+        tvZfhAccount.setText(TextUtils.isEmpty(aliPayLists.getAccount_name()) ? "支付宝": aliPayLists.getAccount_name());
+        tvWxAccount.setText(TextUtils.isEmpty(wxPayLists.getAccount_name()) ? "微信" :wxPayLists.getAccount_name());
+        tvBankAccount.setText(TextUtils.isEmpty(bankCardLists.getAccount_name()) ? "银行" :bankCardLists.getAccount_name());
+
+        tvZfbTitle.setText(TextUtils.isEmpty(aliPayLists.getType_text()) ? "未知" :aliPayLists.getType_text());
+        tvWxTitle.setText(TextUtils.isEmpty(wxPayLists.getType_text()) ? "未知" :wxPayLists.getType_text());
+        tvBankTitle.setText(TextUtils.isEmpty(bankCardLists.getType_text()) ? "未知":bankCardLists.getType_text());
+
+        if (aliPayLists.getIsopen() == 1) {
+            zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+        }else {
+            zfbSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+        }
+        if (wxPayLists.getIsopen() == 1) {
+            wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+        }else {
+            wxSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+        }
+        if (bankCardLists.getIsopen() == 1) {
+            bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_on));
+        }else {
+            bankSwitchImg.setBackground(getResources().getDrawable(R.drawable.switch_off));
+        }
+
     }
 
     @Override

@@ -9,6 +9,6 @@ import com.jieshuizhibiao.waterindex.contract.IBaseViewImpl;
  */
 
 public interface PayMentTypeViewImpl extends IBaseViewImpl {
-    void onPayMentTypeSuccess(PayMentResponseBean beanList);
+    void onPayMentTypeSuccess(PayMentResponseBean payMentResponseBean);
     void onPayMentTypeFailed(String msg);
 }
