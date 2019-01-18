@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
-import com.jieshuizhibiao.waterindex.beans.BaseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserIndexPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
@@ -20,7 +19,7 @@ import com.jieshuizhibiao.waterindex.ui.activity.LoginActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.PaymentTypeActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.SafeCenterActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.SystemMessageActivity;
-import com.jieshuizhibiao.waterindex.ui.activity.TradingDemandActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TransactionDemandActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserAssetActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserConfirmActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.UserDetailActivity;
@@ -57,45 +56,49 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
     private String user_login;//用户登录手机号，作用同isLogin
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
-            R.id.relative_payment_type, R.id.relative_order_lists,
+            R.id.relative_payment_type, R.id.relative_transaction_demand,
             R.id.relative_sys_msg, R.id.relative_safe_center, R.id.relative_about_us,R.id.tv_order_lists})
     public void onClick(View v) {
 
         switch (v.getId()) {
 
             case R.id.relative_user_detail:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(UserDetailActivity.class);
+                }
                 break;
             case R.id.relative_account_detail:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(UserAssetActivity.class);
+                }
                 break;
             case R.id.relative_auth_detail:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(UserConfirmActivity.class);
+                }
                 break;
             case R.id.relative_payment_type:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(PaymentTypeActivity.class);
+                }
                 break;
-//            case R.id.relative_order_lists:
-//                if (checkLoginStatus())
-//                    jump(OrderListsActivity.class);
-//                break;
+            case R.id.relative_transaction_demand:
+                if (checkLoginStatus()) {
+                    jump(TransactionDemandActivity.class);
+                }
+                break;
             case R.id.relative_sys_msg:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(SystemMessageActivity.class);
+                }
                 break;
             case R.id.relative_safe_center:
-                if (checkLoginStatus())
+                if (checkLoginStatus()) {
                     jump(SafeCenterActivity.class);
+                }
                 break;
             case R.id.relative_about_us:
                     jump(AboutListActivity.class);
-                break;
-            case R.id.tv_order_lists:
-                jump(TradingDemandActivity.class);
                 break;
             default:
                 break;

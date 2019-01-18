@@ -160,7 +160,7 @@
             android:background="@color/divider_gray" />
 
         <RelativeLayout
-            android:id="@+id/relative_order_lists"
+            android:id="@+id/relative_transaction_demand"
             style="@style/PaddinLeftRight"
             android:layout_width="match_parent"
             android:layout_height="@dimen/commit_btn_height">
@@ -173,7 +173,7 @@
                 android:src="@mipmap/drop" />
 
             <TextView
-                android:id="@+id/tv_order_lists"
+                android:id="@+id/tv_transaction_demand"
                 style="@style/style_txt_confirm_order1"
                 android:layout_centerVertical="true"
                 android:paddingLeft="26px"
