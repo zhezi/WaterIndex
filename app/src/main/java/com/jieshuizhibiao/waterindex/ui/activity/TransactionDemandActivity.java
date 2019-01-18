@@ -1,9 +1,10 @@
 package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +16,9 @@ import com.jieshuizhibiao.waterindex.contract.presenter.ListTradePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.ui.adapter.TableViewpagerAdapter;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationAllFragment;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationBuyFragment;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationSellFragment;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -36,6 +40,11 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
     TextView tvTitleCenter;
     @BindView(R.id.title_bar)
     RelativeLayout titleBar;
+    @BindView(R.id.transcation_demand_tablayout)
+    TabLayout transcationTabLayout;
+    @BindView(R.id.transcation_demand_viewpager)
+    ViewPager transcationViewpager;
+
 
     private TableViewpagerAdapter adapter;
     private String[] titles=new String[]{"全部","购买","出售"};
@@ -54,6 +63,7 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
 
     private void initView() {
         tvTitleCenter.setText("订单");
+        initTransaction();
     }
 
     @Override
@@ -69,12 +79,13 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
 
     @Override
     public void onReNetRefreshData(int viewId) {
-
+        doReuqest();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        doReuqest();
     }
 
     @OnClick({R.id.left_ll})
@@ -89,8 +100,68 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
 
     }
 
+    public void initTransaction(){
+        fragments.add(new TranscationAllFragment());
+        fragments.add(new TranscationBuyFragment());
+        fragments.add(new TranscationSellFragment());
+
+        adapter = new TableViewpagerAdapter(getSupportFragmentManager(),fragments,titles);
+        transcationViewpager.setAdapter(adapter);
+        transcationViewpager.setCurrentItem(0);//默认选中第一项
+        transcationTabLayout.setupWithViewPager(transcationViewpager,false);
+        transcationViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0://默示什么都没做
+                        break;
+                    case 1://默认正在滑动
+                        break;
+                    case 2://默认滑动完毕
+                        break;
+                    default:break;
+
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        transcationTabLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position= (int) view.getTag();
+                boolean isSelect = transcationTabLayout.getTabAt(position).isSelected();
+                if (position==0 && isSelect){
+                    transcationViewpager.setCurrentItem(0);
+                }else if (position==1 && isSelect){
+                    transcationViewpager.setCurrentItem(1);
+                }else {
+                    TabLayout.Tab tab = transcationTabLayout.getTabAt(position);
+                    if (tab != null) {
+                        tab.select();
+                    }
+                    transcationViewpager.setCurrentItem(2);
+                }
+
+            }
+        });
+    }
+
     @Override
     public void onRequestSuccess(Object bean) {
+        if (bean instanceof ListTradeReqParams){
+
+        }
 
     }
 

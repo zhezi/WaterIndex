@@ -24,22 +24,23 @@ public class ListTradePresenter extends BasePresenter<CommonViewImpl> {
 
     public void getListTrade(BaseActivity activity, ListTradeReqParams params){
         if (listTradeModel == null){
-            listTradeModel.getListTrade(activity, params, new ListTradeModel.ListTradeCallBack() {
-                @Override
-                public void success(ListTradeResponseBean listTradeResponseBean) {
-                    if (mView!=null){
-                        mView.onRequestSuccess(listTradeResponseBean);
-                    }
-                }
-
-                @Override
-                public void failed(String msg) {
-                    if (mView!=null){
-                        mView.onRequestFailed(msg);
-                    }
-
-                }
-            });
+            listTradeModel = new ListTradeModel();
         }
+        listTradeModel.getListTrade(activity, params, new ListTradeModel.ListTradeCallBack() {
+            @Override
+            public void success(ListTradeResponseBean listTradeResponseBean) {
+                if (mView!=null){
+                    mView.onRequestSuccess(listTradeResponseBean);
+                }
+            }
+
+            @Override
+            public void failed(String msg) {
+                if (mView!=null){
+                    mView.onRequestFailed(msg);
+                }
+
+            }
+        });
     }
 }

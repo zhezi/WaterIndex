@@ -3,15 +3,15 @@ package com.jieshuizhibiao.waterindex.beans;
 import java.util.List;
 
 public class ListTradeResponseBean {
-	private TradeList trade_list;
+	private List<TradeList> trade_list;
 	private List<PayInfoList> pay_info_list;
 	private String total;
 
-	public TradeList getTrade_list() {
+	public List<TradeList> getTrade_list() {
 		return trade_list;
 	}
 
-	public void setTrade_list(TradeList trade_list) {
+	public void setTrade_list(List<TradeList> trade_list) {
 		this.trade_list = trade_list;
 	}
 

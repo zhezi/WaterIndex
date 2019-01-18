@@ -235,6 +235,11 @@
 
         <activity android:name=".ui.activity.TransactionDemandActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.TranscationReleaseBuyOrSellActivity"
+            android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>

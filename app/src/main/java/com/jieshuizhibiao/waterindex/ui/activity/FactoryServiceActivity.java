@@ -17,9 +17,9 @@ import com.jieshuizhibiao.waterindex.beans.FactoryServiceResponseBean;
 import com.jieshuizhibiao.waterindex.contract.presenter.FactoryServiceParsenter;
 import com.jieshuizhibiao.waterindex.contract.view.FactoryServiceViewImpl;
 import com.jieshuizhibiao.waterindex.ui.adapter.TableViewpagerAdapter;
-import com.jieshuizhibiao.waterindex.ui.fragment.CommonProblemFragment;
-import com.jieshuizhibiao.waterindex.ui.fragment.PriceSystemFragment;
-import com.jieshuizhibiao.waterindex.ui.fragment.ProcessDescFragment;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationSellFragment;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationBuyFragment;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationAllFragment;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
@@ -152,9 +152,9 @@ public class FactoryServiceActivity extends BaseActivity implements FactoryServi
         list.addAll(factoryServiceResponseBean.getCate_lists());
         arrayList.addAll(factoryServiceResponseBean.getCate_lists());
 
-        fragments.add(new PriceSystemFragment());
-        fragments.add(new ProcessDescFragment());
-        fragments.add(new CommonProblemFragment());
+        fragments.add(new TranscationBuyFragment());
+        fragments.add(new TranscationAllFragment());
+        fragments.add(new TranscationSellFragment());
 
         adapter = new TableViewpagerAdapter(getSupportFragmentManager(),fragments,titles);
         factoryViewpager.setAdapter(adapter);

@@ -57,7 +57,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
             R.id.relative_payment_type, R.id.relative_transaction_demand,
-            R.id.relative_sys_msg, R.id.relative_safe_center, R.id.relative_about_us,R.id.tv_order_lists})
+            R.id.relative_sys_msg, R.id.relative_safe_center, R.id.relative_about_us})
     public void onClick(View v) {
 
         switch (v.getId()) {

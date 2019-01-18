@@ -10,10 +10,10 @@ import com.jieshuizhibiao.waterindex.R;
 
 /**
  * Created by songxiaotao on 2018/12/25.
- * Class Note:流程介绍
+ * Class Note:出售
  */
 
-public class ProcessDescFragment extends BaseFragment {
+public class TranscationSellFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class ProcessDescFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.fragment_process_desc,container,false);
+        View rootView=inflater.inflate(R.layout.fragment_transcation_sell,container,false);
         return rootView;
     }
 
@@ -52,4 +52,5 @@ public class ProcessDescFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
     }
+
 }
