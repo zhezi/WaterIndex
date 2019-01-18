@@ -12,10 +12,10 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
-import com.jieshuizhibiao.waterindex.beans.unpay.BaseOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.unpay.BaseUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayResponse;
-import com.jieshuizhibiao.waterindex.beans.unpay.PayInfo;
+import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayResponse;
 import com.jieshuizhibiao.waterindex.contract.model.CancelOrderModel;
@@ -189,7 +189,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
     public void onRequestSuccess(Object bean) {
         if (bean != null) {
             List<PayInfo> pay_info_list = null;
-            BaseOrderInfo baseOrderInfo = null;
+            BaseUnpayOrderInfo baseUnpayOrderInfo = null;
             String nickname = null;
             String avatarUrl = null;
             if (OrderListsTabFragment.BUYER_UNPAY.equals(current_step)) {
@@ -198,18 +198,18 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 buyerUnpayOrderInfo = buyerUnpayResponse.getOrder_info();
                 avatarUrl = buyerUnpayOrderInfo.getSeller_avatar();
                 nickname = buyerUnpayOrderInfo.getSeller_nickname();
-                baseOrderInfo = buyerUnpayOrderInfo;
+                baseUnpayOrderInfo = buyerUnpayOrderInfo;
             } else if (OrderListsTabFragment.SELLER_UNPAY.equals(current_step)) {
                 SellerUnpayResponse sellerUnpayResponse = (SellerUnpayResponse) bean;
                 pay_info_list = sellerUnpayResponse.getPay_info_list();
                 sellerUnpayOrderInfo = sellerUnpayResponse.getOrder_info();
                 avatarUrl = sellerUnpayOrderInfo.getBuyer_avatar();
                 nickname = sellerUnpayOrderInfo.getBuyer_nickname();
-                baseOrderInfo = sellerUnpayOrderInfo;
+                baseUnpayOrderInfo = sellerUnpayOrderInfo;
             }
-            pay_code = baseOrderInfo.getPay_code();
-            createtime = baseOrderInfo.getCreatetime();
-            setView(baseOrderInfo, pay_info_list, avatarUrl, nickname);
+            pay_code = baseUnpayOrderInfo.getPay_code();
+            createtime = baseUnpayOrderInfo.getCreatetime();
+            setView(baseUnpayOrderInfo, pay_info_list, avatarUrl, nickname);
         }
         dismissLoadingDialog();
     }
@@ -232,9 +232,9 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
         dismissDialog();
     }
 
-    private void setView(BaseOrderInfo baseOrderInfo, List<PayInfo> list, String avatarUrl, String nickname) {
-        if (baseOrderInfo != null && list != null) {
-            expire_time = baseOrderInfo.getExpire_time();
+    private void setView(BaseUnpayOrderInfo baseUnpayOrderInfo, List<PayInfo> list, String avatarUrl, String nickname) {
+        if (baseUnpayOrderInfo != null && list != null) {
+            expire_time = baseUnpayOrderInfo.getExpire_time();
             if (expire_time.equals("不限制")) {
                 tvExpireTime.setText("不限制");
                 tvLeft.setVisibility(View.VISIBLE);
@@ -258,12 +258,12 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 tvLeft.setVisibility(View.GONE);
                 tvRight.setVisibility(View.GONE);
             }
-            tvRmb.setText(baseOrderInfo.getRmb());
-            tvTotal.setText(baseOrderInfo.getTotal());
-            tvPrice.setText(baseOrderInfo.getPrice());
-            tvOrderSn.setText(baseOrderInfo.getOrder_sn());
-            tvPayCode.setText(baseOrderInfo.getPay_code());
-            tvCreatetime.setText(baseOrderInfo.getCreatetime());
+            tvRmb.setText(baseUnpayOrderInfo.getRmb());
+            tvTotal.setText(baseUnpayOrderInfo.getTotal());
+            tvPrice.setText(baseUnpayOrderInfo.getPrice());
+            tvOrderSn.setText(baseUnpayOrderInfo.getOrder_sn());
+            tvPayCode.setText(baseUnpayOrderInfo.getPay_code());
+            tvCreatetime.setText(baseUnpayOrderInfo.getCreatetime());
             GlidImageManager.getInstance().loadCircleImg(this, avatarUrl, imgTraderAvatar, R.mipmap.head, R.mipmap.head);
             tvTraderNickname.setText(nickname);
 

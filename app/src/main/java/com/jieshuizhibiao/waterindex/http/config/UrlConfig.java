@@ -1081,7 +1081,33 @@ public class UrlConfig {
      *          "data":""
      *      }
      */
-    public static final String BUYER_CANCEL="api/home/userOrder/buyerCancel";
+    public static final String BUYER_DO_CANCEL ="api/home/userOrder/buyerCancel";
+
+    /**
+     * 买家身份-申诉
+     *      {
+     *          "code":1,
+     *          "msg":"申诉成功",
+     *          "data":""
+     *      }
+     */
+    public static final String BUYER_DO_APPEAL="api/home/userOrder/buyerAppeal";
+
+    /**
+     * 买家身份-交易成功
+     *
+     */
+    public static final String BUYER_SUCC="api/home/userOrder/buyerSuccInfo";
+
+    /**
+     * 买家身份-申诉处理中
+     */
+    public static final String BUYER_APPEAL="api/home/userOrder/buyerAppealInfo";
+
+    /**
+     * 买家身份-交易取消
+     */
+    public static final String BUYER_CANCEL="api/home/userOrder/buyerCancelInfo";
 
     /**
      * 卖家身份-未付款
@@ -1170,6 +1196,124 @@ public class UrlConfig {
      *      }
      */
     public static final String SELLER_PAID="api/home/userOrder/sellerPaid";
+
+    /**
+     * 卖家身份-申诉
+     */
+    public static final String SELLER_DO_APPEAL="api/home/userOrder/sellerAppeal";
+
+    /**
+     * 卖家身份-放行
+     */
+    public static final String SELLER_CHECKOUT="api/home/userOrder/sellerCheckout";
+
+    /**
+     * 卖家身份-交易成功
+     *      {
+     *          "code":1,
+     *          "msg":"订单详情",
+     *          "data":{
+     *              "order_info":{
+     *                  "title":"交易成功",
+     *                  "rmb":"9.30000元",
+     *                  "total":"3.10000T",
+     *                  "price":"3.00000元\/T",
+     *                  "pay_type":"3",
+     *                  "order_sn":"20181213185500910092",
+     *                  "pay_code":"910092",
+     *                  "createtime":"2018-12-13 18:55:00",
+     *                  "paytime":"1970-01-01 08:00:00",
+     *                  "appealtime":"2018-12-14 13:48:07",
+     *                  "buyer_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/222",
+     *                  "buyer_nickname":"bb",
+     *                  "seller_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/20190108\/37d2a843bb73642738cf3bdcc082c550.png",
+     *                  "seller_nickname":"sss",
+     *                  "order_id":"1"
+     *              },
+     *              "pay_info":{
+     *                  "id":2,
+     *                  "uid":6,
+     *                  "type":3,
+     *                  "user_name":"",
+     *                  "bank_name":"",
+     *                  "bank_detail_name":"",
+     *                  "account_name":"",
+     *                  "qrcode":"",
+     *                  "add_time":0,
+     *                  "status":1
+     *              }
+     *          }
+     *      }
+     */
+    public static final String SELLER_SUCC="api/home/userOrder/sellerSuccInfo";
+
+    /**
+     * 卖家身份-申诉处理中
+     *      {
+     *          "code":1,
+     *          "msg":"订单详情",
+     *          "data":{
+     *              "order_info":{
+     *                  "title":"申诉处理中",
+     *                  "rmb":"9.00000元",
+     *                  "total":"3.00000T",
+     *                  "price":"3.00000元\/T",
+     *                  "pay_type":"3",
+     *                  "order_sn":"20181217141135485517",
+     *                  "pay_code":"485517",
+     *                  "createtime":"2018-12-17 19:44:55",
+     *                  "paytime":"2018-12-17 16:12:55",
+     *                  "appealtime":"2019-01-17 20:28:11",
+     *                  "buyer_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/222",
+     *                  "buyer_nickname":"bb",
+     *                  "seller_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/20190108\/37d2a843bb73642738cf3bdcc082c550.png",
+     *                  "seller_nickname":"sss",
+     *                  "order_id":"5"
+     *              },
+     *              "pay_info":{
+     *                  "id":2,
+     *                  "uid":6,
+     *                  "type":3,
+     *                  "user_name":"",
+     *                  "bank_name":"",
+     *                  "bank_detail_name":"",
+     *                  "account_name":"",
+     *                  "qrcode":"",
+     *                  "add_time":0,
+     *                  "status":1
+     *              }
+     *          }
+     *      }
+     */
+    public static final String SELLER_APPEAL="api/home/userOrder/sellerAppealInfo";
+
+    /**
+     * 卖家身份-交易取消
+     *      {
+     *          "code":1,
+     *          "msg":"订单详情",
+     *          "data":{
+     *              "order_info":{
+     *                  "title":"交易已取消",
+     *                  "rmb":"9.00000元",
+     *                  "total":"3.00000T",
+     *                  "price":"3.00000元\/T",
+     *                  "pay_type":"",
+     *                  "order_sn":"20181214172954550831",
+     *                  "pay_code":"550831",
+     *                  "createtime":"2018-12-14 17:29:54",
+     *                  "paytime":"1970-01-01 08:00:00",
+     *                  "appealtime":"1970-01-01 08:00:00",
+     *                  "buyer_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/222",
+     *                  "buyer_nickname":"bb",
+     *                  "seller_avatar":"http:\/\/www.jieshuizhibiao.com\/upload\/20190108\/37d2a843bb73642738cf3bdcc082c550.png",
+     *                  "seller_nickname":"sss",
+     *                  "order_id":"3"
+     *              }
+     *          }
+     *      }
+     */
+    public static final String SELLER_CANCEL="api/home/userOrder/sellerCancelInfo";
 
     /**
      *基础信息    节水指标单价

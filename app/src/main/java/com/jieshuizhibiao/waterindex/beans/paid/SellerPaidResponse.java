@@ -1,6 +1,6 @@
-package com.jieshuizhibiao.waterindex.beans.sellerpaid;
+package com.jieshuizhibiao.waterindex.beans.paid;
 
-import com.jieshuizhibiao.waterindex.beans.unpay.PayInfo;
+import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
 
 public class SellerPaidResponse {
     private SellerPaidOrderInfo order_info;

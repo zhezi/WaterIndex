@@ -1,11 +1,11 @@
 package com.jieshuizhibiao.waterindex.event;
 
-public class CreateOrderResultEvent {
+public class TradeIndexRefreshEvent {
     String title;
 
     String msg;
 
-    public CreateOrderResultEvent(String title, String msg) {
+    public TradeIndexRefreshEvent(String title, String msg) {
         this.title = title;
         this.msg = msg;
     }

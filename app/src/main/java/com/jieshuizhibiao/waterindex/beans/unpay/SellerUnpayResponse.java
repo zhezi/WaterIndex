@@ -1,5 +1,7 @@
 package com.jieshuizhibiao.waterindex.beans.unpay;
 
+import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
+
 import java.util.List;
 
 public class SellerUnpayResponse {

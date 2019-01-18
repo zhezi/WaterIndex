@@ -1,4 +1,4 @@
-package com.jieshuizhibiao.waterindex.beans.unpay;
+package com.jieshuizhibiao.waterindex.beans.appeal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -90,7 +90,7 @@ public class PayInfo implements Parcelable {
         this.status = in.readInt();
     }
 
-    public static final Parcelable.Creator<PayInfo> CREATOR = new Parcelable.Creator<PayInfo>() {
+    public static final Creator<PayInfo> CREATOR = new Creator<PayInfo>() {
         @Override
         public PayInfo createFromParcel(Parcel source) {
             return new PayInfo(source);

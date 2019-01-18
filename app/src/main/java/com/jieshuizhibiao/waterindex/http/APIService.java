@@ -33,8 +33,11 @@ import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserInfo;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
-import com.jieshuizhibiao.waterindex.beans.buyerpaid.BuyerPaidResponse;
-import com.jieshuizhibiao.waterindex.beans.sellerpaid.SellerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.appeal.AppealResponse;
+import com.jieshuizhibiao.waterindex.beans.cancel.CancelResponse;
+import com.jieshuizhibiao.waterindex.beans.paid.BuyerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.paid.SellerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.succ.SuccResponse;
 import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayResponse;
 import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayResponse;
 import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
@@ -234,8 +237,41 @@ public interface APIService {
      * "device_type", "android";
      * "order_id", "111";
      */
-    @POST(UrlConfig.BUYER_CANCEL)
+    @POST(UrlConfig.BUYER_DO_CANCEL)
     Observable<BaseEntity> buyerCancle(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     * "detail","未收到卖家放行"
+     */
+    @POST(UrlConfig.BUYER_DO_APPEAL)
+    Observable<BaseEntity>buyerDoAppeal(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.BUYER_SUCC)
+    Observable<BaseEntity<SuccResponse>>buyerSucc(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.BUYER_APPEAL)
+    Observable<BaseEntity<AppealResponse>>buyerAppeal(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.BUYER_CANCEL)
+    Observable<BaseEntity<CancelResponse>>buyerCancel(@Body RequestBody body);
 
     /**
      * "token", token;
@@ -252,6 +288,48 @@ public interface APIService {
      */
     @POST(UrlConfig.SELLER_PAID)
     Observable<BaseEntity<SellerPaidResponse>>sellerPaid(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     * "detail","未收到买家付款"
+     */
+    @POST(UrlConfig.SELLER_DO_APPEAL)
+    Observable<BaseEntity>sellerDoAppeal(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     * "safe_pw","******"
+     */
+    @POST(UrlConfig.SELLER_CHECKOUT)
+    Observable<BaseEntity>sellerCheckout(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.SELLER_SUCC)
+    Observable<BaseEntity<SuccResponse>>sellerSucc(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.SELLER_APPEAL)
+    Observable<BaseEntity<AppealResponse>>sellerAppeal(@Body RequestBody body);
+
+    /**
+     * "token", token;
+     * "device_type", "android";
+     * "order_id", "111";
+     */
+    @POST(UrlConfig.SELLER_CANCEL)
+    Observable<BaseEntity<CancelResponse>>sellerCancel(@Body RequestBody body);
 
     /**
      * "token", token;

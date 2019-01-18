@@ -24,8 +24,8 @@ import com.jieshuizhibiao.waterindex.contract.model.UserOrderModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.SysConfigPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserOrderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
-import com.jieshuizhibiao.waterindex.event.CreateOrderResultEvent;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.event.TradeIndexRefreshEvent;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
@@ -42,7 +42,7 @@ import de.greenrobot.event.EventBus;
 
 public class UserOrderActivity extends BaseActivity implements
         CommonViewImpl,
-        SecondRequstViewImpl,
+        SecondRequestViewImpl,
         TextWatcher {
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -207,15 +207,15 @@ public class UserOrderActivity extends BaseActivity implements
         }
         total = edtTotal.getText().toString();
 //        if (checkTime()) {
-            if (checkEdt()) {
-                userOrderPresenter.createOrder(this, trade_id, total);
-            } else {
-                edtTotal.setText("");
-                llTotal.setBackground(edt_border_illegal);
-                tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
-            }
+        if (checkEdt()) {
+            userOrderPresenter.createOrder(this, trade_id, total);
+        } else {
+            edtTotal.setText("");
+            llTotal.setBackground(edt_border_illegal);
+            tvTotalPrice.setText(new StringBuilder("总价：").append("0.00元").toString());
+        }
 //        } else {
-//            EventBus.getDefault().post(new CreateOrderResultEvent("time_too_late",null));
+//            EventBus.getDefault().post(new TradeIndexRefreshEvent("time_too_late",null));
 //            finish();
 //        }
     }
@@ -284,13 +284,13 @@ public class UserOrderActivity extends BaseActivity implements
     @Override
     public void onRequestSuccess(Object bean) {
         finish();
-        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_success",null));
+        EventBus.getDefault().post(new TradeIndexRefreshEvent("creat_order_success", null));
     }
 
     @Override
     public void onRequestFailed(String msg) {
         finish();
-        EventBus.getDefault().post(new CreateOrderResultEvent("creat_order_failed",msg));
+        EventBus.getDefault().post(new TradeIndexRefreshEvent("creat_order_failed", msg));
     }
 
     @Override
@@ -303,17 +303,26 @@ public class UserOrderActivity extends BaseActivity implements
 
     @Override
     public void afterTextChanged(Editable s) {
-        total = edtTotal.getText().toString();
+        total = edtTotal.getText().toString().trim();
         if (!TextUtils.isEmpty(total)) {
+            if(total.endsWith(".")){
+                total=total+"0";
+            }
             final Float aFloat = Float.valueOf(total);
-            tvTotalPrice.setText(new StringBuilder("总价：").append(aFloat * ds_price).append("元").toString());
+            String price=String.format("%.5f",aFloat * ds_price);
+//            LogUtils.e("tag","aFloat:"+aFloat+"  ds_price:"+ds_price+"  price:"+price);
+            tvTotalPrice.setText(new StringBuilder("总价：").append(price).append("元").toString());
         }
     }
 
     @Override
-    public void onSecondRequstSuccess(SysConfigResponseBean o) {
-        if (o != null && !TextUtils.isEmpty(o.getPrice())) {
-            ds_price = Float.valueOf(o.getPrice());
+    public void onSecondRequstSuccess(Object o) {
+        if (o != null) {
+            SysConfigResponseBean sysConfigResponseBean = (SysConfigResponseBean) o;
+
+            if (sysConfigResponseBean != null && !TextUtils.isEmpty(sysConfigResponseBean.getPrice())) {
+                ds_price = Float.valueOf(sysConfigResponseBean.getPrice());
+            }
         }
     }
 

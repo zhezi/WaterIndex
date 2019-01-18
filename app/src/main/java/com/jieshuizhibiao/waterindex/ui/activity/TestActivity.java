@@ -12,24 +12,35 @@ package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
 import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
 import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
+import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
+import com.jieshuizhibiao.waterindex.ui.view.NewAlertDialog;
+import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
+import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.HashMap;
 
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * @ProjectName: NewWaterIndex
@@ -45,9 +56,10 @@ import butterknife.OnClick;
  */
 public class TestActivity extends BaseActivity {
     //    @BindView(R.id.btn_request)
-    Button btnRequest, btnGoLogin;
+    Button btnRequest, btnGoLogin,btnAppeal;
     EditText edt;
     private String edtContent;
+    NewAlertDialog dialog;
 
 
     @Override
@@ -55,8 +67,8 @@ public class TestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         btnRequest = findViewById(R.id.btn_request);
         btnGoLogin = findViewById(R.id.btn_go_login);
+        btnAppeal=findViewById(R.id.btn_appeal);
         edt = findViewById(R.id.edt);
-
     }
 
     @Override
@@ -69,18 +81,18 @@ public class TestActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_request, R.id.btn_go_login})
+    @OnClick({R.id.btn_request, R.id.btn_go_login,R.id.btn_appeal})
     public void onClick(View v) {
-        edtContent=edt.getText().toString();
+        edtContent = edt.getText().toString();
         int id = v.getId();
         switch (id) {
 
             case R.id.btn_request:
 
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("order_id", edtContent);
+                params.put("order_id", "1");
                 RetrofitFactory.getInstance().createService()
-                        .buyerUnpay(RequestUtil.getRequestHashBody(params, false))
+                        .sellerSucc(RequestUtil.getRequestHashBody(params, false))
                         .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
                         .compose(ObservableTransformerUtils.<BaseEntity>io())
                         .subscribe(new BaseObserver(TestActivity.this) {
@@ -95,13 +107,49 @@ public class TestActivity extends BaseActivity {
                             }
                         });
 
-
                 break;
 
             case R.id.btn_go_login:
-                startActivity(new Intent(TestActivity.this, LoginActivity.class));
+//                startActivity(new Intent(TestActivity.this, LoginActivity.class));
+                HashMap<String, Object> params1 = new HashMap<>();
+                params1.put("order_id", "3");
+                RetrofitFactory.getInstance().createService()
+                        .sellerCancel(RequestUtil.getRequestHashBody(params1, false))
+                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity>io())
+                        .subscribe(new BaseObserver(TestActivity.this) {
+
+                            @Override
+                            protected void onSuccess(Object bean) throws Exception {
+
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                            }
+                        });
+                break;
+            case R.id.btn_appeal:
+                HashMap<String, Object> params2 = new HashMap<>();
+                params2.put("order_id", "5");
+                RetrofitFactory.getInstance().createService()
+                        .sellerAppeal(RequestUtil.getRequestHashBody(params2, false))
+                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
+                        .compose(ObservableTransformerUtils.<BaseEntity>io())
+                        .subscribe(new BaseObserver(TestActivity.this) {
+
+                            @Override
+                            protected void onSuccess(Object bean) throws Exception {
+
+                            }
+
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                            }
+                        });
                 break;
         }
     }
+
 
 }

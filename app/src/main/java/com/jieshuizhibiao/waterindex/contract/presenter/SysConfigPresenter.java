@@ -1,13 +1,12 @@
 package com.jieshuizhibiao.waterindex.contract.presenter;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.SysConfigResponseBean;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.UserOrderModel;
-import com.jieshuizhibiao.waterindex.contract.model.callback.SencondRequestCallback;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.model.callback.SecondRequestCallback;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
 
-public class SysConfigPresenter extends BasePresenter<SecondRequstViewImpl> {
+public class SysConfigPresenter extends BasePresenter<SecondRequestViewImpl> {
     private UserOrderModel userOrderModel;
 
     public SysConfigPresenter(UserOrderModel userOrderModel) {
@@ -19,9 +18,9 @@ public class SysConfigPresenter extends BasePresenter<SecondRequstViewImpl> {
             userOrderModel = new UserOrderModel();
         }
 
-        userOrderModel.getSysConfig(activity, new SencondRequestCallback() {
+        userOrderModel.getSysConfig(activity, new SecondRequestCallback() {
             @Override
-            public void onSecondRequstSuccess(SysConfigResponseBean bean) {
+            public void onSecondRequstSuccess(Object bean) {
                 if (mView != null) {
                     mView.onSecondRequstSuccess(bean);
                 }

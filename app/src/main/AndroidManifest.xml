@@ -227,6 +227,15 @@
         <activity android:name=".ui.activity.TraderPaidActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".ui.activity.TraderAppealActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.TraderSuccActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.TraderCancelActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

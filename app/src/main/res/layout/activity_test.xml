@@ -15,11 +15,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="去登陆"/>
+    <Button
+        android:id="@+id/btn_appeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="去登陆"/>
     <EditText
         android:id="@+id/edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 
 </LinearLayout>

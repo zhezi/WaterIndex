@@ -77,4 +77,5 @@
     <string name="rationale_camera">本应用程序需要使用你的相机，这样你就可以拍照了或者扫描二维码</string>
     <string name="rationale_storage">本应用程序需要读取和写入存储，这样你就可以选择本地文件了</string>
     <string name="rationale_ask_again">没有该权限，此应用程序可能无法正常工作。打开应用程序设置来修改应用程序权限。</string>
+    <string name="appeal_warning">提起申诉后，资产将会冻结。申诉专员将介入本次交易，直至申诉结束。</string>
 </resources>

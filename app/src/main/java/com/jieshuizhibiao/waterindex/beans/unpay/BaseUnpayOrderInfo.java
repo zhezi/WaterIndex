@@ -3,7 +3,7 @@ package com.jieshuizhibiao.waterindex.beans.unpay;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class BaseOrderInfo implements Parcelable {
+public class BaseUnpayOrderInfo implements Parcelable {
     //    "order_info":{
 //     *                  "title":"出售节水指标",
 //     *                  "expire_time":"不限制",
@@ -29,15 +29,15 @@ public class BaseOrderInfo implements Parcelable {
 
     private String order_id;
 
-    public static final Creator<BaseOrderInfo> CREATOR = new Creator<BaseOrderInfo>() {
+    public static final Creator<BaseUnpayOrderInfo> CREATOR = new Creator<BaseUnpayOrderInfo>() {
         @Override
-        public BaseOrderInfo createFromParcel(Parcel in) {
-            return new BaseOrderInfo(in);
+        public BaseUnpayOrderInfo createFromParcel(Parcel in) {
+            return new BaseUnpayOrderInfo(in);
         }
 
         @Override
-        public BaseOrderInfo[] newArray(int size) {
-            return new BaseOrderInfo[size];
+        public BaseUnpayOrderInfo[] newArray(int size) {
+            return new BaseUnpayOrderInfo[size];
         }
     };
 
@@ -95,10 +95,10 @@ public class BaseOrderInfo implements Parcelable {
         dest.writeString(this.order_id);
     }
 
-    public BaseOrderInfo() {
+    public BaseUnpayOrderInfo() {
     }
 
-    protected BaseOrderInfo(Parcel in) {
+    protected BaseUnpayOrderInfo(Parcel in) {
         this.title = in.readString();
         this.expire_time = in.readString();
         this.rmb = in.readString();

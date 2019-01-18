@@ -19,7 +19,10 @@ import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.event.ShouldRefreshEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.TestActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderAppealActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderCancelActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderPaidActivity;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderSuccActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
@@ -143,11 +146,11 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
             } else if (next_step.equals(BUYER_PAID) || next_step.equals(SELLER_PAID)) {
                 jump(TraderPaidActivity.class, intent);
             } else if (next_step.equals(BUYER_APPEAL) || next_step.equals(SELLER_APPEAL)) {
-                //todo jump
+                jump(TraderAppealActivity.class,intent);
             } else if (next_step.equals(BUYER_SUCC) || next_step.equals(SELLER_SUCC)) {
-                //todo jump
+                jump(TraderSuccActivity.class,intent);
             } else if (next_step.equals(BUYER_CANCEL) || next_step.equals(SELLER_CANCEL)) {
-                //todo jump
+                jump(TraderCancelActivity.class,intent);
             }
         }
     }
@@ -180,7 +183,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("msg");
+        ToastUtils.showCustomToast(msg);
         //如果因为加载更多进行网络请求，请求完毕后isLoadMore归位至false;
         if (isLoadMore) {
             isLoadMore = false;
@@ -243,8 +246,8 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
         if (event != null) {
             String from = event.getFrom();
             String msg = event.getMsg();
-            if (from.equals("TraderUnpayActivity")) {
-                if (msg.equals("buyer_cancel")) {
+            if (from.equals("TraderUnpayActivity")||from.equals("TraderPaidActivity")) {
+                if (msg.equals("buyer_cancel")||msg.equals("trader_do_appeal")||msg.equals("seller_checkout")) {
                     isRefresh = true;//所有页面都要刷新
                     intPage = 1;
                 }

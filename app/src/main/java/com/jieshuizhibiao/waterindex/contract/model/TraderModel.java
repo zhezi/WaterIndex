@@ -1,8 +1,11 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.buyerpaid.BuyerPaidResponse;
-import com.jieshuizhibiao.waterindex.beans.sellerpaid.SellerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.appeal.AppealResponse;
+import com.jieshuizhibiao.waterindex.beans.cancel.CancelResponse;
+import com.jieshuizhibiao.waterindex.beans.paid.BuyerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.paid.SellerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.succ.SuccResponse;
 import com.jieshuizhibiao.waterindex.beans.unpay.BuyerUnpayResponse;
 import com.jieshuizhibiao.waterindex.beans.unpay.SellerUnpayResponse;
 import com.jieshuizhibiao.waterindex.contract.model.callback.CommonCallback;
@@ -24,7 +27,7 @@ public class TraderModel {
                 .buyerUnpay(RequestUtil.getRequestHashBody(initParams(order_id), false))
                 .compose(activity.<BaseEntity<BuyerUnpayResponse>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<BuyerUnpayResponse>>io())
-                .subscribe(new BaseObserver<BuyerUnpayResponse>() {
+                .subscribe(new BaseObserver<BuyerUnpayResponse>(activity) {
                     @Override
                     protected void onSuccess(BuyerUnpayResponse buyerUnpayResponse) throws Exception {
                         callback.onRequestSuccess(buyerUnpayResponse);
@@ -58,7 +61,7 @@ public class TraderModel {
                 .sellerUnpay(RequestUtil.getRequestHashBody(initParams(order_id), false))
                 .compose(activity.<BaseEntity<SellerUnpayResponse>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<SellerUnpayResponse>>io())
-                .subscribe(new BaseObserver<SellerUnpayResponse>() {
+                .subscribe(new BaseObserver<SellerUnpayResponse>(activity) {
                     @Override
                     protected void onSuccess(SellerUnpayResponse sellerUnpayResponse) throws Exception {
                         callback.onRequestSuccess(sellerUnpayResponse);
@@ -92,7 +95,7 @@ public class TraderModel {
                 .buyerPaid(RequestUtil.getRequestHashBody(initParams(order_id), false))
                 .compose(activity.<BaseEntity<BuyerPaidResponse>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<BuyerPaidResponse>>io())
-                .subscribe(new BaseObserver<BuyerPaidResponse>() {
+                .subscribe(new BaseObserver<BuyerPaidResponse>(activity) {
                     @Override
                     protected void onSuccess(BuyerPaidResponse buyerPaidResponse) throws Exception {
                         callback.onRequestSuccess(buyerPaidResponse);
@@ -126,10 +129,214 @@ public class TraderModel {
                 .sellerPaid(RequestUtil.getRequestHashBody(initParams(order_id), false))
                 .compose(activity.<BaseEntity<SellerPaidResponse>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<SellerPaidResponse>>io())
-                .subscribe(new BaseObserver<SellerPaidResponse>() {
+                .subscribe(new BaseObserver<SellerPaidResponse>(activity) {
                     @Override
                     protected void onSuccess(SellerPaidResponse sellerPaidResponse) throws Exception {
                         callback.onRequestSuccess(sellerPaidResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void buyerAppeal(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .buyerAppeal(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<AppealResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<AppealResponse>>io())
+                .subscribe(new BaseObserver<AppealResponse>(activity) {
+                    @Override
+                    protected void onSuccess(AppealResponse appealResponse) throws Exception {
+                        callback.onRequestSuccess(appealResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void sellerAppeal(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .sellerAppeal(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<AppealResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<AppealResponse>>io())
+                .subscribe(new BaseObserver<AppealResponse>(activity) {
+                    @Override
+                    protected void onSuccess(AppealResponse appealResponse) throws Exception {
+                        callback.onRequestSuccess(appealResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void buyerSucc(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .buyerSucc(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<SuccResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<SuccResponse>>io())
+                .subscribe(new BaseObserver<SuccResponse>(activity) {
+                    @Override
+                    protected void onSuccess(SuccResponse succResponse) throws Exception {
+                        callback.onRequestSuccess(succResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void sellerSucc(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .sellerSucc(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<SuccResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<SuccResponse>>io())
+                .subscribe(new BaseObserver<SuccResponse>(activity) {
+                    @Override
+                    protected void onSuccess(SuccResponse succResponse) throws Exception {
+                        callback.onRequestSuccess(succResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void buyerCancel(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .buyerCancel(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<CancelResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<CancelResponse>>io())
+                .subscribe(new BaseObserver<CancelResponse>(activity) {
+                    @Override
+                    protected void onSuccess(CancelResponse cancelResponse) throws Exception {
+                        callback.onRequestSuccess(cancelResponse);
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        if (e != null && e.getMessage() != null) {
+                            if (isNetWorkError) {
+                                LogUtils.e(e.getMessage());
+                                callback.onRequestFailed(HttpConfig.ERROR_MSG);
+                            } else {
+                                callback.onRequestFailed(e.getMessage());
+                            }
+                        } else {
+                            callback.onRequestFailed("");
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(String code, String msg) throws Exception {
+                        callback.onRequestFailed(msg);
+                    }
+                });
+
+    }
+
+    public void sellerCancel(BaseActivity activity, long order_id, final CommonCallback callback) {
+
+        RetrofitFactory.getInstance().createService()
+                .sellerCancel(RequestUtil.getRequestHashBody(initParams(order_id), false))
+                .compose(activity.<BaseEntity<CancelResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<CancelResponse>>io())
+                .subscribe(new BaseObserver<CancelResponse>(activity) {
+                    @Override
+                    protected void onSuccess(CancelResponse cancelResponse) throws Exception {
+                        callback.onRequestSuccess(cancelResponse);
                     }
 
                     @Override

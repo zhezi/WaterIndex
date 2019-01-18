@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.unpay.BaseOrderInfo;
-import com.jieshuizhibiao.waterindex.beans.unpay.PayInfo;
+import com.jieshuizhibiao.waterindex.beans.unpay.BaseUnpayOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
 import com.jieshuizhibiao.waterindex.contract.model.CancelOrderModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.CancelOrderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CancelOrderViewImpl;
@@ -83,7 +83,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
     CheckBox cbAgreement;
 
 
-    private BaseOrderInfo baseOrderInfo;
+    private BaseUnpayOrderInfo baseUnpayOrderInfo;
     private PayInfo payInfo;
     private String lastStep;
     private int pay_type;
@@ -142,17 +142,17 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
     private void getIntntExtra() {
         Intent intent = getIntent();
         if (intent != null) {
-            baseOrderInfo = intent.getParcelableExtra(TraderUnpayActivity.ORDERINFO);
+            baseUnpayOrderInfo = intent.getParcelableExtra(TraderUnpayActivity.ORDERINFO);
             payInfo = intent.getParcelableExtra(TraderUnpayActivity.PAYINFO);
             lastStep = intent.getStringExtra(TraderUnpayActivity.CURRENT_STEP);
             pay_type = intent.getIntExtra(TraderUnpayActivity.PAY_TYPE, 0);
             expire_time = intent.getStringExtra(TraderUnpayActivity.MILLIS);
 
-            if (baseOrderInfo != null) {
-                order_id = Long.valueOf(baseOrderInfo.getOrder_id());
-                pay_code = baseOrderInfo.getPay_code();
-                createtime = baseOrderInfo.getCreatetime();
-                rmb = baseOrderInfo.getRmb();
+            if (baseUnpayOrderInfo != null) {
+                order_id = Long.valueOf(baseUnpayOrderInfo.getOrder_id());
+                pay_code = baseUnpayOrderInfo.getPay_code();
+                createtime = baseUnpayOrderInfo.getCreatetime();
+                rmb = baseUnpayOrderInfo.getRmb();
             }
             if (payInfo != null) {
                 qrcodeUrl = payInfo.getQrcode();

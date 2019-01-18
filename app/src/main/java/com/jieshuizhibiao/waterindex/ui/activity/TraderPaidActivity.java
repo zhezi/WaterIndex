@@ -2,6 +2,7 @@ package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,23 +12,33 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
-import com.jieshuizhibiao.waterindex.beans.buyerpaid.BuyerPaidOrderInfo;
-import com.jieshuizhibiao.waterindex.beans.buyerpaid.BuyerPaidResponse;
-import com.jieshuizhibiao.waterindex.beans.sellerpaid.SellerPaidOrderInfo;
-import com.jieshuizhibiao.waterindex.beans.sellerpaid.SellerPaidResponse;
-import com.jieshuizhibiao.waterindex.beans.unpay.PayInfo;
+import com.jieshuizhibiao.waterindex.beans.paid.BuyerPaidOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.paid.BuyerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.paid.SellerPaidOrderInfo;
+import com.jieshuizhibiao.waterindex.beans.paid.SellerPaidResponse;
+import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
+import com.jieshuizhibiao.waterindex.contract.model.SellerCheckoutModel;
+import com.jieshuizhibiao.waterindex.contract.model.TraderDoAppealModel;
 import com.jieshuizhibiao.waterindex.contract.model.TraderModel;
+import com.jieshuizhibiao.waterindex.contract.presenter.SellerCheckoutPresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.TraderDoAppealPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.TraderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ThirdRequestViewImpl;
+import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
-import com.jieshuizhibiao.waterindex.utils.LogUtils;
+import com.jieshuizhibiao.waterindex.ui.view.NewAlertDialog;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
-public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
+public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, SecondRequestViewImpl, ThirdRequestViewImpl {
     @BindView(R.id.tv_title_center)
     TextView tvTitleCenter;
     @BindView(R.id.title_bar)
@@ -131,6 +142,8 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
     Button btnSellerCheckout;
     @BindView(R.id.ll_btns_seller)
     LinearLayout llBtnsSeller;
+    @BindString(R.string.appeal_warning)
+    String appealWarning;
 
     private String current_step;
     private long order_id;
@@ -138,9 +151,17 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
     private String qrcodeUrl;//该页面要做放大吗？？
     private String pay_code;
     private String createtime;
-
+    private NewAlertDialog dialog;
+    private String appealConten;
+    private String safePw;
 
     private TraderPresenter traderPresenter;
+    private TraderDoAppealPresenter traderDoAppealPresenter;
+    private SellerCheckoutPresenter sellerCheckoutPresenter;
+
+    private final String I_KNOW = "知道了";
+    private final String APPEAL_SUCC="申诉成功！";
+    private final String CHECKOUT_SUCC="放行成功！";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +171,12 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
         initView();
         traderPresenter = new TraderPresenter(new TraderModel());
         traderPresenter.attachView(this);
+        traderDoAppealPresenter = new TraderDoAppealPresenter(new TraderDoAppealModel());
+        traderDoAppealPresenter.attachView(this);
+        sellerCheckoutPresenter = new SellerCheckoutPresenter(new SellerCheckoutModel());
+        sellerCheckoutPresenter.attachView(this);
         doRequest();
+
     }
 
     @Override
@@ -199,19 +225,27 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
     }
 
 
-    @OnClick({R.id.left_ll,})
+    @OnClick({R.id.left_ll, R.id.btn_seller_appeal, R.id.btn_seller_checkout})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.left_ll:
                 finish();
                 break;
-//            case R.id.left_ll:
-//
-//                break;
-//            case R.id.left_ll:
-//
-//                break;
+            case R.id.btn_seller_appeal:
+                showDialog(NewAlertDialog.TYPES[0],
+                        "订单申诉",
+                        appealWarning,
+                        "确认",
+                        null);
+                break;
+            case R.id.btn_seller_checkout:
+                showDialog(NewAlertDialog.TYPES[1],
+                        "确认收款并放行",
+                        "请务必登录网银或第三方支付账号确定该笔款项",
+                        "确认",
+                        "取消");
+                break;
 //            case R.id.left_ll:
 //
 //                break;
@@ -242,6 +276,34 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
         }
     }
 
+    private void doAppeal(String detail) {
+        if (traderDoAppealPresenter == null) {
+            traderDoAppealPresenter = new TraderDoAppealPresenter(new TraderDoAppealModel());
+            traderDoAppealPresenter.attachView(this);
+        }
+        if (TextUtils.isEmpty(detail)) {
+            ToastUtils.showCustomToast("未填写申诉内容");
+            return;
+        }
+        if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
+            traderDoAppealPresenter.buyerDoAppeal(this, order_id, detail);
+        } else if (current_step.equals(OrderListsTabFragment.SELLER_PAID)) {
+            traderDoAppealPresenter.sellerDoAppeal(this, order_id, detail);
+
+        }
+    }
+
+    private void doCheckout(String safe_pw) {
+        if (sellerCheckoutPresenter == null) {
+            sellerCheckoutPresenter = new SellerCheckoutPresenter(new SellerCheckoutModel());
+            sellerCheckoutPresenter.attachView(this);
+        }
+        if (TextUtils.isEmpty(safe_pw)) {
+            ToastUtils.showCustomToast("请输入资金密码");
+            return;
+        }
+        sellerCheckoutPresenter.sellerCheckout(this, order_id, safe_pw);
+    }
 
     @Override
     public void onRequestSuccess(Object bean) {
@@ -278,14 +340,43 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
                     //卖家内容
                     tvBigRmb.setText(sellerPaidOrderInfo.getRmb());
                     tvTrader.setText("买家");
-                    GlidImageManager.getInstance().loadCircleImg(this,sellerPaidOrderInfo.getBuyer_avatar(),imgTraderAvatar,R.mipmap.head,R.mipmap.head);
+                    GlidImageManager.getInstance().loadCircleImg(this, sellerPaidOrderInfo.getBuyer_avatar(), imgTraderAvatar, R.mipmap.head, R.mipmap.head);
                     tvTraderNickname.setText(sellerPaidOrderInfo.getBuyer_nickname());
                 }
             }
-            if(payInfo!=null) {
+            if (payInfo != null) {
                 setCommonView(payInfo);
             }
         }
+    }
+
+    @Override
+    public void onRequestFailed(String msg) {
+        ToastUtils.showCustomToast(msg);
+    }
+
+    //卖家申诉成功、买家申诉成功
+    @Override
+    public void onSecondRequstSuccess(Object bean) {
+        showDialog(null, "提示", APPEAL_SUCC, I_KNOW, null);
+    }
+
+    //申诉失败
+    @Override
+    public void onSecondRequstFailed(String msg) {
+        ToastUtils.showCustomToast(msg);
+    }
+
+    //放行成功
+    @Override
+    public void onThirdRequestSucc(Object o) {
+        showDialog(null, "提示", CHECKOUT_SUCC, I_KNOW, null);
+    }
+
+    //放行失败
+    @Override
+    public void onThirdRequestFail(String msg) {
+
     }
 
     private void setCommonView(PayInfo payInfo) {
@@ -323,10 +414,50 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
 
     }
 
+    private void showDialog(final String type, String title, final String msg, final String positive, final String negative) {
+        if (dialog == null) {
+            dialog = new NewAlertDialog(this);
+        }
+        dialog.builder().setCancelable(true);
+        dialog.setType(type)
+                .setTitle(title)
+                .setMsg(msg)
+                .setPositiveButton(positive, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(msg.equals(APPEAL_SUCC)){
+                            dialog.dismiss();
+                            finish();
+                            //该事件发出，所有OrderListsTabFragment都刷新
+                            EventBus.getDefault().post(new ChangeOrderStatusEvent("TraderPaidActivity", "trader_do_appeal"));
+                            return;
+                        }else if(msg.equals(CHECKOUT_SUCC)){
+                            finish();
+                            //该事件发出，所有OrderListsTabFragment都刷新
+                            EventBus.getDefault().post(new ChangeOrderStatusEvent("TraderPaidActivity", "seller_checkout"));
+                            return;
+                        }
 
-    @Override
-    public void onRequestFailed(String msg) {
+                        if (type.equals(NewAlertDialog.TYPES[0])) {//卖家发起申诉
+                            appealConten = dialog.getAppealContent();
+                            dialog.setAppealContent("");
+                            doAppeal(appealConten);
+                        } else if (type.equals(NewAlertDialog.TYPES[1])) {//卖家放行
+                            safePw = dialog.getSafepwContent();
+                            dialog.setSafepwContent("");
+                            doCheckout(safePw);
+                        } else if (TextUtils.isEmpty(type)) {
+                            dialog.dismiss();
+                        }
 
+                    }
+                })
+                .setNegativeButton(negative, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -336,4 +467,6 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl {
         }
         super.onDestroy();
     }
+
+
 }

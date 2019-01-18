@@ -58,7 +58,7 @@
                 android:layout_width="0px"
                 android:layout_height="@dimen/commit_btn_height"
                 android:layout_weight="1"
-                android:background="@drawable/btn_yellow_border_bg_selector"
+                android:background="@drawable/alertdialog_left_selector"
                 android:text="取消订单"
                 android:textColor="@color/primary_yellow"
                 android:textSize="@dimen/text_size_commit" />
@@ -84,7 +84,7 @@
                 android:layout_width="0px"
                 android:layout_height="@dimen/commit_btn_height"
                 android:layout_weight="1"
-                android:background="@drawable/btn_yellow_border_bg_selector"
+                android:background="@drawable/alertdialog_left_selector"
                 android:text="取消订单"
                 android:textColor="@color/primary_yellow"
                 android:textSize="@dimen/text_size_commit" />

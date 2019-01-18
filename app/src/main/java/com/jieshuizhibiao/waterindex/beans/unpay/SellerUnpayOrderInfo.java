@@ -2,7 +2,7 @@ package com.jieshuizhibiao.waterindex.beans.unpay;
 
 import android.os.Parcel;
 
-public class SellerUnpayOrderInfo extends BaseOrderInfo {
+public class SellerUnpayOrderInfo extends BaseUnpayOrderInfo {
     private String buyer_avatar;
     private String buyer_nickname;
 

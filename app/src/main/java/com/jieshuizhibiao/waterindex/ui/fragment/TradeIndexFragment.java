@@ -20,7 +20,7 @@ import com.jieshuizhibiao.waterindex.beans.TradeIndexBase;
 import com.jieshuizhibiao.waterindex.contract.model.TradeIndexModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.TradeIndexPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.event.CreateOrderResultEvent;
+import com.jieshuizhibiao.waterindex.event.TradeIndexRefreshEvent;
 import com.jieshuizhibiao.waterindex.event.LoginStatusChangedEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.AuthActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.LoginActivity;
@@ -270,7 +270,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         }
     }
 
-    public void onEventMainThread(CreateOrderResultEvent event) {
+    public void onEventMainThread(TradeIndexRefreshEvent event) {
         if (event != null) {
             LogUtils.e("tag", "******------" + event.getMsg());
             if (event.getTitle().equals("creat_order_success")) {

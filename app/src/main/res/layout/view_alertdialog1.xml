@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lLayout_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/alert_bg"
+    android:background="@drawable/dialog_white_bg_shape"
     android:orientation="vertical">
 
     <TextView
@@ -18,62 +17,77 @@
         android:text="我是标题"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/txt_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="56dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginRight="15dp"
         android:gravity="center_vertical|left"
         android:text="我是消息体我是消息体我是消息体我是消息体我是消息体我是消息体我是消息体我是消息体"
-        android:textColor="@color/black"
+        android:textColor="@color/text_black"
         android:textSize="16sp" />
 
     <FrameLayout
+        android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="200px"
-        android:paddingLeft="56dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
         android:paddingTop="15dp"
-        android:paddingRight="56dp">
+        android:paddingRight="15dp"
+        android:visibility="gone">
 
-        <Button
+        <!--<Button-->
+        <!--android:id="@+id/btn_img"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@drawable/gray_border_bg_shape"-->
+        <!--android:drawableTop="@mipmap/add"-->
+        <!--android:minHeight="82dp"-->
+        <!--android:paddingTop="40px"-->
+        <!--android:text="上传支付凭证"-->
+        <!--android:textColor="@color/text_gray"-->
+        <!--android:textSize="12sp"-->
+        <!--android:visibility="gone" />-->
+
+
+        <EditText
+            android:id="@+id/edt_appeal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/gray_border_bg_shape"
-            android:drawableTop="@mipmap/add"
-            android:paddingTop="40px"
-            android:text="上传支付凭证"
-            android:textColor="@color/text_gray"
-            android:textSize="12sp"
+            android:gravity="top"
+            android:hint="请输入申诉理由"
+            android:inputType="textMultiLine"
+            android:maxLength="500"
+            android:minHeight="82dp"
+            android:padding="@dimen/edt_padding_left"
+            android:singleLine="false"
+            android:textColorHint="@color/hit_color"
+            android:textSize="14sp"
             android:visibility="gone" />
 
-        <ScrollView
+        <EditText
+            android:id="@+id/edt_safepw"
+            style="@style/style_edt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                android:maxLength="500"
-                android:background="@drawable/gray_border_bg_shape"
-                android:paddingLeft="@dimen/edt_padding_left"
-                android:textColorHint="@color/hit_color"
-                android:textSize="12sp"
-                android:hint="请输入申诉理由"/>
+            android:layout_height="wrap_content"
+            android:hint="请输入资金密码"
+            android:inputType="textPassword"
+            android:minHeight="@dimen/edt_height"
+            android:visibility="gone" />
 
 
-        </ScrollView>
     </FrameLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/alertdialog_line" />
+        android:background="@color/edittext_border_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,13 +103,13 @@
             android:gravity="center"
             android:text="取消"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/img_line"
             android:layout_width="0.5dp"
             android:layout_height="43dp"
-            android:background="@color/alertdialog_line" />
+            android:background="@color/edittext_border_gray" />
 
         <Button
             android:id="@+id/btn_pos"
@@ -106,8 +120,8 @@
             android:gravity="center"
             android:text="确认"
             android:textColor="@color/primary_yellow"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </LinearLayout>
