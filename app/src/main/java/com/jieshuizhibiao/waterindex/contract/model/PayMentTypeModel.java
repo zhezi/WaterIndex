@@ -24,8 +24,8 @@ public class PayMentTypeModel {
                 .compose(ObservableTransformerUtils.<BaseEntity<PayMentResponseBean>>io())
                 .subscribe(new BaseObserver<PayMentResponseBean>(activity) {
                     @Override
-                    protected void onSuccess(PayMentResponseBean beanList) throws Exception {
-                        callBack.success(beanList);
+                    protected void onSuccess(PayMentResponseBean payMentResponseBean) throws Exception {
+                        callBack.success(payMentResponseBean);
                     }
 
                     @Override

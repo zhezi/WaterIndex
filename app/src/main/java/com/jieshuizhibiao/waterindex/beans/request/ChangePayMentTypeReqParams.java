@@ -7,7 +7,7 @@ package com.jieshuizhibiao.waterindex.beans.request;
 
 public class ChangePayMentTypeReqParams {
 
-    String id; 	//收款方式id 	字符串(string) 	是 		pi_id
+    int id; 	//收款方式id 	字符串(string) 	是 		pi_id
     String user_name; 	//姓名 	字符串(string) 	是
     String account_name; 	//卡号 	字符串(string) 	是
     String qrcode; 	//二维码 	字符串(string) 	否 		支付宝微信必填
@@ -15,11 +15,11 @@ public class ChangePayMentTypeReqParams {
     String safe_pw; 	//资金密码 	字符串(string) 	是
     String bank_detail_name; 	//支行信息 	字符串(string) 	是 		支行信息
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

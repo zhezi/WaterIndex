@@ -27,9 +27,9 @@ public class PayMentTypePresenter extends BasePresenter<PayMentTypeViewImpl> {
         }
         payMentTypeModel.payMentType(activity, new PayMentTypeModel.PayMentTypeCallBack() {
             @Override
-            public void success(PayMentResponseBean beanList) {
+            public void success(PayMentResponseBean payMentResponseBean) {
                 if (mView!=null){
-                    mView.onPayMentTypeSuccess(beanList);
+                    mView.onPayMentTypeSuccess(payMentResponseBean);
                 }
             }
 

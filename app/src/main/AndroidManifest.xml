@@ -203,13 +203,10 @@
         <activity android:name=".ui.activity.PaymentTypeActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddBankPaymetActivity"
+        <activity android:name=".ui.activity.BankPaymetActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.AddWxOrZfbPaymetActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.activity.AddZFBPaymetActivity"
+        <activity android:name=".ui.activity.WxOrZfbPaymetActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.activity.TraderUnpayActivity"

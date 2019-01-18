@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -34,7 +35,10 @@ public class SystemMessageActivity extends BaseActivity implements CommonViewImp
     View title_bar;
     @BindView(R.id.rc_message_list)
     XRecyclerView messageList;
-
+    @BindView(R.id.relative_hint)
+    RelativeLayout relativeHint;
+    @BindView(R.id.tv_detail)
+    TextView tvDetail;
     private int currentPage = 1, pageSize = 5;
     private SystemMsgPresenter systemMsgPresenter;
     private SystemMsgAdapter systemMsgAdapter;
@@ -116,8 +120,20 @@ public class SystemMessageActivity extends BaseActivity implements CommonViewImp
         msgLists.clear();
         if (bean instanceof SystemMsgResponseBean){
             msgLists.addAll(((SystemMsgResponseBean) bean).getLists());
-            systemMsgAdapter.notifyDataSetChanged();
-            messageList.refreshComplete();
+            if (msgLists.size() <= 0) {
+                messageList.setVisibility(View.GONE);
+                relativeHint.setVisibility(View.VISIBLE);
+                tvDetail.setText("您还没有任何消息！");
+                tvDetail.setTextColor(getResources().getColor(R.color.text_black));
+                tvDetail.setEnabled(false);
+            } else {
+                systemMsgAdapter.notifyDataSetChanged();
+                messageList.refreshComplete();
+                messageList.setVisibility(View.VISIBLE);
+                relativeHint.setVisibility(View.GONE);
+                tvDetail.setEnabled(false);
+            }
+
         }
     }
 

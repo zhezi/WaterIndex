@@ -23,9 +23,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
+import com.jieshuizhibiao.waterindex.beans.request.ChangePayMentTypeReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.AddPayMentTypePresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.ChangePaymentTypePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ChangePaymentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.Util;
@@ -66,7 +70,7 @@ import top.zibin.luban.Luban;
  * Class Note:
  */
 
-public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl {
+public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTypeViewImpl,ChangePaymentTypeViewImpl {
 
     @BindView(R.id.title_bar)
     View title_bar;
@@ -99,6 +103,8 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
     private AddPayMentTypePresenter addPayMentTypePresenter;
     private static final int REQUEST_TAKE_PHOTO = 0x110;//拍照结果回调
     private String mCurrentPhotoPath,stringStream;
+    private ChangePaymentTypePresenter changePaymentTypePresenter;
+    private PayMentResponseBean.TypeList typeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,20 +112,33 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
         StatusBarUtil.setImmersionStatus(this, title_bar);
         addPayMentTypePresenter = new AddPayMentTypePresenter();
         addPayMentTypePresenter.attachView(this);
+        changePaymentTypePresenter = new ChangePaymentTypePresenter();
+        changePaymentTypePresenter.attachView(this);
         initView();
     }
 
     private void initView() {
         if (getIntent().getStringExtra("payType").equals(HttpConfig.WX_TYPE)){
-            tv_title_center.setText("微信");
+            if (getIntent().getBooleanExtra("isHasAdd",false)){
+                tv_title_center.setText("编辑微信");
+            }else {
+                tv_title_center.setText("添加微信");
+            }
             btnQrcode.setText(R.string.hint_upload_payment_wx_img);
             edtAccount.setHint(R.string.hint_input_payment_wx_account);
         }else {
-            tv_title_center.setText("支付宝");
+            if (getIntent().getBooleanExtra("isHasAdd",false)){
+                tv_title_center.setText("编辑支付宝");
+            }else {
+                tv_title_center.setText("添加支付宝");
+            }
             btnQrcode.setText(R.string.hint_upload_payment_zfb_img);
             edtAccount.setHint(R.string.hint_input_payment_zfb_account);
         }
 
+        if (getIntent().getParcelableExtra("TypeList")!=null){
+            typeList = getIntent().getParcelableExtra("TypeList");
+        }
         initPopupView();
     }
 
@@ -144,18 +163,29 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
                 showPopupView();
                 break;
             case R.id.btn_confirm:
-                AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
-                if (getIntent().getStringExtra("payType").equals(HttpConfig.WX_TYPE)){
-                    params.setType(HttpConfig.WX_TYPE);
-                }else {
-                    params.setType(HttpConfig.ZFB_TYPE);
+                if (getIntent().getBooleanExtra("isHasAdd",false)){//编辑
+                    ChangePayMentTypeReqParams params = new ChangePayMentTypeReqParams();
+                    params.setUser_name(edtPayName.getText().toString());
+                    params.setQrcode(stringStream);
+                    params.setSafe_pw(edtPayPass.getText().toString());
+                    params.setAccount_name(edtAccount.getText().toString());
+                    params.setId(typeList.getId());
+                    changePaymentTypePresenter.vertify(params);
+                    changePaymentTypePresenter.changePaymentType(WxOrZfbPaymetActivity.this,params,getIntent().getStringExtra("payType"));
+                }else {//添加
+                    AddPayMentTypeReqParams params = new AddPayMentTypeReqParams();
+                    if (getIntent().getStringExtra("payType").equals(HttpConfig.WX_TYPE)){
+                        params.setType(HttpConfig.WX_TYPE);
+                    }else {
+                        params.setType(HttpConfig.ZFB_TYPE);
+                    }
+                    params.setUser_name(edtPayName.getText().toString());
+                    params.setQrcode(stringStream);
+                    params.setSafe_pw(edtPayPass.getText().toString());
+                    params.setAccount_name(edtAccount.getText().toString());
+                    addPayMentTypePresenter.vertify(params);
+                    addPayMentTypePresenter.addPayMentType(this,params);
                 }
-                params.setUser_name(edtPayName.getText().toString());
-                params.setQrcode(stringStream);
-                params.setSafe_pw(edtPayPass.getText().toString());
-                params.setAccount_name(edtAccount.getText().toString());
-                addPayMentTypePresenter.vertify(params);
-                addPayMentTypePresenter.addPayMentType(this,params);
                 break;
 
             default:break;
@@ -164,7 +194,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
 
     public void initPopupView() {
         if (popupWindow == null) {
-            popupWindow = new PicturePopupWindow(AddWxOrZfbPaymetActivity.this);
+            popupWindow = new PicturePopupWindow(WxOrZfbPaymetActivity.this);
             popupWindow.setOnItemClickListener(new PicturePopupWindow.OnItemClickListener() {
 
                 @Override
@@ -186,7 +216,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
     }
 
     public void showPopupView() {
-        View parent = LayoutInflater.from(AddWxOrZfbPaymetActivity.this).inflate(R.layout.activity_auth, null);
+        View parent = LayoutInflater.from(WxOrZfbPaymetActivity.this).inflate(R.layout.activity_auth, null);
         popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.LEFT, 0, 0);
     }
 
@@ -216,7 +246,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
                     fileUrl = Uri.fromFile(file);
 
                 } else {//包装7.0 Uri--清单文件中智能有一个FileProvider的声明
-                    fileUrl = FileProvider.getUriForFile(AddWxOrZfbPaymetActivity.this, "com.quanminjieshui.waterindex.fileProvider", file);
+                    fileUrl = FileProvider.getUriForFile(WxOrZfbPaymetActivity.this, "com.quanminjieshui.waterindex.fileProvider", file);
 
                     //授权4.4FileProvider content的grantUriPermission 方法
                     List<ResolveInfo> mResolveList = getPackageManager().
@@ -246,7 +276,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
-            ZipImg(AddWxOrZfbPaymetActivity.this,mRotateFile);
+            ZipImg(WxOrZfbPaymetActivity.this,mRotateFile);
 
             if (mOriginalBitmap != null) {
                 mOriginalBitmap.recycle();
@@ -256,7 +286,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
-            ZipImg(AddWxOrZfbPaymetActivity.this,mFile);
+            ZipImg(WxOrZfbPaymetActivity.this,mFile);
         }
     }
 
@@ -266,7 +296,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
                 .map(new Function<File, File>() {
                     @Override
                     public File apply(File file) throws Exception {
-                        return Luban.with(AddWxOrZfbPaymetActivity.this).load(file).get();
+                        return Luban.with(WxOrZfbPaymetActivity.this).load(file).get();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -321,7 +351,7 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
         performCodeWithPermission(getString(R.string.rationale_storage), PermissionConfig.REQUEST_STORAGE_PERM, perms, new PermissionCallback() {
             @Override
             public void hasPermission(List<String> allPerms) {
-                Intent intent = new Intent(AddWxOrZfbPaymetActivity.this, ImageGridActivity.class);
+                Intent intent = new Intent(WxOrZfbPaymetActivity.this, ImageGridActivity.class);
                 startActivityForResult(intent, ImagePicker.RESULT_CODE_ITEMS);
                 LogUtils.i("已获取storage权限");
             }
@@ -416,6 +446,60 @@ public class AddWxOrZfbPaymetActivity extends BaseActivity implements AddPayMent
 
     @Override
     public void onAddPaymentTypeFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg);
+    }
+
+    @Override
+    public void onChangeContentsLegal() {
+        edtAccount.setBackground(edt_border);
+        edtPayName.setBackground(edt_border);
+        edtPayPass.setBackground(edt_border);
+        btnQrcode.setBackground(edt_border);
+        showLoadingDialog();
+    }
+
+    @Override
+    public void onChangeEdtContentsIllegal(Map<String, Boolean> verify) {
+        if (!Util.isEmpty(verify.get(keyPayQcode)) && !verify.get(keyPayQcode)){
+            btnQrcode.setBackground(edt_border_illegal);
+        } else {
+            btnQrcode.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayName)) && !verify.get(keyPayName)) {
+            edtPayName.setBackground(edt_border_illegal);
+            edtPayName.setText("");
+        } else {
+            edtPayName.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayAccount)) && !verify.get(keyPayAccount)){
+            edtAccount.setBackground(edt_border_illegal);
+            edtAccount.setText("");
+        } else {
+            edtAccount.setBackground(edt_border);
+        }
+        if (!Util.isEmpty(verify.get(keyPayPass)) && !verify.get(keyPayPass)){
+            edtPayPass.setBackground(edt_border_illegal);
+            edtPayPass.setText("");
+        } else {
+            edtPayPass.setBackground(edt_border);
+        }
+    }
+
+    @Override
+    public void onChangeEdtContentsIllegalBank(Map<String, Boolean> verify) {
+
+    }
+
+    @Override
+    public void onChangePaymentTyoeSuccess() {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("修改成功！");
+        finish();
+    }
+
+    @Override
+    public void onChangePaymentTypeFalied(String msg) {
         dismissLoadingDialog();
         ToastUtils.showCustomToast(msg);
     }
