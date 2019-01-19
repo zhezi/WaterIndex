@@ -214,7 +214,7 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onGetSmsSuccess() {
-        ToastUtils.showCustomToast("验证码已发送至您手机，请注意查收");
+        ToastUtils.showCustomToast("验证码已发送至您手机，请注意查收",1);
 
         TimeCount = new CountDownTimer(60 * 1000, 1000) {
             @Override
@@ -247,7 +247,7 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
 
     @Override
     public void onGetSmsFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override

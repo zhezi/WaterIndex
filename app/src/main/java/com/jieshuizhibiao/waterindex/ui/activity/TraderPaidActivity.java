@@ -282,7 +282,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             traderDoAppealPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(detail)) {
-            ToastUtils.showCustomToast("未填写申诉内容");
+            ToastUtils.showCustomToast("未填写申诉内容",0);
             return;
         }
         if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
@@ -299,7 +299,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             sellerCheckoutPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(safe_pw)) {
-            ToastUtils.showCustomToast("请输入资金密码");
+            ToastUtils.showCustomToast("请输入资金密码",0);
             return;
         }
         sellerCheckoutPresenter.sellerCheckout(this, order_id, safe_pw);
@@ -352,7 +352,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     //卖家申诉成功、买家申诉成功
@@ -364,7 +364,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     //申诉失败
     @Override
     public void onSecondRequstFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     //放行成功

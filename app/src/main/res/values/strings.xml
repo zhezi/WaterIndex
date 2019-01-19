@@ -51,6 +51,11 @@
     <string name="key_edt_pay_type_bank_deposit">key_edt_pay_type_bank_deposit</string>
     <string name="key_edt_pay_type_bank_deposit_branch">key_edt_pay_type_bank_deposit_branch</string>
 
+    <string name="key_edt_release_time_limit">key_edt_release_time_limit</string>
+    <string name="key_edt_release_transaction_max">key_edt_release_transaction_max</string>
+    <string name="key_edt_release_transaction_min">key_edt_release_transaction_min</string>
+    <string name="key_edt_release_capital_pwd">key_edt_release_capital_pwd</string>
+
     <string name="hit_edt_mobile">请输入您的手机号</string>
     <string name="hit_edt_password">请输入密码</string>
     <string name="hit_edt_transfer_amonut">划转数量</string>

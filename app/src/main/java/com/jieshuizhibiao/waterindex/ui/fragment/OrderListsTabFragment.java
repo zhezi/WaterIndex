@@ -183,7 +183,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
         //如果因为加载更多进行网络请求，请求完毕后isLoadMore归位至false;
         if (isLoadMore) {
             isLoadMore = false;

@@ -3,17 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:paddingHorizontal="20px"
     android:orientation="vertical">
-
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/transaction_demand_sell"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/bottom_btn_Rl"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/transaction_demand_sell"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <include layout="@layout/module_include_no_data"/>
+    </FrameLayout>
 
 </LinearLayout>

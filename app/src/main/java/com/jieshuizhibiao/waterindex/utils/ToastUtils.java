@@ -3,6 +3,7 @@ package com.jieshuizhibiao.waterindex.utils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,16 +16,41 @@ import com.jieshuizhibiao.waterindex.WaterIndexApplication;
  */
 
 public class ToastUtils {
+
     /**
      * 一般的toast提示
-     *
      * @param textStr 提示信息
      */
     public static void showCustomToast(String textStr) {
         View layout = LayoutInflater.from(WaterIndexApplication.getInstance()).inflate(R.layout.layout_toast, null);
         TextView text = (TextView) layout.findViewById(R.id.toast_text_tv);
+        ImageView img = layout.findViewById(R.id.toast_msg_iv);
+        img.setVisibility(View.GONE);
         text.setText(textStr);
         Toast toast = new Toast(WaterIndexApplication.getInstance());
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    /**
+     * 一般的toast提示
+     * @param toastImg 提示信息对应的logo 0:失败异常 1：成功
+     * @param textStr 提示信息
+     */
+    public static void showCustomToast(String textStr,int toastImg) {
+        View layout = LayoutInflater.from(WaterIndexApplication.getInstance()).inflate(R.layout.layout_toast, null);
+        TextView text = (TextView) layout.findViewById(R.id.toast_text_tv);
+        ImageView img = layout.findViewById(R.id.toast_msg_iv);
+        text.setText(textStr);
+        if (toastImg == 1){
+            img.setBackground(WaterIndexApplication.getInstance().getResources().getDrawable(R.mipmap.right2));
+        }else{
+            img.setBackground(WaterIndexApplication.getInstance().getResources().getDrawable(R.mipmap.close2));
+        }
+        Toast toast = new Toast(WaterIndexApplication.getInstance());
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();

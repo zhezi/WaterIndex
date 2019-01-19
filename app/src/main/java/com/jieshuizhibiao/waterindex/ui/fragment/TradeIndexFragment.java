@@ -256,7 +256,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     public void onEventMainThread(LoginStatusChangedEvent event) {

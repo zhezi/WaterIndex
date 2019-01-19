@@ -63,7 +63,8 @@
             android:screenOrientation="behind" />
         <!--alipay end -->
 
-        <activity android:name=".ui.activity.TestActivity" /> <!--<intent-filter>
+        <activity android:name=".ui.activity.TestActivity" />
+            <!--<intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />

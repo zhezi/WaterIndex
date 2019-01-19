@@ -163,7 +163,7 @@ public class TraderCancelActivity extends BaseActivity implements CommonViewImpl
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     private void doRequest() {

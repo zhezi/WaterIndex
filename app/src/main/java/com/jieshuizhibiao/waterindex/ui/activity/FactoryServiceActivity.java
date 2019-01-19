@@ -194,17 +194,14 @@ public class FactoryServiceActivity extends BaseActivity implements FactoryServi
                 boolean isSelect = factoryTabLayout.getTabAt(position).isSelected();
                 if (position==0 && isSelect){
                     factoryViewpager.setCurrentItem(0);
-                    ToastUtils.showCustomToast("点击了价格体系");
                 }else if (position==1 && isSelect){
                     factoryViewpager.setCurrentItem(1);
-                    ToastUtils.showCustomToast("点击了流程介绍");
                 }else {
                     TabLayout.Tab tab = factoryTabLayout.getTabAt(position);
                     if (tab != null) {
                         tab.select();
                     }
                     factoryViewpager.setCurrentItem(2);
-                    ToastUtils.showCustomToast("点击了常见问题");
                 }
 
             }

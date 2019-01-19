@@ -125,7 +125,7 @@ public class FindFragment extends BaseFragment implements InfoListViewImpl, XRec
 
     @Override
     public void infoListFailed(String msg) {
-        ToastUtils.showCustomToast("加载失败");
+        ToastUtils.showCustomToast("加载失败",0);
     }
 
     @Override

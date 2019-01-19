@@ -225,7 +225,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
 
     }
 
@@ -237,7 +237,7 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
     @Override
     public void onBeforeMvMoneryFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override

@@ -220,7 +220,7 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
     public void onPaymentTypeSwitcFailed(String msg) {
         //失败时 状态要回归原来的状态
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -263,7 +263,7 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
     @Override
     public void onPayMentTypeFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override

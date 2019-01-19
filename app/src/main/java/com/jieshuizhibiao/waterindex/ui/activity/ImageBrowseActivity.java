@@ -184,13 +184,13 @@ public class ImageBrowseActivity extends BaseActivity {
                 .SaveResultCallback() {
             @Override
             public void onSavedSuccess() {
-//                ToastUtils.showCustomToast("保存成功！");
+//                ToastUtils.showCustomToast("保存成功！",1);
                 LogUtils.e("TAG","保存成功！");
             }
 
             @Override
             public void onSavedFailed() {
-//                ToastUtils.showCustomToast("保存失败！");
+//                ToastUtils.showCustomToast("保存失败！",0);
                 LogUtils.e("TAG","保存失败！");
 
             }

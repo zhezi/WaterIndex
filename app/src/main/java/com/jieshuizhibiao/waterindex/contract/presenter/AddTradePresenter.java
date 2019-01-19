@@ -6,6 +6,8 @@ import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.AddTradeModel;
 import com.jieshuizhibiao.waterindex.contract.view.AddTradeViewImpl;
 
+import java.util.Map;
+
 /**
  * Created by songxiaotao on 2019/1/13.
  * Class Note:
@@ -21,11 +23,39 @@ public class AddTradePresenter extends BasePresenter<AddTradeViewImpl> {
         this.addTradeModel = addTradeModel;
     }
 
-    public void addTrade(BaseActivity activity, AddTradeReqParams params){
+    public void vertify(AddTradeReqParams params,String action,String transferNumber){
         if (addTradeModel == null){
             addTradeModel = new AddTradeModel();
         }
-        addTradeModel.addTrade(activity, params, new AddTradeModel.AddTradeCallBack() {
+        addTradeModel.verify(params,action,transferNumber);
+    }
+
+    public void addTrade(BaseActivity activity,AddTradeReqParams params, String action){
+        if (addTradeModel == null){
+            addTradeModel = new AddTradeModel();
+        }
+        addTradeModel.addTrade(activity, params,action, new AddTradeModel.AddTradeCallBack() {
+            @Override
+            public void onEdtContentsLegal() {
+                if (mView!=null){
+                    mView.onEdtContentsLegal();
+                }
+            }
+
+            @Override
+            public void onEdtContentsIllegalSell(Map<String, Boolean> verify) {
+                if (mView!=null){
+                    mView.onEdtContentsIllegalSell(verify);
+                }
+            }
+
+            @Override
+            public void onEdtContentsIllegalBuy(Map<String, Boolean> verify) {
+                if (mView!=null){
+                    mView.onEdtContentsIllegalBuy(verify);
+                }
+            }
+
             @Override
             public void success() {
                 if (mView!=null){

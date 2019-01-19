@@ -154,6 +154,6 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 }

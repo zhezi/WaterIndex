@@ -440,14 +440,14 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
     @Override
     public void onAddPaymentTypeSuccess() {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("添加成功！");
+        ToastUtils.showCustomToast("添加成功！",1);
         finish();
     }
 
     @Override
     public void onAddPaymentTypeFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -494,13 +494,13 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
     @Override
     public void onChangePaymentTyoeSuccess() {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("修改成功！");
+        ToastUtils.showCustomToast("修改成功！",1);
         finish();
     }
 
     @Override
     public void onChangePaymentTypeFalied(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 }

@@ -216,7 +216,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
         dismissDialog();
     }
 
@@ -228,7 +228,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
 
     @Override
     public void onCancelFail(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
         dismissDialog();
     }
 

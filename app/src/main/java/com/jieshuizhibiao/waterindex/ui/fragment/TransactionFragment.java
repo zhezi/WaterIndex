@@ -380,7 +380,7 @@ public class TransactionFragment extends BaseFragment implements
 
     @Override
     public void onTradeCenterFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -399,7 +399,7 @@ public class TransactionFragment extends BaseFragment implements
     public void onBuyFailed(String msg) {
         cleanEdt();
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -418,7 +418,7 @@ public class TransactionFragment extends BaseFragment implements
     public void onSellFailed(String msg) {
         cleanEdt();
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -436,7 +436,7 @@ public class TransactionFragment extends BaseFragment implements
     @Override
     public void onCancleFailed(String msg) {
 //        dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override

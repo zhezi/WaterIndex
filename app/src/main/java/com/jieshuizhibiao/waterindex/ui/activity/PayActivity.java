@@ -258,7 +258,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
                 if (isChecked) {
 
                 } else {
-                    ToastUtils.showCustomToast("请同意");
+                    ToastUtils.showCustomToast("请同意",0);
                 }
                 break;
         }

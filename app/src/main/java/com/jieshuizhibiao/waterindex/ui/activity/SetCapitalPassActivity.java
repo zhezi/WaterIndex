@@ -190,14 +190,14 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     @Override
     public void onSetCapitalPassSuccess() {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("设置成功");
+        ToastUtils.showCustomToast("设置成功",1);
         finish();
     }
 
     @Override
     public void onSetCapitalPassFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
 
     }
 
@@ -238,13 +238,13 @@ public class SetCapitalPassActivity extends BaseActivity implements SetCapitalPa
     @Override
     public void onChangeCapitalPassSuccess() {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("修改成功");
+        ToastUtils.showCustomToast("修改成功",1);
         finish();
     }
 
     @Override
     public void onChangeCapitalPassFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 }

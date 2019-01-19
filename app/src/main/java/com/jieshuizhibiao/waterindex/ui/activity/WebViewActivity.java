@@ -195,11 +195,11 @@ public class WebViewActivity extends BaseActivity {
 
     public static void launch(final Context context, final String url, String title) {
         if (!NetworkUtils.isConnected()) {
-            ToastUtils.showCustomToast("网络无效");
+            ToastUtils.showCustomToast("网络无效",0);
             return;
         }
         if (TextUtils.isEmpty(url)) {
-            Toast.makeText(context, "没有h5地址", Toast.LENGTH_SHORT).show();
+            ToastUtils.showCustomToast("没有h5地址",0);
             return;
         }
         goToWebViewActivity(context, url, title);

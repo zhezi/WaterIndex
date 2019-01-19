@@ -119,14 +119,14 @@ public class ChangePassActivity extends BaseActivity implements ChangePassViewIm
     @Override
     public void changePassSuccess() {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast("修改成功！");
+        ToastUtils.showCustomToast("修改成功！",1);
         finish();
     }
 
     @Override
     public void changePassFiled(String err) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(err);
+        ToastUtils.showCustomToast(err,0);
     }
 
     @Override

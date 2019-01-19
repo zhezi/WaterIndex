@@ -507,7 +507,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     @Override
     public void onCompanyAuthFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
@@ -519,7 +519,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     @Override
     public void onPersonalAuthFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     /**
