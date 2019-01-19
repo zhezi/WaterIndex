@@ -22,9 +22,8 @@ public class HttpConfig {
     public static final String BANK_TYPE = "1";
     public static final String ZFB_TYPE = "2";
     public static final String WX_TYPE = "3";
-    public static final String TRANSCATION_TYPE_ALL = "1";
-    public static final String TRANSCATION_TYPE_BUY = "2";
-    public static final String TRANSCATION_TYPE_SELL = "3";
+
+    public static final String TRANSCATION_RELEASE_All = "0";
     public static final String TRANSCATION_RELEASE_BUY = "1";
     public static final String TRANSCATION_RELEASE_SELL = "2";
 }

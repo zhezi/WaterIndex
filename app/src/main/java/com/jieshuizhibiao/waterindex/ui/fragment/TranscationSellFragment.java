@@ -14,14 +14,13 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
-import com.jieshuizhibiao.waterindex.beans.SystemMsgResponseBean;
+import com.jieshuizhibiao.waterindex.beans.request.DelTradeReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.ListTradeReqParams;
+import com.jieshuizhibiao.waterindex.contract.presenter.DelTradePresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.ListTradePresenter;
-import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.DelTradeViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ListTradeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
-import com.jieshuizhibiao.waterindex.ui.activity.SystemMessageActivity;
-import com.jieshuizhibiao.waterindex.ui.activity.TransactionDemandActivity;
-import com.jieshuizhibiao.waterindex.ui.adapter.SystemMsgAdapter;
 import com.jieshuizhibiao.waterindex.ui.adapter.TransactionAdapter;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
@@ -39,7 +38,7 @@ import butterknife.Unbinder;
  * Class Note:出售
  */
 
-public class TranscationSellFragment extends BaseFragment implements CommonViewImpl {
+public class TranscationSellFragment extends BaseFragment implements ListTradeViewImpl,DelTradeViewImpl {
 
     @BindView(R.id.transaction_demand_sell)
     XRecyclerView transcationSellList;
@@ -50,16 +49,18 @@ public class TranscationSellFragment extends BaseFragment implements CommonViewI
     private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
     private ListTradePresenter listTradePresenter;
-    private int currentPage = 1, pageSize = 5;
+    private DelTradePresenter delTradePresenter;
+    private int currentPage = 1, pageSize = 10;
     private TransactionAdapter transactionAdapter;
-    private List<ListTradeResponseBean.TradeList> tradeLists = new ArrayList<>();
+    private List<ListTradeResponseBean.TradeList> tradeListArrayList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listTradePresenter = new ListTradePresenter();
         listTradePresenter.attachView(this);
-
+        delTradePresenter = new DelTradePresenter();
+        delTradePresenter.attachView(this);
     }
 
     @Override
@@ -74,10 +75,10 @@ public class TranscationSellFragment extends BaseFragment implements CommonViewI
 
     private void initView() {
 
-        transactionAdapter = new TransactionAdapter(getBaseActivity(), tradeLists, new TransactionAdapter.TransactionListener() {
+        transactionAdapter = new TransactionAdapter(getBaseActivity(), tradeListArrayList, new TransactionAdapter.TransactionListener() {
             @Override
             public void onLowerShelfClick(String sn) {
-
+                doRequestDel(sn);
             }
         });
         transcationSellList.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -125,10 +126,17 @@ public class TranscationSellFragment extends BaseFragment implements CommonViewI
 
     public void doReuqest(){
         ListTradeReqParams params = new ListTradeReqParams();
-        params.setType(HttpConfig.TRANSCATION_TYPE_SELL);
+        params.setType(HttpConfig.TRANSCATION_RELEASE_SELL);
         params.setPage(String.valueOf(currentPage));
         params.setPage_size(String.valueOf(pageSize));
         listTradePresenter.getListTrade(getBaseActivity(),params);
+        showLoadingDialog();
+    }
+
+    public void doRequestDel(String sn){
+        DelTradeReqParams params = new DelTradeReqParams();
+        params.setId(sn);
+        delTradePresenter.delTrade(getBaseActivity(),params);
         showLoadingDialog();
     }
 
@@ -138,49 +146,77 @@ public class TranscationSellFragment extends BaseFragment implements CommonViewI
         if (listTradePresenter!=null){
             listTradePresenter.detachView();
         }
+        if (delTradePresenter!=null){
+            delTradePresenter.detachView();
+        }
     }
 
     @Override
-    public void onRequestSuccess(Object bean) {
-        if (bean instanceof ListTradeResponseBean){
-            if(currentPage ==1){
-                tradeLists.addAll(((ListTradeResponseBean) bean).getTrade_list());
-                transactionAdapter.notifyDataSetChanged();
-                transcationSellList.refreshComplete();
-            }else{
-                tradeLists.clear();
-                transactionAdapter.notifyDataSetChanged();
-                transcationSellList.loadMoreComplete();
-            }
+    public void onListTradeSuccess(ListTradeResponseBean bean) {
+
+    }
+
+    @Override
+    public void onloadMoreListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
+        dismissLoadingDialog();
+        tradeListArrayList.addAll(tradeLists);
+        transactionAdapter.notifyDataSetChanged();
+        transcationSellList.loadMoreComplete();
+
+        if (tradeListArrayList.size() <= 0) {
+            transcationSellList.setVisibility(View.GONE);
+            relativeHint.setVisibility(View.VISIBLE);
+            tvDetail.setText("暂无内容！");
+            tvDetail.setTextColor(getResources().getColor(R.color.text_black));
+            tvDetail.setEnabled(false);
+        } else {
             transcationSellList.setVisibility(View.VISIBLE);
             relativeHint.setVisibility(View.GONE);
             tvDetail.setEnabled(false);
-//            if (((ListTradeResponseBean) bean).getTrade_list().size() <= 0) {
-//                transcationSellList.setVisibility(View.GONE);
-//                relativeHint.setVisibility(View.VISIBLE);
-//                tvDetail.setText("暂无内容！");
-//                tvDetail.setTextColor(getResources().getColor(R.color.text_black));
-//                tvDetail.setEnabled(false);
-//            } else {
-//                if(currentPage ==1){
-//                    tradeLists.addAll(((ListTradeResponseBean) bean).getTrade_list());
-//                    transactionAdapter.notifyDataSetChanged();
-//                    transcationSellList.refreshComplete();
-//                }else{
-//                    tradeLists.clear();
-//                    transactionAdapter.notifyDataSetChanged();
-//                    transcationSellList.loadMoreComplete();
-//                }
-//                transcationSellList.setVisibility(View.VISIBLE);
-//                relativeHint.setVisibility(View.GONE);
-//                tvDetail.setEnabled(false);
-//            }
         }
-        dismissLoadingDialog();
     }
 
     @Override
-    public void onRequestFailed(String msg) {
+    public void onRefreshListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
+        dismissLoadingDialog();
+        tradeListArrayList.clear();
+        tradeListArrayList.addAll(tradeLists);
+        transactionAdapter.notifyDataSetChanged();
+        transcationSellList.refreshComplete();
+
+        if (tradeListArrayList.size() <= 0) {
+            transcationSellList.setVisibility(View.GONE);
+            relativeHint.setVisibility(View.VISIBLE);
+            tvDetail.setText("暂无内容！");
+            tvDetail.setTextColor(getResources().getColor(R.color.text_black));
+            tvDetail.setEnabled(false);
+        } else {
+            transcationSellList.setVisibility(View.VISIBLE);
+            relativeHint.setVisibility(View.GONE);
+            tvDetail.setEnabled(false);
+        }
+
+    }
+
+    @Override
+    public void onLoadListTradeError(boolean isRefresh, String msg) {
+        if (isRefresh) {
+            transcationSellList.refreshComplete();
+        } else {
+            transcationSellList.loadMoreComplete();
+        }
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
+    }
+
+    @Override
+    public void onDelTradeSuccess() {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast("已下架",1);
+    }
+
+    @Override
+    public void onDelTradeFailed(String msg) {
         dismissLoadingDialog();
         ToastUtils.showCustomToast(msg,0);
     }

@@ -59,17 +59,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.tvTransMin.setText("最小交易量："+(TextUtils.isEmpty(list.get(position).getPay_min()) ? "0.00T" :list.get(position).getPay_min()));
         holder.tvTransOrderState.setText("状态："+(TextUtils.isEmpty(list.get(position).getStatus_text()) ? "未知" :list.get(position).getStatus_text()));
         holder.tvTransState.setText(list.get(position).getAction_type_text());
-        holder.tvTransState.setTextColor(context.getResources().getColor(R.color.text_red_dialog));
-        holder.tvTransPrecent.setText(list.get(position).getTotal()+"T (已完成"+list.get(position).getDone()+")");
-
-        if(list.get(position).getCan_del()==1){//1可下架 0 不能下架
-            holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_blue_bg_selector));
-            holder.btnTransLowerShelf.setEnabled(true);
+        if(list.get(position).getAction_type_text().equals("出售")){
+            holder.tvTransState.setTextColor(context.getResources().getColor(R.color.text_green));
+            holder.btnTransLowerShelf.setVisibility(View.VISIBLE);
+            if(list.get(position).getCan_del()==1){//1可下架 0 不能下架
+                holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_blue_bg_selector));
+                holder.btnTransLowerShelf.setEnabled(true);
+            }else {
+                holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_gray_bg_selector));
+                holder.btnTransLowerShelf.setEnabled(false);
+            }
         }else {
-            holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_gray_bg_selector));
-            holder.btnTransLowerShelf.setEnabled(false);
+            holder.btnTransLowerShelf.setVisibility(View.GONE);
+            holder.tvTransState.setTextColor(context.getResources().getColor(R.color.text_red_dialog));
         }
 
+        holder.tvTransPrecent.setText(list.get(position).getTotal()+"T (已完成"+list.get(position).getDone()+")");
         holder.btnTransLowerShelf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +106,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         TextView tvTransTime;
         @BindView(R.id.tv_transaction_id)
         TextView tvTransId;
-
+        @BindView(R.id.line)
+        View line;
         public RecycleHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

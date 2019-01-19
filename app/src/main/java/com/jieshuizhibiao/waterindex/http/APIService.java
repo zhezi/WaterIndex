@@ -445,7 +445,7 @@ public interface APIService {
     Observable<BaseEntity> addTrade(@Body RequestBody requestBody);
 
     /**
-     * 买卖需求列表--发布
+     * 买卖需求列表--下架
      */
     @POST(UrlConfig.DELETE_TRADE)
     Observable<BaseEntity> delTrade(@Body RequestBody requestBody);

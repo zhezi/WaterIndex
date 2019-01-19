@@ -5,14 +5,14 @@ import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.ListTradeReqParams;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.ListTradeModel;
-import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ListTradeViewImpl;
 
 /**
  * Created by songxiaotao on 2019/1/13.
  * Class Note:
  */
 
-public class ListTradePresenter extends BasePresenter<CommonViewImpl> {
+public class ListTradePresenter extends BasePresenter<ListTradeViewImpl> {
 
     private ListTradeModel listTradeModel;
 
@@ -22,7 +22,7 @@ public class ListTradePresenter extends BasePresenter<CommonViewImpl> {
         this.listTradeModel = listTradeModel;
     }
 
-    public void getListTrade(BaseActivity activity, ListTradeReqParams params){
+    public void getListTrade(BaseActivity activity, final ListTradeReqParams params){
         if (listTradeModel == null){
             listTradeModel = new ListTradeModel();
         }
@@ -30,14 +30,23 @@ public class ListTradePresenter extends BasePresenter<CommonViewImpl> {
             @Override
             public void success(ListTradeResponseBean listTradeResponseBean) {
                 if (mView!=null){
-                    mView.onRequestSuccess(listTradeResponseBean);
+                    if (Integer.parseInt(params.getPage()) == 1){
+                        mView.onRefreshListTrade(listTradeResponseBean.getTrade_list());
+                    }else {
+                        mView.onloadMoreListTrade(listTradeResponseBean.getTrade_list());
+                    }
+                    mView.onListTradeSuccess(listTradeResponseBean);
                 }
             }
 
             @Override
             public void failed(String msg) {
                 if (mView!=null){
-                    mView.onRequestFailed(msg);
+                    if (Integer.parseInt(params.getPage()) == 1) {
+                        mView.onLoadListTradeError(true, msg);
+                    } else {
+                        mView.onLoadListTradeError(false, msg);
+                    };
                 }
 
             }

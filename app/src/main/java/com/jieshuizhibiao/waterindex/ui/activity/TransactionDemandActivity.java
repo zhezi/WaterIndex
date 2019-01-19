@@ -11,9 +11,10 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.ListTradeReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.ListTradePresenter;
-import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.ListTradeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.ui.adapter.TableViewpagerAdapter;
 import com.jieshuizhibiao.waterindex.ui.fragment.TranscationAllFragment;
@@ -32,7 +33,7 @@ import butterknife.OnClick;
  * Class Note:买卖需求
  */
 
-public class TransactionDemandActivity extends BaseActivity implements CommonViewImpl {
+public class TransactionDemandActivity extends BaseActivity implements ListTradeViewImpl {
 
     @BindView(R.id.left_ll)
     LinearLayout leftLl;
@@ -50,7 +51,7 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
     private String[] titles=new String[]{"全部","购买","出售"};
     private List<Fragment> fragments=new ArrayList<>();
     private ListTradePresenter listTradePresenter;
-    private int pageSize = 10, page = 1;
+    private int pageSize = 5, currentPage = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,9 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
 
     public void doReuqest(){
         ListTradeReqParams params = new ListTradeReqParams();
-        params.setType(HttpConfig.TRANSCATION_TYPE_ALL);
+        params.setPage(String.valueOf(currentPage));
+        params.setPage_size(String.valueOf(pageSize));
+        params.setType(HttpConfig.TRANSCATION_RELEASE_All);
         listTradePresenter.getListTrade(TransactionDemandActivity.this,params);
     }
 
@@ -158,15 +161,22 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
     }
 
     @Override
-    public void onRequestSuccess(Object bean) {
-        if (bean instanceof ListTradeReqParams){
-
-        }
+    public void onListTradeSuccess(ListTradeResponseBean bean) {
 
     }
 
     @Override
-    public void onRequestFailed(String msg) {
+    public void onloadMoreListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
+
+    }
+
+    @Override
+    public void onRefreshListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
+
+    }
+
+    @Override
+    public void onLoadListTradeError(boolean isRefresh, String msg) {
 
     }
 
@@ -177,4 +187,6 @@ public class TransactionDemandActivity extends BaseActivity implements CommonVie
             listTradePresenter.detachView();
         }
     }
+
+
 }
