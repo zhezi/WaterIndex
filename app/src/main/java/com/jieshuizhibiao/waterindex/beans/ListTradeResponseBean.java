@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ListTradeResponseBean {
 	private List<TradeList> trade_list;
-	private List<PayInfoList> pay_info_list;
+	private int [] pay_info_list;
 	private String total;
 
 	public List<TradeList> getTrade_list() {
@@ -15,11 +15,11 @@ public class ListTradeResponseBean {
 		this.trade_list = trade_list;
 	}
 
-	public List<PayInfoList> getPay_info_list() {
+	public int[] getPay_info_list() {
 		return pay_info_list;
 	}
 
-	public void setPay_info_list(List<PayInfoList> pay_info_list) {
+	public void setPay_info_list(int[] pay_info_list) {
 		this.pay_info_list = pay_info_list;
 	}
 

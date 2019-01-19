@@ -143,26 +143,38 @@ public class TranscationSellFragment extends BaseFragment implements CommonViewI
     @Override
     public void onRequestSuccess(Object bean) {
         if (bean instanceof ListTradeResponseBean){
-            if (((ListTradeResponseBean) bean).getTrade_list().size() <= 0) {
-                transcationSellList.setVisibility(View.GONE);
-                relativeHint.setVisibility(View.VISIBLE);
-                tvDetail.setText("暂无内容！");
-                tvDetail.setTextColor(getResources().getColor(R.color.text_black));
-                tvDetail.setEnabled(false);
-            } else {
-                if(currentPage ==1){
-                    tradeLists.addAll(((ListTradeResponseBean) bean).getTrade_list());
-                    transactionAdapter.notifyDataSetChanged();
-                    transcationSellList.refreshComplete();
-                }else{
-                    tradeLists.clear();
-                    transactionAdapter.notifyDataSetChanged();
-                    transcationSellList.loadMoreComplete();
-                }
-                transcationSellList.setVisibility(View.VISIBLE);
-                relativeHint.setVisibility(View.GONE);
-                tvDetail.setEnabled(false);
+            if(currentPage ==1){
+                tradeLists.addAll(((ListTradeResponseBean) bean).getTrade_list());
+                transactionAdapter.notifyDataSetChanged();
+                transcationSellList.refreshComplete();
+            }else{
+                tradeLists.clear();
+                transactionAdapter.notifyDataSetChanged();
+                transcationSellList.loadMoreComplete();
             }
+            transcationSellList.setVisibility(View.VISIBLE);
+            relativeHint.setVisibility(View.GONE);
+            tvDetail.setEnabled(false);
+//            if (((ListTradeResponseBean) bean).getTrade_list().size() <= 0) {
+//                transcationSellList.setVisibility(View.GONE);
+//                relativeHint.setVisibility(View.VISIBLE);
+//                tvDetail.setText("暂无内容！");
+//                tvDetail.setTextColor(getResources().getColor(R.color.text_black));
+//                tvDetail.setEnabled(false);
+//            } else {
+//                if(currentPage ==1){
+//                    tradeLists.addAll(((ListTradeResponseBean) bean).getTrade_list());
+//                    transactionAdapter.notifyDataSetChanged();
+//                    transcationSellList.refreshComplete();
+//                }else{
+//                    tradeLists.clear();
+//                    transactionAdapter.notifyDataSetChanged();
+//                    transcationSellList.loadMoreComplete();
+//                }
+//                transcationSellList.setVisibility(View.VISIBLE);
+//                relativeHint.setVisibility(View.GONE);
+//                tvDetail.setEnabled(false);
+//            }
         }
         dismissLoadingDialog();
     }
