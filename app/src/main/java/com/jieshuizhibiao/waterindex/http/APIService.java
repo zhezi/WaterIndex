@@ -46,9 +46,12 @@ import com.jieshuizhibiao.waterindex.http.config.UrlConfig;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by WanghongHe on 2018/12/3 11:41.
@@ -250,6 +253,16 @@ public interface APIService {
     Observable<BaseEntity>buyerDoAppeal(@Body RequestBody body);
 
     /**
+     * "token":token
+     * "device_type":"android"
+     * "order_id":"111"
+     * "pi_id":
+     * "pay_snapshot":"asdfadfasdf"
+     */
+    @POST(UrlConfig.BUYER_DO_PAY)
+    Observable<BaseEntity>buyerDoPay(@Body RequestBody body);
+
+    /**
      * "token", token;
      * "device_type", "android";
      * "order_id", "111";
@@ -352,8 +365,10 @@ public interface APIService {
      * "device_type", "android";
      * "file",File
      */
+    @Multipart
     @POST(UrlConfig.UPLOAD)
-    Observable<BaseEntity<UploadOne>> upload(@Body RequestBody requestBody);
+    Observable<BaseEntity<UploadOne>> upload(@Part("file") MultipartBody.Part file);
+
 
     /**
      * "token", token;

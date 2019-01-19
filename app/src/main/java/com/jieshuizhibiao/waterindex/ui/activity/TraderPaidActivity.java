@@ -225,7 +225,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     }
 
 
-    @OnClick({R.id.left_ll, R.id.btn_seller_appeal, R.id.btn_seller_checkout})
+    @OnClick({R.id.left_ll, R.id.btn_seller_appeal, R.id.btn_seller_checkout,R.id.btn_buyer_appeal})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
@@ -245,6 +245,12 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                         "请务必登录网银或第三方支付账号确定该笔款项",
                         "确认",
                         "取消");
+            case R.id.btn_buyer_appeal:
+                showDialog(NewAlertDialog.TYPES[0],
+                        "订单申诉",
+                        appealWarning,
+                        "确认",
+                        null);
                 break;
 //            case R.id.left_ll:
 //
@@ -282,7 +288,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             traderDoAppealPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(detail)) {
-            ToastUtils.showCustomToast("未填写申诉内容",0);
+            ToastUtils.showCustomToast("未填写申诉内容");
             return;
         }
         if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
@@ -299,7 +305,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             sellerCheckoutPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(safe_pw)) {
-            ToastUtils.showCustomToast("请输入资金密码",0);
+            ToastUtils.showCustomToast("请输入资金密码");
             return;
         }
         sellerCheckoutPresenter.sellerCheckout(this, order_id, safe_pw);
@@ -352,7 +358,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg);
     }
 
     //卖家申诉成功、买家申诉成功
@@ -364,7 +370,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     //申诉失败
     @Override
     public void onSecondRequstFailed(String msg) {
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg);
     }
 
     //放行成功

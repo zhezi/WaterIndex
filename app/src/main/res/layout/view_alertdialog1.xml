@@ -40,18 +40,18 @@
         android:paddingRight="15dp"
         android:visibility="gone">
 
-        <!--<Button-->
-        <!--android:id="@+id/btn_img"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/gray_border_bg_shape"-->
-        <!--android:drawableTop="@mipmap/add"-->
-        <!--android:minHeight="82dp"-->
-        <!--android:paddingTop="40px"-->
-        <!--android:text="上传支付凭证"-->
-        <!--android:textColor="@color/text_gray"-->
-        <!--android:textSize="12sp"-->
-        <!--android:visibility="gone" />-->
+        <Button
+            android:id="@+id/btn_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gray_border_bg_shape"
+            android:drawableTop="@mipmap/add"
+            android:minHeight="82dp"
+            android:paddingTop="40px"
+            android:text="上传支付凭证"
+            android:textColor="@color/text_gray"
+            android:textSize="12sp"
+            android:visibility="gone" />
 
 
         <EditText

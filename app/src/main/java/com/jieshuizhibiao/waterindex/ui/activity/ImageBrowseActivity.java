@@ -53,7 +53,7 @@ public class ImageBrowseActivity extends BaseActivity {
     private void getIntentExtra() {
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(PayActivity.QRCODE_URL);
-        mImageUrl = HttpConfig.BASE_URL + "/" + mImageUrl;
+        mImageUrl = HttpConfig.BASE_URL + "/" + mImageUrl;//todo 试着拼接是否有误
 //        mImageUrl="https://www.jieshuizhibiao.com/upload/admin/20190109/277a2b3341ebbf2a70bf755c0774361e.jpg";
     }
 
@@ -184,13 +184,13 @@ public class ImageBrowseActivity extends BaseActivity {
                 .SaveResultCallback() {
             @Override
             public void onSavedSuccess() {
-//                ToastUtils.showCustomToast("保存成功！",1);
+//                ToastUtils.showCustomToast("保存成功！");
                 LogUtils.e("TAG","保存成功！");
             }
 
             @Override
             public void onSavedFailed() {
-//                ToastUtils.showCustomToast("保存失败！",0);
+//                ToastUtils.showCustomToast("保存失败！");
                 LogUtils.e("TAG","保存失败！");
 
             }

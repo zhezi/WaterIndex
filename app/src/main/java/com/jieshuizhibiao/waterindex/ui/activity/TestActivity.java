@@ -38,9 +38,12 @@ import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
+import io.reactivex.Observable;
 
 /**
  * @ProjectName: NewWaterIndex
@@ -150,6 +153,17 @@ public class TestActivity extends BaseActivity {
                 break;
         }
     }
+
+
+
+//    /**
+//     * 上传日志
+//     *
+//     * @return
+//     */
+//    @Multipart
+//    @POST("v1/app/exception")
+//    Observable<ResponseBean<List<String>>> uploadLog(@PartMap Map<String, RequestBody> map);
 
 
 }
