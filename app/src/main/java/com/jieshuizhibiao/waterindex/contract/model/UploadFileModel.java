@@ -11,6 +11,7 @@ import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import java.io.File;
 
@@ -21,9 +22,20 @@ import okhttp3.RequestBody;
 public class UploadFileModel {
 
     public void uploadFile(BaseActivity activity, String token,File file,final UploadFileCallback callback){
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file",file.getName(), RequestBody.create(
-                MediaType.parse("application/octet-stream"),file
-        ));
+
+        RequestBody fileBody = null;
+        String fileName = file.getName();
+        if(file.getName().contains(".png")||file.getName().contains(".PNG")){
+            fileBody = RequestBody.create(MediaType.parse("image/png"), file);
+            fileName += ".png";
+        }else if (file.getName().contains(".jpg")||file.getName().contains(".JPG")){
+            fileBody = RequestBody.create(MediaType.parse("image/jpg"), file);
+            fileName += ".jpg";
+        }else {
+            fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+            fileName += ".jpeg";
+        }
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file",fileName, fileBody);
         RetrofitFactory.getInstance().createService()
                 .uploadFile(token,"android",filePart)
                 .compose(activity.<BaseEntity<UploadFileResponseBean>>bindToLifecycle())

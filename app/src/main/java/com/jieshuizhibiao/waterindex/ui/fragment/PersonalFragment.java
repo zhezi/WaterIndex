@@ -22,21 +22,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
-import com.jieshuizhibiao.waterindex.WaterIndexApplication;
 import com.jieshuizhibiao.waterindex.base.permission.config.PermissionConfig;
 import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
-import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.SetAvatarReqParams;
-import com.jieshuizhibiao.waterindex.contract.model.UploadFileModel;
-import com.jieshuizhibiao.waterindex.contract.model.UserInfoModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.SetAvatarPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UploadFilePresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserIndexPresenter;
-import com.jieshuizhibiao.waterindex.contract.presenter.UserInfoPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.UserInfoViewImpl;
 import com.jieshuizhibiao.waterindex.event.LoginStatusChangedEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.AboutListActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.LoginActivity;
@@ -357,7 +351,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
-            ZipImg(getBaseActivity(),mRotateFile);
+            ZipImg(mRotateFile);
 
             if (mOriginalBitmap != null) {
                 mOriginalBitmap.recycle();
@@ -367,11 +361,11 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
-            ZipImg(getBaseActivity(),mFile);
+            ZipImg(mFile);
         }
     }
 
-    private void ZipImg(final Activity activity, File mFile) {
+    private void ZipImg(File mFile) {
         Flowable.just(mFile)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<File, File>() {
@@ -499,7 +493,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     public void onRequestSuccess(Object bean) {
         dismissLoadingDialog();
         if (bean instanceof UserIndexResponseBean){
-            avatar_url = ((UserIndexResponseBean) bean).getAvatar();
+//            avatar_url = ((UserIndexResponseBean) bean).getAvatar();
             nike_name = ((UserIndexResponseBean) bean).getNick_name();
             SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatar_url);
             SPUtil.insert(getBaseActivity(),SPUtil.USER_NICKNAME,nike_name);
@@ -523,7 +517,9 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     @Override
     public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
         dismissLoadingDialog();
-        doChangeAvatarRuest(fileResponseBean.getUrl());
+        avatar_url = fileResponseBean.getFull_url();
+        SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatar_url);
+        doChangeAvatarRuest(fileResponseBean.getUrl());//使用上传图片成功以后的绝对路径
     }
 
     @Override
