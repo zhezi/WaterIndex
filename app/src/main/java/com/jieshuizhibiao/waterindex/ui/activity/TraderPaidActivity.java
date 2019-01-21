@@ -24,7 +24,8 @@ import com.jieshuizhibiao.waterindex.contract.presenter.SellerCheckoutPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.TraderDoAppealPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.TraderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.ThirdRequestViewImpl;
 import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
@@ -38,7 +39,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
-public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, SecondRequestViewImpl, ThirdRequestViewImpl {
+public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, SecondRequstViewImpl, ThirdRequestViewImpl {
     @BindView(R.id.tv_title_center)
     TextView tvTitleCenter;
     @BindView(R.id.title_bar)

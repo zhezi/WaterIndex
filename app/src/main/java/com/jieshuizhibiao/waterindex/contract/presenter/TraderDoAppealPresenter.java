@@ -4,12 +4,13 @@ import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.TraderDoAppealModel;
 import com.jieshuizhibiao.waterindex.contract.model.callback.SecondRequestCallback;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 
 /**
  * 卖家申诉，卖家申诉
  */
-public class TraderDoAppealPresenter extends BasePresenter<SecondRequestViewImpl> {
+public class TraderDoAppealPresenter extends BasePresenter<SecondRequstViewImpl> {
 
     private TraderDoAppealModel traderDoAppealModel;
 

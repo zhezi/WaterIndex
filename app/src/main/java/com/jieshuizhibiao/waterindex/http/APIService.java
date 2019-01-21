@@ -27,7 +27,7 @@ import com.jieshuizhibiao.waterindex.beans.TradeIndexBase;
 import com.jieshuizhibiao.waterindex.beans.TradeLineResponseBean;
 import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.TradeListsResponseBean;
-import com.jieshuizhibiao.waterindex.beans.UploadOne;
+import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
 import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
@@ -52,6 +52,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 /**
  * Created by WanghongHe on 2018/12/3 11:41.
@@ -367,7 +368,9 @@ public interface APIService {
      */
     @Multipart
     @POST(UrlConfig.UPLOAD)
-    Observable<BaseEntity<UploadOne>> upload(@Part("file") MultipartBody.Part file);
+    Observable<BaseEntity<UploadFileResponseBean>> uploadFile(
+            @Query("token") String token,@Query("device_type") String device_type, @Part MultipartBody.Part file
+    );
 
 
     /**

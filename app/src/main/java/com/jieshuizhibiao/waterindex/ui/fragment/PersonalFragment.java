@@ -22,15 +22,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
+import com.jieshuizhibiao.waterindex.WaterIndexApplication;
 import com.jieshuizhibiao.waterindex.base.permission.config.PermissionConfig;
+import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.SetAvatarReqParams;
+import com.jieshuizhibiao.waterindex.contract.model.UploadFileModel;
 import com.jieshuizhibiao.waterindex.contract.model.UserInfoModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.SetAvatarPresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.UploadFilePresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserIndexPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserInfoPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.UserInfoViewImpl;
 import com.jieshuizhibiao.waterindex.event.LoginStatusChangedEvent;
 import com.jieshuizhibiao.waterindex.ui.activity.AboutListActivity;
@@ -78,7 +83,7 @@ import top.zibin.luban.Luban;
  * Class Note:我的个人中心
  */
 
-public class PersonalFragment extends BaseFragment implements CommonViewImpl {
+public class PersonalFragment extends BaseFragment implements CommonViewImpl,UploadFileViewImpl {
     @BindView(R.id.img_avatar)
     ImageView imgAvatar;
     @BindView(R.id.tv_nickname)
@@ -91,6 +96,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
     private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
     private UserIndexPresenter userIndexPresenter;
+    private UploadFilePresenter uploadFilePresenter;
     private SetAvatarPresenter setAvatarPresenter;
     private static final int REQUEST_TAKE_PHOTO = 0x110;//拍照结果回调
     /**
@@ -203,7 +209,8 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
         unbinder = ButterKnife.bind(this, rootView);
         userIndexPresenter = new UserIndexPresenter();
         userIndexPresenter.attachView(this);
-
+        uploadFilePresenter = new UploadFilePresenter();
+        uploadFilePresenter.attachView(this);
         setAvatarPresenter = new SetAvatarPresenter();
         setAvatarPresenter.attachView(this);
         doRequest();
@@ -367,20 +374,18 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
     private void ZipImg(final Activity activity, File mFile) {
         Flowable.just(mFile)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<File, String>() {
+                .map(new Function<File, File>() {
                     @Override
-                    public String apply(File file) throws Exception {
-                        return ImageFactory.file2String(Luban.with(getBaseActivity()).load(file).get());
+                    public File apply(File file) throws Exception {
+                        return Luban.with(getBaseActivity()).load(file).get();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
+                .subscribe(new Consumer<File>() {
                     @Override
-                    public void accept(String stringStream) throws Exception {
-                        SetAvatarReqParams params = new SetAvatarReqParams();
-                        params.setAvatar(stringStream);
-                        setAvatarPresenter.setAvatar(getBaseActivity(),params);
-                        showLoadingDialog();
+                    public void accept(File file) throws Exception {
+                        //获取到文件后调用上传接口
+                        doUploadFileRuest(file);
                     }
                 });
     }
@@ -428,7 +433,6 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode, data);
         switch (requestCode) {
             case REQUEST_TAKE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
@@ -458,7 +462,23 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
 
     }
 
+    /**
+     * 文件上传
+     */
+    public void doUploadFileRuest(File file){
+        uploadFilePresenter.uploadFile(getBaseActivity(), (String) SPUtil.get(getBaseActivity(),SPUtil.TOKEN,"token"),file);
+        showLoadingDialog();
+    }
 
+    /**
+     * 修改头像接口请求
+     */
+    public void doChangeAvatarRuest(String avatartUrl){
+        SetAvatarReqParams params = new SetAvatarReqParams();
+        params.setAvatar(avatartUrl);
+        setAvatarPresenter.setAvatar(getBaseActivity(),params);
+        showLoadingDialog();
+    }
 
     @Override
     public void onDestroy() {
@@ -469,6 +489,9 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
         }
         if (userIndexPresenter!=null){
             userIndexPresenter.detachView();
+        }
+        if (uploadFilePresenter!=null){
+            uploadFilePresenter.detachView();
         }
     }
 
@@ -497,4 +520,15 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl {
     }
 
 
+    @Override
+    public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
+        dismissLoadingDialog();
+        doChangeAvatarRuest(fileResponseBean.getUrl());
+    }
+
+    @Override
+    public void onUploadFileFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
+    }
 }

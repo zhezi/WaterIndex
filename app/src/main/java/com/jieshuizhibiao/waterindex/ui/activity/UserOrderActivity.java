@@ -24,7 +24,8 @@ import com.jieshuizhibiao.waterindex.contract.model.UserOrderModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.SysConfigPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserOrderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.event.TradeIndexRefreshEvent;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
@@ -42,7 +43,7 @@ import de.greenrobot.event.EventBus;
 
 public class UserOrderActivity extends BaseActivity implements
         CommonViewImpl,
-        SecondRequestViewImpl,
+        SecondRequstViewImpl,
         TextWatcher {
     @BindView(R.id.tv_title)
     TextView tvTitle;

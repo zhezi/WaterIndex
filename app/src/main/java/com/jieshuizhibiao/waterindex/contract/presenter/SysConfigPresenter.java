@@ -4,9 +4,10 @@ import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.UserOrderModel;
 import com.jieshuizhibiao.waterindex.contract.model.callback.SecondRequestCallback;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 
-public class SysConfigPresenter extends BasePresenter<SecondRequestViewImpl> {
+public class SysConfigPresenter extends BasePresenter<SecondRequstViewImpl> {
     private UserOrderModel userOrderModel;
 
     public SysConfigPresenter(UserOrderModel userOrderModel) {

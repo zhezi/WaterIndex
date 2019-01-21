@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.unpay.BaseUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
 import com.jieshuizhibiao.waterindex.contract.model.BuyerDoPayModel;
 import com.jieshuizhibiao.waterindex.contract.model.CancelOrderModel;
 import com.jieshuizhibiao.waterindex.contract.model.UploadFileModel;
-import com.jieshuizhibiao.waterindex.contract.model.callback.SecondRequestCallback;
 import com.jieshuizhibiao.waterindex.contract.presenter.BuyerDoPayPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.CancelOrderPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.PicturePresenter;
@@ -37,11 +37,9 @@ import com.jieshuizhibiao.waterindex.contract.presenter.UploadFilePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CancelOrderViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.PictureViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequestViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.ThirdRequestViewImpl;
-import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
-import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
 import com.jieshuizhibiao.waterindex.utils.PictureFileUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
@@ -52,13 +50,12 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * 买家身份单独使用
  * 卖家身份无对应步骤
  */
-public class PayActivity extends BaseActivity implements CancelOrderViewImpl, PictureViewImpl ,CommonViewImpl, SecondRequestViewImpl {
+public class PayActivity extends BaseActivity implements CancelOrderViewImpl, PictureViewImpl ,CommonViewImpl, SecondRequstViewImpl,UploadFileViewImpl {
 
     @BindView(R.id.tv_title_center)
     TextView tvTitleCenter;
@@ -403,7 +400,8 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
             uploadFilePresenter.attachView(this);
         }
         //todo 参数待定
-        uploadFilePresenter.uploadFile(this);
+//        File file = new File();
+//        uploadFilePresenter.uploadFile(this);
     }
 
     @Override
@@ -516,4 +514,13 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
         super.onDestroy();
     }
 
+    @Override
+    public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
+
+    }
+
+    @Override
+    public void onUploadFileFailed(String msg) {
+
+    }
 }
