@@ -2,6 +2,7 @@ package com.jieshuizhibiao.waterindex.contract.model;
 
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
+import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
 import com.jieshuizhibiao.waterindex.http.RetrofitFactory;
 import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
@@ -15,17 +16,17 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
  * Class Note:用户信息
  */
 
-public class UserDetailModel {
+public class UserInfoModel {
 
-    public void getUserDetail(BaseActivity activity, final UserDetailCallBack callBack){
+    public void getUserInfo(BaseActivity activity, final UserInfoCallBack callBack){
         RetrofitFactory.getInstance().createService()
-                .userDetail(RequestUtil.getRequestHashBody(null,false))
-                .compose(activity.<BaseEntity<UserDetailResponseBean>>bindToLifecycle())
-                .compose(ObservableTransformerUtils.<BaseEntity<UserDetailResponseBean>>io())
-                .subscribe(new BaseObserver<UserDetailResponseBean>() {
+                .userInfo(RequestUtil.getRequestHashBody(null,false))
+                .compose(activity.<BaseEntity<UserInfoResponseBean>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<UserInfoResponseBean>>io())
+                .subscribe(new BaseObserver<UserInfoResponseBean>() {
 
                     @Override
-                    protected void onSuccess(UserDetailResponseBean userDetailBean) throws Exception {
+                    protected void onSuccess(UserInfoResponseBean userDetailBean) throws Exception {
                         callBack.success(userDetailBean);
                     }
 
@@ -51,8 +52,8 @@ public class UserDetailModel {
                 });
     }
 
-    public interface UserDetailCallBack{
-        void success(UserDetailResponseBean userDetailResponseBean);
+    public interface UserInfoCallBack{
+        void success(UserInfoResponseBean userInfoResponseBean);
         void failed(String msg);
     }
 }

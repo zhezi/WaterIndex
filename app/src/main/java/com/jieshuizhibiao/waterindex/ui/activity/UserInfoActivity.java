@@ -11,21 +11,23 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
-import com.jieshuizhibiao.waterindex.contract.model.UserDetailModel;
-import com.jieshuizhibiao.waterindex.contract.presenter.UserDetailPresenter;
-import com.jieshuizhibiao.waterindex.contract.view.UserDetailViewImpl;
+import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
+import com.jieshuizhibiao.waterindex.contract.model.UserInfoModel;
+import com.jieshuizhibiao.waterindex.contract.presenter.UserInfoPresenter;
+import com.jieshuizhibiao.waterindex.contract.view.UserInfoViewImpl;
 import com.jieshuizhibiao.waterindex.event.SelectFragmentEvent;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.Util;
+import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
-public class UserDetailActivity extends BaseActivity implements UserDetailViewImpl {
+public class UserInfoActivity extends BaseActivity implements UserInfoViewImpl {
 
     @BindView(R.id.title_bar)
     View titleBar;
@@ -52,10 +54,9 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     @BindView(R.id.btn_logout)
     Button btnLogout;
 
-    private UserDetailPresenter userDetailPresenter;
+    private UserInfoPresenter userInfoPresenter;
     private AlertChainDialog alertChainDialog;
-    private String userLogin = "";
-
+    private String userLogin = "" ,avatar_url = "";
     @OnClick({R.id.left_ll, R.id.tv_change_pass, R.id.tv_auth_status, R.id.btn_logout})
     public void onClick(View v) {
         int id = v.getId();
@@ -101,9 +102,9 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
         StatusBarUtil.setImmersionStatus(this, titleBar);
         initView();
 
-        userDetailPresenter = new UserDetailPresenter(new UserDetailModel());
-        userDetailPresenter.attachView(this);
-        userDetailPresenter.getUserDetail(this);
+        userInfoPresenter = new UserInfoPresenter(new UserInfoModel());
+        userInfoPresenter.attachView(this);
+
     }
 
     private void initView() {
@@ -114,7 +115,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     }
 
     private void jump(Class<?> cls) {
-        startActivity(new Intent(UserDetailActivity.this, cls));
+        startActivity(new Intent(UserInfoActivity.this, cls));
     }
 
 
@@ -125,7 +126,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
 
     @Override
     public void onReNetRefreshData(int viewId) {
-
+        doReuqest();
     }
 
 
@@ -133,7 +134,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
         //一起操作
         //            SPUtil.delete(this,SPUtil.IS_LOGIN);
         SPUtil.delete(this, SPUtil.TOKEN);
-        SPUtil.insert(UserDetailActivity.this, SPUtil.IS_LOGIN, false);//更改用户登录状态为未登录
+        SPUtil.insert(UserInfoActivity.this, SPUtil.IS_LOGIN, false);//更改用户登录状态为未登录
 
         SPUtil.delete(this, SPUtil.USER_LOGIN);
         SPUtil.delete(this, SPUtil.UID);
@@ -153,18 +154,18 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     }
 
     @Override
-    public void onUserDetailSuccess(UserDetailResponseBean userDetailResponseBean) {
-        if (userDetailResponseBean != null) {
-
-            tvCreateTime.setText(userDetailResponseBean.getCreate_time());
-            tvUserLoginTel.setText(TextUtils.isEmpty(userDetailResponseBean.getUser_login()) ? Util.hide4Phone(userLogin): userDetailResponseBean.getUser_login());
-            tvUserType.setText(userDetailResponseBean.getUser_type());
-            int user_status = userDetailResponseBean.getUser_status();
-            if (user_status == 0) {
+    public void onUserInfoSuccess(UserInfoResponseBean userInfoResponseBean) {
+        dismissLoadingDialog();
+        if (userInfoResponseBean != null) {
+            avatar_url = userInfoResponseBean.getAvatar();
+            tvCreateTime.setText(userInfoResponseBean.getCreate_time());
+            tvUserLoginTel.setText(TextUtils.isEmpty(userInfoResponseBean.getUser_login()) ? Util.hide4Phone(userLogin): userInfoResponseBean.getUser_login());
+            int userStatus = userInfoResponseBean.getIs_auth();
+            if (userStatus == 0) {
                 tvAuthStatus.setText("去认证");
                 tvAuthStatus.setTextColor(getResources().getColor(R.color.primary_yellow));
                 tvAuthStatus.setEnabled(true);
-            } else if (user_status == 1) {
+            } else if (userStatus == 1) {
                 tvAuthStatus.setText("已认证");
                 tvAuthStatus.setTextColor(getResources().getColor(R.color.text_black));
                 tvAuthStatus.setEnabled(false);
@@ -173,13 +174,34 @@ public class UserDetailActivity extends BaseActivity implements UserDetailViewIm
     }
 
     @Override
-    public void onUserDetailFailed(String msg) {
-
+    public void onUserInfoFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doReuqest();
+        showAvatar();
+    }
+
+    public void doReuqest(){
+        userInfoPresenter.getUserInfo(this);
+        showLoadingDialog();
+    }
+
+    private void showAvatar() {
+        //显示头像
+        GlidImageManager.getInstance().loadCircleImg(UserInfoActivity.this, avatar_url, imgAvatar, R.mipmap.head, R.mipmap.head);
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        userDetailPresenter.detachView();
+        if (userInfoPresenter!=null){
+            userInfoPresenter.detachView();
+        }
     }
 }

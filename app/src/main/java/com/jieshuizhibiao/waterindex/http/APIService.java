@@ -31,7 +31,7 @@ import com.jieshuizhibiao.waterindex.beans.UploadOne;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
 import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserIndexResponseBean;
-import com.jieshuizhibiao.waterindex.beans.UserInfo;
+import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
 import com.jieshuizhibiao.waterindex.beans.appeal.AppealResponse;
 import com.jieshuizhibiao.waterindex.beans.cancel.CancelResponse;
@@ -383,7 +383,7 @@ public interface APIService {
      * "device_type", "android";
      */
     @POST(UrlConfig.USER_INFO)
-    Observable<BaseEntity<UserInfo>> userInfo(@Body RequestBody requestBody);
+    Observable<BaseEntity<UserInfoResponseBean>> userInfo(@Body RequestBody requestBody);
 
     /**
      * "token", token;

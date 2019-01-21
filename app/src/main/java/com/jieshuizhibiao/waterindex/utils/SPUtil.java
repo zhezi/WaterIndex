@@ -36,7 +36,9 @@ public class SPUtil {
     public static final String IS_BLOCKED = "is_blocked";
     public static final String C2C_TRAMSFER = "c2cGyj";
     public static final String BB_TRAMSFER = "BbGyj";
-
+    public static final String USER_AVATAR = "user_avatar";
+    public static final String CREATE_TIME = "create_time";
+    public static final String IS_AUTH = "is_auth";
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
      *

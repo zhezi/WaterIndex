@@ -9,10 +9,16 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.AuthDetailResponseBean;
+import com.jieshuizhibiao.waterindex.beans.UserInfoResponseBean;
 import com.jieshuizhibiao.waterindex.contract.model.AuthDetailModel;
+import com.jieshuizhibiao.waterindex.contract.model.UserInfoModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.AuthDetailPresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.UserInfoPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AuthDetailViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UserInfoViewImpl;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -20,7 +26,7 @@ import butterknife.OnClick;
 /**
  * @Author: fushizhe
  */
-public class UserConfirmActivity extends BaseActivity implements AuthDetailViewImpl {
+public class UserConfirmActivity extends BaseActivity implements UserInfoViewImpl {
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
     @BindView(R.id.title_bar)
@@ -36,16 +42,13 @@ public class UserConfirmActivity extends BaseActivity implements AuthDetailViewI
     TextView tvUserName;
     @BindView(R.id.tv_id_no)
     TextView tvIdNo;
-
-    AuthDetailPresenter authDetailPresenter;
+    UserInfoPresenter userInfoPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authDetailPresenter = new AuthDetailPresenter(new AuthDetailModel());
-        authDetailPresenter.attachView(this);
-        authDetailPresenter.getAuthDetail(this);
-
+        userInfoPresenter = new UserInfoPresenter(new UserInfoModel());
+        userInfoPresenter.attachView(this);
         StatusBarUtil.setImmersionStatus(this, title_bar);
         initView();
     }
@@ -65,7 +68,18 @@ public class UserConfirmActivity extends BaseActivity implements AuthDetailViewI
 
     @Override
     public void onReNetRefreshData(int viewId) {
+        doUserInfoReuqest();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doUserInfoReuqest();
+    }
+
+    public void doUserInfoReuqest(){
+        userInfoPresenter.getUserInfo(UserConfirmActivity.this);
+        showLoadingDialog();
     }
 
     @OnClick({R.id.left_ll, R.id.img_title_left, R.id.tv_do_auth})
@@ -88,55 +102,43 @@ public class UserConfirmActivity extends BaseActivity implements AuthDetailViewI
 
     }
 
-    private void selectLayout(AuthDetailResponseBean authDetailResponseBean) {
-        if (authDetailResponseBean != null) {
-            String user_status = authDetailResponseBean.getUser_status().trim();
-            if (user_status.equals("待认证") || user_status.equals("已驳回")) {
+    private void selectLayout(UserInfoResponseBean userInfoResponseBean) {
+        if (userInfoResponseBean != null) {
+            int isAuth = userInfoResponseBean.getIs_auth();
+            //0 未认证|被驳回 1认证审核中 3通过
+            if (isAuth == 0) {
                 llDidNot.setVisibility(View.VISIBLE);
                 llIng.setVisibility(View.GONE);
                 llDone.setVisibility(View.GONE);
-            } else if (user_status.equals("待审核")) {
+            } else if (isAuth == 1) {
                 llDidNot.setVisibility(View.GONE);
                 llIng.setVisibility(View.VISIBLE);
                 llDone.setVisibility(View.GONE);
-            } else if (user_status.equals("已通过")) {
+            } else {
                 llDidNot.setVisibility(View.GONE);
                 llIng.setVisibility(View.GONE);
                 llDone.setVisibility(View.VISIBLE);
-                int user_type = authDetailResponseBean.getUser_type();
-                if (user_type == 1) {//个人
-                    tvUserName.setText(new StringBuilder().append("姓名：").append(authDetailResponseBean.getUser_name()).toString());
-                    String idNo=authDetailResponseBean.getId_no();
-                    String str1=idNo.substring(0,3);
-                    String str2="*************";
-                    String str3=idNo.substring(idNo.length()-2,idNo.length());
-                    tvIdNo.setText(new StringBuilder().append("证件号码：").append(str1).append(str2).append(str3).toString());
-                } else if (user_type == 2) { //企业
-                    tvUserName.setText(new StringBuilder().append("营业执照登记名称：").append(authDetailResponseBean.getUser_name()).toString());
-                    String idNo=authDetailResponseBean.getId_no();
-                    String str1=idNo.substring(0,3);
-                    String str2="**********";
-                    String str3=idNo.substring(idNo.length()-2,idNo.length());
-                    tvIdNo.setText(new StringBuilder().append("营业执照注册号").append(str1).append(str2).append(str3).toString());
-                }
             }
         }
     }
 
-
     @Override
-    public void authDetailSuccess(AuthDetailResponseBean authDetailResponseBean) {
-        selectLayout(authDetailResponseBean);
+    public void onUserInfoSuccess(UserInfoResponseBean userInfoResponseBean) {
+        dismissLoadingDialog();
+        selectLayout(userInfoResponseBean);
     }
 
     @Override
-    public void authDetailFailed(String msg) {
-
+    public void onUserInfoFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        authDetailPresenter.detachView();
+        if (userInfoPresenter!=null){
+            userInfoPresenter.detachView();
+        }
     }
 }

@@ -264,7 +264,7 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
     }
 
     public void dealTakePhoto() {
-        if (!TextUtils.isEmpty(BitmapUtils.getBrand()) && BitmapUtils.getBrand().equals("samsung")) {
+        if (!TextUtils.isEmpty(BitmapUtils.getBrand()) && BitmapUtils.getBrand().equals("samsung") || BitmapUtils.getBrand().equals("Xiaomi")) {
             //获取照片拍照角度
             int degree = BitmapUtils.readPictureDegree(mCurrentPhotoPath);
             LogUtils.i("拍照角度：" + degree);//正常角度应该返回0 三星的是90度

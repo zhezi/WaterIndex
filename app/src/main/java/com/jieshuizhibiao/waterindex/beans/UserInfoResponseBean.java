@@ -1,6 +1,6 @@
 package com.jieshuizhibiao.waterindex.beans;
 
-public class UserInfo {
+public class UserInfoResponseBean {
 	private String avatar;//"default.pic"
 	private String nick_name;//"sss"
 	private String create_time;//":"2018-12-04"

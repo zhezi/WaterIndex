@@ -8,12 +8,10 @@ package com.jieshuizhibiao.waterindex.beans;
 public class UserIndexResponseBean {
     String avatar; 	//头像 	字符串(string)
     String nick_name; 	//昵称 	字符串(string)
-    String create_time; 	//注册时间 	字符串(string)
-    String user_login; 	//注册手机号 	字符串(string)
-    String is_auth; 	//身份认证 	字符串(string) 		0 未认证|被驳回 1认证审核中 3通过
+    String sys_msg; 	//系统消息 	字符串(string)
 
     public String getAvatar() {
-        return avatar;
+        return avatar == null ? "" : avatar;
     }
 
     public void setAvatar(String avatar) {
@@ -21,34 +19,18 @@ public class UserIndexResponseBean {
     }
 
     public String getNick_name() {
-        return nick_name;
+        return nick_name == null ? "" : nick_name;
     }
 
     public void setNick_name(String nick_name) {
         this.nick_name = nick_name;
     }
 
-    public String getCreate_time() {
-        return create_time;
+    public String getSys_msg() {
+        return sys_msg == null ? "" : sys_msg;
     }
 
-    public void setCreate_time(String create_time) {
-        this.create_time = create_time;
-    }
-
-    public String getUser_login() {
-        return user_login;
-    }
-
-    public void setUser_login(String user_login) {
-        this.user_login = user_login;
-    }
-
-    public String getIs_auth() {
-        return is_auth;
-    }
-
-    public void setIs_auth(String is_auth) {
-        this.is_auth = is_auth;
+    public void setSys_msg(String sys_msg) {
+        this.sys_msg = sys_msg;
     }
 }
