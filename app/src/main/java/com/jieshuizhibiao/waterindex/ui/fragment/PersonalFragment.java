@@ -86,12 +86,13 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     TextView tvVersion;
 
     private PicturePopupWindow popupWindow;
-    private String mCurrentPhotoPath,stringStream;
+    private String mCurrentPhotoPath;
     private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
     private UserIndexPresenter userIndexPresenter;
     private UploadFilePresenter uploadFilePresenter;
     private SetAvatarPresenter setAvatarPresenter;
+
     private static final int REQUEST_TAKE_PHOTO = 0x110;//拍照结果回调
     /**
      * 是否登录
@@ -101,7 +102,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     private String user_login,nike_name;//用户登录手机号，作用同isLogin
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
-            R.id.relative_payment_type, R.id.relative_transaction_demand,
+            R.id.relative_payment_type, R.id.relative_transaction_demand,R.id.tv_version,
             R.id.relative_sys_msg, R.id.relative_safe_center, R.id.relative_about_us,R.id.img_avatar})
     public void onClick(View v) {
 
@@ -217,13 +218,12 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         showAvatar();
+        showUserInfo();
     }
 
     private void initView() {
-        isLogin= (boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
-        user_login=(String)SPUtil.get(getActivity(),SPUtil.USER_LOGIN,"user_login");
-        tvNickname.setText(TextUtils.isEmpty(user_login) ? "******" :Util.hide4Phone(user_login));
         alertChainDialog = new AlertChainDialog(getBaseActivity());
+        tvVersion.setText("版本号 V"+Util.versionName(getBaseActivity()));
         initPopupView();
     }
 
@@ -237,6 +237,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
         if (!hidden) {
             doRequest();
             showAvatar();
+            showUserInfo();
         }
     }
 
@@ -246,6 +247,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
         if(isVisibleToUser){
             doRequest();
             showAvatar();
+            showUserInfo();
         }
     }
 
@@ -262,6 +264,11 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
         }
     }
 
+    private void showUserInfo() {
+        isLogin= (boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
+        user_login=(String)SPUtil.get(getActivity(),SPUtil.USER_LOGIN,"******");
+        tvNickname.setText(TextUtils.isEmpty(user_login) ? "******" :Util.hide4Phone(user_login));
+    }
 
     public String getIsLogin(){
         return new StringBuilder().append(isLogin).append(user_login).toString();
@@ -529,4 +536,6 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
         dismissLoadingDialog();
         ToastUtils.showCustomToast(msg,0);
     }
+
+
 }

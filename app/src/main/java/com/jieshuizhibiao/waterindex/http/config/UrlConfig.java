@@ -1434,4 +1434,9 @@ public class UrlConfig {
      * 资产划转-划转前确认
      */
     public static final String BEFORE_MOVE_MONERY = "api/home/user/beforeMvMoney";
+
+    /**
+     * 版本检查
+     */
+    public static final String APP_VERSION = "api/home/public/ver";
 }

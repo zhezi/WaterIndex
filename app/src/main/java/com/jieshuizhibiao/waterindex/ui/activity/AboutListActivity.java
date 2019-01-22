@@ -2,12 +2,19 @@ package com.jieshuizhibiao.waterindex.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.AppUpdateResponseBean;
+import com.jieshuizhibiao.waterindex.contract.presenter.AppUpdatePresenter;
+import com.jieshuizhibiao.waterindex.contract.view.AppUpdateViewImpl;
+import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -15,21 +22,27 @@ import butterknife.OnClick;
 /**
  * @Author: fushizhe
  */
-public class AboutListActivity extends BaseActivity{
+public class AboutListActivity extends BaseActivity implements AppUpdateViewImpl {
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
     @BindView(R.id.title_bar)
     View title_bar;
+
+    private AppUpdatePresenter appUpdatePresenter;
+    private AlertChainDialog alertChainDialog;
+    private boolean isUpdate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        appUpdatePresenter = new AppUpdatePresenter();
+        appUpdatePresenter.attachView(this);
         StatusBarUtil.setImmersionStatus(this, title_bar);
         initView();
     }
 
     private void initView() {
         tv_title_center.setText("关于我们");
+        alertChainDialog = new AlertChainDialog(this);
     }
 
     @Override
@@ -42,7 +55,7 @@ public class AboutListActivity extends BaseActivity{
 
     }
 
-    @OnClick({R.id.left_ll,R.id.img_title_left,R.id.btn_about})
+    @OnClick({R.id.left_ll,R.id.img_title_left,R.id.btn_about,R.id.btn_version})
     public void onClick(View view) {
         int id = view.getId();
 
@@ -56,13 +69,76 @@ public class AboutListActivity extends BaseActivity{
             case R.id.left_ll:
                 goBack(view);
                 break;
-
+            case R.id.btn_version:
+                appUpdatePresenter.appVersion(this, Util.versionName(AboutListActivity.this));
+                showLoadingDialog();
+                break;
             default:
                 break;
         }
 
     }
 
+    @Override
+    public void onAppUpdateSuccess(Object bean) {
+        dismissLoadingDialog();
+
+        if (bean instanceof AppUpdateResponseBean){
+            String version = ((AppUpdateResponseBean) bean).getVer();
+            if (TextUtils.isEmpty(version)){
+                isUpdate = false;
+                return;
+            }else {
+                String[] versionService = version.split(".");
+                String[] versionLocal = Util.versionName(this).split(".");
+                int service = Integer.parseInt(versionService[0]+versionService[1]+versionService[2]);
+                int local = Integer.parseInt(versionLocal[0]+versionLocal[1]+versionLocal[2]);
+                if(TextUtils.isEmpty(version) && service>local){
+                    isUpdate = true;
+                }else {
+                    isUpdate = false;
+                }
+            }
+        }
+        if(alertChainDialog!=null){
+            if(alertChainDialog!=null){
+                alertChainDialog.builder().setCancelable(false);
+                alertChainDialog.setTitle("提示消息")
+                        .setMsg(isUpdate ? "有新版可供更新" :"当前已是最新版本")
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(isUpdate){
+                                    update();
+                                }
+                            }
+
+                            private void update() {
+                                //TODO 版本更新
+                            }
+                        }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+            }
+        }
+    }
+
+    @Override
+    public void onAppUpdateFailed(String msg) {
+        dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (appUpdatePresenter!=null){
+            appUpdatePresenter.detachView();
+        }
+    }
 
 
 }

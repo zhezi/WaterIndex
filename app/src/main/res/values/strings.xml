@@ -60,7 +60,7 @@
     <string name="hit_edt_password">请输入密码</string>
     <string name="hit_edt_transfer_amonut">划转数量</string>
     <string name="hit_edt_transfer_amonut_pwd">资金密码</string>
-    <string name="hit_edt_transfer_max">交易数量 最大交易数量 1997</string>
+    <string name="hit_edt_transfer_max">交易数量</string>
     <string name="hit_edt_transfer_min">最小交易量</string>
     <string name="hit_edt_transfer_time_limit">付款时限 15-30</string>
 

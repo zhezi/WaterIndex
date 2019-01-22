@@ -1,5 +1,9 @@
 package com.jieshuizhibiao.waterindex.utils;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by songxiaotao on 2019/1/4.
  * Class Note:
@@ -83,5 +87,12 @@ public class TimeUtils {
         }else{
             return null;
         }
+    }
+
+    public static Date stringToDate(String dateString) {
+        ParsePosition position = new ParsePosition(0);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dateValue = simpleDateFormat.parse(dateString, position);
+        return dateValue;
     }
 }

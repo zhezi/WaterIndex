@@ -28,10 +28,14 @@ import com.jieshuizhibiao.waterindex.ui.activity.TransactionDemandActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TranscationReleaseBuyOrSellActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.TransactionAdapter;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
+import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -82,7 +86,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
 
     private void initView() {
 
-        transactionAdapter = new TransactionAdapter(getBaseActivity(), tradeListArrayList, new TransactionAdapter.TransactionListener() {
+        transactionAdapter = new TransactionAdapter(getBaseActivity(), sortData(tradeListArrayList), new TransactionAdapter.TransactionListener() {
             @Override
             public void onLowerShelfClick(String sn) {
                 doRequestDel(sn);
@@ -105,6 +109,23 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
                 doReuqest();
             }
         });
+    }
+
+    private List<ListTradeResponseBean.TradeList> sortData(List<ListTradeResponseBean.TradeList> mList) {
+        Collections.sort(mList, new Comparator<ListTradeResponseBean.TradeList>() {
+
+            @Override
+            public int compare(ListTradeResponseBean.TradeList lhs, ListTradeResponseBean.TradeList rhs) {
+                Date date1 = TimeUtils.stringToDate(lhs.getAdd_time());
+                Date date2 = TimeUtils.stringToDate(rhs.getAdd_time());
+                // 对日期字段进行升序，如果欲降序可采用after方法
+                if (date1.after(date2)) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+        return mList;
     }
 
     @Override

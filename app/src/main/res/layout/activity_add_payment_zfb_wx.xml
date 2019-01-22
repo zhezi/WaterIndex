@@ -17,7 +17,7 @@
             android:id="@+id/btn_payment_qrcode_img"
             style="@style/btn_upload"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="250px"
             android:layout_marginBottom="30px" />
 
         <EditText
@@ -37,6 +37,7 @@
         <EditText
             android:id="@+id/edt_capital_pass"
             style="@style/style_edt"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_input_payment_capital_pass" />

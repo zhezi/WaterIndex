@@ -1,6 +1,8 @@
 package com.jieshuizhibiao.waterindex.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.LongSparseArray;
@@ -214,5 +216,25 @@ public class Util {
     public static String hide4Phone(String phone) {
         String phoneNumber = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
         return phoneNumber;
+    }
+
+    public static int versionCode(Context context) { PackageManager manager = context.getPackageManager();
+        int code = 0;
+        try { PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            code = info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
+
+    public static String versionName(Context context) { PackageManager manager = context.getPackageManager();
+        String name = null;
+        try { PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            name = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 }

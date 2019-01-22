@@ -63,7 +63,7 @@ public class TransactionDemandActivity extends BaseActivity implements ListTrade
     }
 
     private void initView() {
-        tvTitleCenter.setText("订单");
+        tvTitleCenter.setText("买卖需求");
         initTransaction();
     }
 

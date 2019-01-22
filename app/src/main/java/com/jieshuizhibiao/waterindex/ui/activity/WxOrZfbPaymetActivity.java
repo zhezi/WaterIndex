@@ -23,6 +23,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jieshuizhibiao.waterindex.R;
+import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.base.permission.config.PermissionConfig;
 import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.AddPayMentTypeReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.ChangePayMentTypeReqParams;
@@ -31,22 +34,18 @@ import com.jieshuizhibiao.waterindex.contract.presenter.ChangePaymentTypePresent
 import com.jieshuizhibiao.waterindex.contract.view.AddPayMentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.ChangePaymentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
-import com.jieshuizhibiao.waterindex.utils.ToastUtils;
-import com.jieshuizhibiao.waterindex.utils.Util;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.jieshuizhibiao.waterindex.R;
-import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.base.permission.config.PermissionConfig;
 import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
 import com.jieshuizhibiao.waterindex.utils.BitmapUtils;
 import com.jieshuizhibiao.waterindex.utils.ImageFactory;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,6 +137,8 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
 
         if (getIntent().getParcelableExtra("TypeList")!=null){
             typeList = getIntent().getParcelableExtra("TypeList");
+            edtAccount.setText(typeList.getAccount_name());
+            edtAccount.setSelection(typeList.getAccount_name().length());
         }
         initPopupView();
     }
@@ -276,7 +277,7 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
             String fileName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA).format(new Date()) + ".png";
             //转为File
             File mRotateFile = ImageFactory.convertBitmapToFile(mRotateBitmap, fileName);
-            ZipImg(WxOrZfbPaymetActivity.this,mRotateFile);
+            ZipImg(mRotateFile);
 
             if (mOriginalBitmap != null) {
                 mOriginalBitmap.recycle();
@@ -286,11 +287,12 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
             }
         } else {//其他机型手机
             File mFile = new File(mCurrentPhotoPath);
-            ZipImg(WxOrZfbPaymetActivity.this,mFile);
+            ZipImg(mFile);
         }
     }
 
-    private void ZipImg(final Activity activity, File mFile) {
+    private void ZipImg(File mFile) {
+
         Flowable.just(mFile)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<File, File>() {
@@ -316,13 +318,9 @@ public class WxOrZfbPaymetActivity extends BaseActivity implements AddPayMentTyp
      * @param file
      */
     public void showImgData(File file){
-        try {
-            Bitmap bitmap = BitmapUtils.getBitmap(file.getAbsolutePath(),file.getName());
-            final BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-            btnQrcode.setBackground(bitmapDrawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Bitmap bitmap = BitmapUtils.getBitmap(file.getAbsolutePath());
+        final BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+        btnQrcode.setBackground(bitmapDrawable);
     }
 
     public void cameraTask(){

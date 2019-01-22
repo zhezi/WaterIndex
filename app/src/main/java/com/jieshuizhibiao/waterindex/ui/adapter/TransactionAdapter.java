@@ -68,6 +68,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }else {
                 holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_gray_bg_selector));
                 holder.btnTransLowerShelf.setEnabled(false);
+                holder.btnTransLowerShelf.setVisibility(View.GONE);
             }
         }else {
             holder.btnTransLowerShelf.setVisibility(View.GONE);

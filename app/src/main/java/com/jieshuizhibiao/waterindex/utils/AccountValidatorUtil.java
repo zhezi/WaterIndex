@@ -13,7 +13,7 @@ public class AccountValidatorUtil {
     public static final String REGEX_USERNAME = "^[a-zA-Z]\\w{5,20}$";
 
     /**
-     * 正则表达式：验证密码
+     * 正则表达式：验证密码(8-20位字母数字组合) 资金密码是否也为同样规则--TODO 待确认
      */
     public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,20}$";
 

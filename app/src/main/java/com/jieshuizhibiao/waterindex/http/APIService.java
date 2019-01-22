@@ -10,6 +10,7 @@ import com.jieshuizhibiao.waterindex.beans.FactoryServiceResponseBean;
 import com.jieshuizhibiao.waterindex.beans.GoodsResposeBean;
 import com.jieshuizhibiao.waterindex.beans.InfoListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
+import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.LoginResponseBean;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
 import com.jieshuizhibiao.waterindex.beans.OrderDetailResponseBean;
@@ -25,7 +26,6 @@ import com.jieshuizhibiao.waterindex.beans.TotalPriceResponseBean;
 import com.jieshuizhibiao.waterindex.beans.TradeCenterResponseBean;
 import com.jieshuizhibiao.waterindex.beans.TradeIndexBase;
 import com.jieshuizhibiao.waterindex.beans.TradeLineResponseBean;
-import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.TradeListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
@@ -52,7 +52,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Query;
 
 /**
  * Created by WanghongHe on 2018/12/3 11:41.
@@ -502,5 +501,10 @@ public interface APIService {
     @POST(UrlConfig.BEFORE_MOVE_MONERY)
     Observable<BaseEntity<MoveMoneryBean>> beforeMvMoney(@Body RequestBody requestBody);
 
+    /**
+     * 版本更新检查
+     */
+    @POST(UrlConfig.APP_VERSION)
+    Observable<BaseEntity> appUpdate(@Body RequestBody requestBody);
 }
 

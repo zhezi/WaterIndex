@@ -88,6 +88,13 @@ public class BankPaymetActivity extends BaseActivity implements AddPayMentTypeVi
         }
         if (getIntent().getParcelableExtra("TypeList")!=null){
             typeList = getIntent().getParcelableExtra("TypeList");
+            etBankName.setText(typeList.getType_text());
+            String[] typeText = typeList.getAccount_name().split(" ");
+            etName.setText(typeText[0]);
+            etBankNumber.setText(typeText[1]);
+            etBankName.setSelection(typeList.getType_text().length());
+            etName.setSelection(typeText[0].length());
+            etBankNumber.setSelection(typeText[1].length());
         }
 
     }
