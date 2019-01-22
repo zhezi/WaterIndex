@@ -25,6 +25,7 @@ import com.jieshuizhibiao.waterindex.ui.activity.TraderPaidActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderSuccActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -136,6 +137,11 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
 
     @Override
     public void onItemClicked(ListOrder order) {
+        boolean isLogin=(boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
+        if(!isLogin){
+            ToastUtils.showCustomToast("请重新登录");
+            return;
+        }
         if (order != null) {
             final String next_step = order.getNext_step();
 
@@ -146,11 +152,11 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
             } else if (next_step.equals(BUYER_PAID) || next_step.equals(SELLER_PAID)) {
                 jump(TraderPaidActivity.class, intent);
             } else if (next_step.equals(BUYER_APPEAL) || next_step.equals(SELLER_APPEAL)) {
-                jump(TraderAppealActivity.class,intent);
+                jump(TraderAppealActivity.class, intent);
             } else if (next_step.equals(BUYER_SUCC) || next_step.equals(SELLER_SUCC)) {
-                jump(TraderSuccActivity.class,intent);
+                jump(TraderSuccActivity.class, intent);
             } else if (next_step.equals(BUYER_CANCEL) || next_step.equals(SELLER_CANCEL)) {
-                jump(TraderCancelActivity.class,intent);
+                jump(TraderCancelActivity.class, intent);
             }
         }
     }
@@ -168,7 +174,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
                 rlHint.setVisibility(View.GONE);
                 if (isRefresh) list.clear();
                 list.addAll(datas);
-                intPage += 1;
+                if (datas.size() > 0) intPage += 1;
                 orderListsAdapter.notifyDataSetChanged();
             }
         }
@@ -183,7 +189,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     @Override
     public void onRequestFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
         //如果因为加载更多进行网络请求，请求完毕后isLoadMore归位至false;
         if (isLoadMore) {
             isLoadMore = false;
@@ -246,15 +252,15 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
         if (event != null) {
             String from = event.getFrom();
             String msg = event.getMsg();
-            if (from.equals("TraderUnpayActivity")||from.equals("TraderPaidActivity")) {
-                if (msg.equals("buyer_cancel")||msg.equals("trader_do_appeal")||msg.equals("seller_checkout")) {
+            if ("TraderUnpayActivity,TraderPaidActivity,PayFloatActivity,PayActivity".contains(from)) {
+                if ("buyer_cancel,trader_do_appeal,seller_checkout,buyer_do_pay".contains(msg)) {
                     isRefresh = true;//所有页面都要刷新
                     intPage = 1;
                 }
-                if ("全部，进行中".contains(title) && isVisiable) {
-                    doRequest();//立即刷新
-                    baseActivity.dismissLoadingDialog();
-                }
+//                if ("全部，进行中".contains(title) && isVisiable) {
+//                    doRequest();//立即刷新
+//                    baseActivity.dismissLoadingDialog();
+//                }
             }
 
         }
@@ -279,6 +285,11 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isVisiable = isVisibleToUser;
+        if (isRefresh && intPage == 1) {
+            doRequest();
+            baseActivity.dismissLoadingDialog();
+            return;
+        }
         if (isVisiable) {
             isFirstVisable += 1;
             //用户滑动到该fragment显示时，且该fragment接收到刷新event
@@ -291,6 +302,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
                 doRequest();
             }
         }
+
     }
 
 

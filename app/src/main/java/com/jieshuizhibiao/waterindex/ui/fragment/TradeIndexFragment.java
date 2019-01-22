@@ -28,6 +28,7 @@ import com.jieshuizhibiao.waterindex.ui.activity.UserOrderActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.TradeIndexAdapter;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     private Unbinder unbinder;
     private String type = "2";//购买2 出售1
     private TradeIndexPresenter tradeIndexPresenter;
-    private int buyCounter = 0;//buy返回数据页数统计
-    private int sellCounter = 0;//sell返回数据页数统计
+    private int buyCounter = 1;//buy返回数据页数统计
+    private int sellCounter = 1;//sell返回数据页数统计
     private List<TradeIndex> buyList = new ArrayList<>();
     private List<TradeIndex> sellList = new ArrayList<>();
     private TradeIndexAdapter buyAdapter;
@@ -65,6 +66,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     private int is_auth;//是否注册  1是认证中 3是已认证 0是未认证
     private String tip;
     private AlertChainDialog dialog;
+    private String loginStatus="false_token";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         doRequest();
 
         initView();
+        loginStatus=getLoginStatus();
         return rootView;
     }
 
@@ -129,14 +132,6 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     @Override
     public void onReNetRefreshData(int viewId) {
 
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden) {//todo 是否刷新
-
-        }
     }
 
     @OnClick({R.id.btn_buy, R.id.btn_sell, R.id.ll_warning})
@@ -251,6 +246,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             }
         }
         dismissLoadingDialog();
+        loginStatus=getLoginStatus();
     }
 
     @Override
@@ -260,20 +256,31 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     }
 
     public void onEventMainThread(LoginStatusChangedEvent event) {
-        if (event != null && event.getMsg().equals("login_status_changed_main_trade_index_reconnect")) {
-            buyCounter = 0;
-            buyList.clear();
-            sellCounter = 0;
-            sellList.clear();
-            showLoadingDialog();
-            doRequest();
-        }
+        if (event != null) {
+            if( event.getMsg().equals("login_status_changed_main_trade_index_reconnect")){
+                buyCounter = 1;
+                buyList.clear();
+                sellCounter = 1;
+                sellList.clear();
+                showLoadingDialog();
+                doRequest();
+            }}
     }
 
     public void onEventMainThread(TradeIndexRefreshEvent event) {
         if (event != null) {
-            LogUtils.e("tag", "******------" + event.getMsg());
             if (event.getTitle().equals("creat_order_success")) {
+                if(type=="2"){
+                    buyCounter=1;
+                    showLoadingDialog();
+                    buyList.clear();
+                    doRequest();
+                }else if(type=="1"){
+                    sellCounter=1;
+                    showLoadingDialog();
+                    sellList.clear();
+                    doRequest();
+                }
                 showDialog("提示", "下单成功！", "确定");
             } else if (event.getTitle().equals("creat_order_failed")) {
                 if (!TextUtils.isEmpty(event.getMsg())) showDialog("提示", event.getMsg(), "确定");
@@ -305,6 +312,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             intent.putExtra("type", type);
             jump(UserOrderActivity.class, intent);
             getActivity().overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
+        }else{
+            ToastUtils.showCustomToast("确保您已经登录且已完善必要的交易信息！");
         }
 
     }
@@ -338,12 +347,27 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         jump(LoginActivity.class, intent);
     }
 
-
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            //TODO 对比登录状态是否改变，改变择刷新
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {//刷新
+            final String currentStatus = getLoginStatus();
+            if(!currentStatus.equals(loginStatus)){
+                buyCounter = 1;
+                buyList.clear();
+                sellCounter = 1;
+                sellList.clear();
+                showLoadingDialog();
+                doRequest();
+            }
         }
     }
+
+    private String getLoginStatus(){
+        boolean isLogin= (boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
+        String token=(String)SPUtil.get(getActivity(),SPUtil.TOKEN,"token");
+        return new StringBuilder().append(isLogin).append("_").append(token).toString();
+    }
+
+
 }

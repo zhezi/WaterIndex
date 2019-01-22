@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class PayInfo implements Parcelable {
-    private int id;
+    private long id;
     private int uid;
     private int type;
     private String user_name;
@@ -15,7 +15,7 @@ public class PayInfo implements Parcelable {
     private long add_time;
     private int status;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class PayInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeLong(this.id);
         dest.writeInt(this.uid);
         dest.writeInt(this.type);
         dest.writeString(this.user_name);
@@ -78,7 +78,7 @@ public class PayInfo implements Parcelable {
     }
 
     protected PayInfo(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readLong();
         this.uid = in.readInt();
         this.type = in.readInt();
         this.user_name = in.readString();

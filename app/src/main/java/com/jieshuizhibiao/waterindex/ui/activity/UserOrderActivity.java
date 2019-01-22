@@ -65,8 +65,6 @@ public class UserOrderActivity extends BaseActivity implements
     EditText edtTotal;
     @BindView(R.id.ll_total)
     LinearLayout llTotal;
-    //    @BindView(R.id.edt_safe_pw)
-//    EditText edtSafePw;
     @BindView(R.id.tv_total_price)
     TextView tvTotalPrice;
     @BindView(R.id.tv_pay_timeout)
@@ -281,17 +279,16 @@ public class UserOrderActivity extends BaseActivity implements
         unbinder.unbind();
         super.onDestroy();
     }
-
+    //下单成功
     @Override
     public void onRequestSuccess(Object bean) {
         finish();
         EventBus.getDefault().post(new TradeIndexRefreshEvent("creat_order_success", null));
     }
-
+    //下单失败
     @Override
     public void onRequestFailed(String msg) {
         finish();
-        EventBus.getDefault().post(new TradeIndexRefreshEvent("creat_order_failed", msg));
     }
 
     @Override
@@ -315,7 +312,7 @@ public class UserOrderActivity extends BaseActivity implements
             tvTotalPrice.setText(new StringBuilder("总价：").append(price).append("元").toString());
         }
     }
-
+    //获取单价成功
     @Override
     public void onSecondRequstSuccess(Object o) {
         if (o != null) {
@@ -327,9 +324,9 @@ public class UserOrderActivity extends BaseActivity implements
         }
     }
 
-
+    //获取单价失败
     @Override
     public void onSecondRequstFailed(String msg) {
-        LogUtils.e("tag", "******------" + msg);
+        LogUtils.e("tag", "******获取单价失败------" + msg);
     }
 }

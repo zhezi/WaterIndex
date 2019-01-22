@@ -1,22 +1,11 @@
 package com.jieshuizhibiao.waterindex.ui.activity;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,38 +13,29 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
-import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.unpay.BaseUnpayOrderInfo;
 import com.jieshuizhibiao.waterindex.beans.appeal.PayInfo;
-import com.jieshuizhibiao.waterindex.contract.model.BuyerDoPayModel;
 import com.jieshuizhibiao.waterindex.contract.model.CancelOrderModel;
-import com.jieshuizhibiao.waterindex.contract.model.UploadFileModel;
-import com.jieshuizhibiao.waterindex.contract.presenter.BuyerDoPayPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.CancelOrderPresenter;
-import com.jieshuizhibiao.waterindex.contract.presenter.PicturePresenter;
-import com.jieshuizhibiao.waterindex.contract.presenter.UploadFilePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CancelOrderViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.PictureViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
+import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
+import com.jieshuizhibiao.waterindex.event.UserDoPayEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
-import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
-import com.jieshuizhibiao.waterindex.utils.PictureFileUtil;
+import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * 买家身份单独使用
  * 卖家身份无对应步骤
  */
-public class PayActivity extends BaseActivity implements CancelOrderViewImpl, PictureViewImpl ,CommonViewImpl, SecondRequstViewImpl,UploadFileViewImpl {
+public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
 
     @BindView(R.id.tv_title_center)
     TextView tvTitleCenter;
@@ -104,21 +84,6 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
     @BindView(R.id.cb_agreement)
     CheckBox cbAgreement;
 
-    @BindView(R.id.ll_float_snapshot)
-    LinearLayout llFloatSnapshot;
-    @BindView(R.id.txt_title)
-    TextView txtTitle;
-    @BindView(R.id.txt_msg)
-    TextView txtMsg;
-    @BindView(R.id.fl_container)
-    FrameLayout flContainer;
-    @BindView(R.id.btn_img)
-    Button btnImg;
-    @BindView(R.id.btn_neg)
-    Button btnNeg;
-    @BindView(R.id.btn_pos)
-    Button btnPos;
-
 
     private BaseUnpayOrderInfo baseUnpayOrderInfo;
     private PayInfo payInfo;
@@ -126,7 +91,6 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
     private int pay_type;
     private String expire_time;
     private CountDownTimer TimeCount;
-    private CancelOrderPresenter cancelOrderPresenter;
     private boolean isChecked = false;
     private long order_id;
     private String pay_code;
@@ -134,31 +98,23 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
     private String qrcodeUrl;
     private String rmb;
     private String account_name;
-    private PicturePopupWindow popupWindow;
-    private PicturePresenter picturePresenter;
-    private BuyerDoPayPresenter buyerDoPayPresenter;
-    private UploadFilePresenter uploadFilePresenter;
+    private CancelOrderPresenter cancelOrderPresenter;
+    private long pi_id;
+    private boolean isTimeout = false;//倒计时结束，订单取消，不能继续操作
 
     public static final String QRCODE_URL = "qrcodeUrl";
-    private final String CANCEL_SUCC = "取消成功！";
-    private final String I_KNOW = "知道了";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         StatusBarUtil.setImmersionStatus(this, titleBar);
         getIntntExtra();
         initView();
-        initFloatView();
 
         cancelOrderPresenter = new CancelOrderPresenter(new CancelOrderModel());
         cancelOrderPresenter.attachView(this);
-        picturePresenter = PicturePresenter.getInstance();
-        picturePresenter.attachView(this);
-        buyerDoPayPresenter=new BuyerDoPayPresenter(new BuyerDoPayModel());
-        buyerDoPayPresenter.attachView(this);
-        uploadFilePresenter=new UploadFilePresenter(new UploadFileModel());
-        uploadFilePresenter.attachView(this);
     }
 
 
@@ -174,33 +130,13 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
 
     @Override
     public void onCancelSucc(Object bean) {
-
+        ToastUtils.showSuccessToast("取消成功");
+        EventBus.getDefault().post(new ChangeOrderStatusEvent("PayActivity","buyer_cancel"));
     }
 
     @Override
     public void onCancelFail(String msg) {
-
-    }
-    //买家身份-支付  成功
-    @Override
-    public void onRequestSuccess(Object bean) {
-
-    }
-    //买家身份-支付  失败
-    @Override
-    public void onRequestFailed(String msg) {
-
-    }
-
-    //买家身份-上传支付凭证 成功
-    @Override
-    public void onSecondRequstSuccess(Object bean) {
-
-    }
-    //买家身份-上传支付凭证失败
-    @Override
-    public void onSecondRequstFailed(String msg) {
-
+        ToastUtils.showCustomToast(msg);
     }
 
     private void getIntntExtra() {
@@ -221,6 +157,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
             if (payInfo != null) {
                 qrcodeUrl = payInfo.getQrcode();
                 account_name = payInfo.getAccount_name();
+                pi_id = payInfo.getId();
             }
         }
     }
@@ -247,7 +184,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
             tvTimeClock.setText(expire_time);
             tvTimeClock.setTextColor(getResources().getColor(R.color.text_black));
         }
-
+        tvTimeClock.setVisibility(View.VISIBLE);
         if (lastStep.equals(OrderListsTabFragment.BUYER_UNPAY)) {
             tvBuyerPaid.setVisibility(View.GONE);
             llTimeClock.setVisibility(View.VISIBLE);
@@ -304,16 +241,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
         });
     }
 
-    private void initFloatView() {
-        llFloatSnapshot.setVisibility(View.GONE);
-        flContainer.setVisibility(View.VISIBLE);
-        btnImg.setVisibility(View.VISIBLE);
-        txtTitle.setText("付款确认");
-        txtMsg.setText("请确认你已向卖方付款。恶意点击将直接冻结账号");
-    }
-
-    @OnClick({R.id.left_ll, R.id.ll_qrcode, R.id.btn_finish_pay,
-            R.id.btn_img, R.id.btn_pos, R.id.btn_neg})
+    @OnClick({R.id.left_ll, R.id.ll_qrcode, R.id.btn_finish_pay})
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -327,31 +255,26 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
                 startActivity(intent);
                 break;
             case R.id.btn_finish_pay:
-                if (isChecked) {
-                    llFloatSnapshot.setVisibility(View.VISIBLE);
+                if (isTimeout) {
+                    if (isChecked) {
+                        Intent i = new Intent(PayActivity.this, PayFloatActivity.class);
+                        i.putExtra("order_id", order_id);
+                        i.putExtra("pi_id", pi_id);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
+
+                    } else {
+                        ToastUtils.showCustomToast("请同意");
+                    }
                 } else {
-                    ToastUtils.showCustomToast("请同意");
+                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
                 }
-                break;
-
-            case R.id.btn_pos:
-                finish();
-                //todo pay & send event
-                uploadFile();
-                break;
-
-            case R.id.btn_neg:
-                llFloatSnapshot.setVisibility(View.GONE);
-                break;
-
-            case R.id.btn_img:
-                showPopupView();
                 break;
         }
     }
 
     private void countDownPayTime(long expire_time) {
-        TimeCount = new CountDownTimer(expire_time * 1000, 1000) {
+        TimeCount = new CountDownTimer(expire_time, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -364,8 +287,9 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
             @Override
             public void onFinish() {
                 if (!PayActivity.this.isFinishing()) {
-                    TimeCount.onFinish();
-                    cancelOrder(lastStep, order_id);
+//                    cancelOrder(lastStep, order_id);
+                    tvTimeClock.setText("00分00秒");
+                    isTimeout = true;
                 }
             }
 
@@ -385,142 +309,22 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl, Pi
         }*/
     }
 
-    private void buyerDoPay(){
-        if(buyerDoPayPresenter==null){
-            buyerDoPayPresenter=new BuyerDoPayPresenter(new BuyerDoPayModel());
-            buyerDoPayPresenter.attachView(this);
+    public void onEventMainThread(UserDoPayEvent event) {
+        if (event != null) {
+            if (event.getAction().equals(PayFloatActivity.ACTION_FORM_PAYFLOATACTIVITY)) {
+                finish();
+            }
         }
-        //todo 校验图片上传是否成功
-        buyerDoPayPresenter.buyerDoPay(this,order_id,pay_type,"");//todo 填写图片上传成功后后台返回url
-    }
-    //todo 参数待定
-    private void uploadFile(){
-        if(uploadFilePresenter==null){
-            uploadFilePresenter=new UploadFilePresenter(new UploadFileModel());
-            uploadFilePresenter.attachView(this);
-        }
-        //todo 参数待定
-//        File file = new File();
-//        uploadFilePresenter.uploadFile(this);
-    }
-
-    @Override
-    public void onViewClicked() {
-
-    }
-
-    @Override
-    public void initPopupView() {
-
-    }
-
-    @Override
-    public void showView(Bitmap bitmap) {
-        final BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-        String imgStr = PictureFileUtil.bitmap2String(bitmap);
-        btnImg.setBackground(bitmapDrawable);
-    }
-
-    @Override
-    public void showPopupView() {
-        View parent = LayoutInflater.from(PayActivity.this).inflate(R.layout.activity_auth, null);
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.LEFT, 0, 0);
-    }
-
-    @Override
-    public void dismissPopupView() {
-        popupWindow.dismiss();
-    }
-
-    @Override
-    public boolean popupIsShowing() {
-        return popupWindow.isShowing();
-    }
-
-    @Override
-    public void go2PicSettingActivity(Uri uri) {
-        if (uri == null) {
-            return;
-        }
-        Intent intent = new Intent();
-        intent.setClass(PayActivity.this, PictureSettingActivity.class);
-        intent.setData(uri);
-        startActivity(intent);
-    }
-
-    @Override
-    public void go2SystemPhoto(int requestCode) {
-        //跳转到调用系统图库
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media
-                .EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(intent, "请选择图片"), requestCode);
-    }
-
-    @Override
-    public void go2SystemCamera(File tempFile, int requestCode) {
-        //跳转到调用系统相机
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //设置7.0中共享文件，分享路径定义在xml/file_paths.xml，下面2种方式都可以
-            //            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            //            Uri contentUri = FileProvider.getUriForFile(mActivity, BuildConfig
-            // .APPLICATION_ID + "" +
-            //                    ".fileProvider", tempFile);
-            //            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-
-            ContentValues contentValues = new ContentValues(1);
-            contentValues.put(MediaStore.Images.Media.DATA, tempFile
-                    .getAbsolutePath());
-            Uri uri = PayActivity.this.getContentResolver().insert(MediaStore.Images
-                    .Media.EXTERNAL_CONTENT_URI, contentValues);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        } else {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-        }
-        startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    public BaseActivity getActivity() {
-        return PayActivity.this;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        picturePresenter.onActivityResult(requestCode, resultCode, intent);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        picturePresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         if (cancelOrderPresenter != null) {
             cancelOrderPresenter.detachView();
         }
-        if(picturePresenter!=null){
-            picturePresenter.detachView();
-        }
-        if(buyerDoPayPresenter!=null){
-            buyerDoPayPresenter.detachView();
-        }
-        if(uploadFilePresenter!=null){
-            uploadFilePresenter.detachView();
-        }
         if (TimeCount != null) TimeCount.cancel();
+        TimeCount.cancel();
         super.onDestroy();
-    }
-
-    @Override
-    public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
-
-    }
-
-    @Override
-    public void onUploadFileFailed(String msg) {
-
     }
 }

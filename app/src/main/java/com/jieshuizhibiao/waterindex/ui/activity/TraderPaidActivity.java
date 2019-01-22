@@ -193,7 +193,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     private void initView() {
         llTimeClock.setVisibility(View.GONE);
         if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
-            tvTitleCenter.setText("等待买家放行");
+            tvTitleCenter.setText("等待卖家放行");
             llHeaderRmb.setVisibility(View.GONE);
             tvBuyerPaid.setVisibility(View.GONE);
             llTradeInfoContainer.setVisibility(View.VISIBLE);
@@ -320,7 +320,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
 
             if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
                 BuyerPaidResponse buyerPaidResponse = (BuyerPaidResponse) bean;
-                buyerPaidOrderInfo = buyerPaidResponse.getOrderinfo();
+                buyerPaidOrderInfo = buyerPaidResponse.getOrder_info();
                 if (buyerPaidResponse != null) {
                     payInfo = buyerPaidResponse.getPay_info();
                 }
@@ -410,7 +410,9 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                 imgPayTypeWechat.setVisibility(View.GONE);
                 tvPayType.setText("支付宝");
             }
+            tvUserName.setText(payInfo.getUser_name());
             tvAccountNameTxt.setText("收款账号");
+            tvAccountName.setText(payInfo.getAccount_name());
             llBankInfo.setVisibility(View.GONE);
             llQrcode.setVisibility(View.VISIBLE);
             qrcodeUrl = payInfo.getQrcode();
@@ -474,6 +476,5 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
         }
         super.onDestroy();
     }
-
 
 }

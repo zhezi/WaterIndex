@@ -239,7 +239,10 @@
 
         <activity android:name=".ui.activity.TranscationReleaseBuyOrSellActivity"
             android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ui.activity.PayFloatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialogstyle" />
 
     </application>
 

@@ -113,57 +113,22 @@ public class TestActivity extends BaseActivity {
                 break;
 
             case R.id.btn_go_login:
-//                startActivity(new Intent(TestActivity.this, LoginActivity.class));
-                HashMap<String, Object> params1 = new HashMap<>();
-                params1.put("order_id", "3");
-                RetrofitFactory.getInstance().createService()
-                        .sellerCancel(RequestUtil.getRequestHashBody(params1, false))
-                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
-                        .compose(ObservableTransformerUtils.<BaseEntity>io())
-                        .subscribe(new BaseObserver(TestActivity.this) {
+                startActivity(new Intent(TestActivity.this, LoginActivity.class));
 
-                            @Override
-                            protected void onSuccess(Object bean) throws Exception {
-
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            }
-                        });
                 break;
             case R.id.btn_appeal:
-                HashMap<String, Object> params2 = new HashMap<>();
-                params2.put("order_id", "5");
-                RetrofitFactory.getInstance().createService()
-                        .sellerAppeal(RequestUtil.getRequestHashBody(params2, false))
-                        .compose(TestActivity.this.<BaseEntity>bindToLifecycle())
-                        .compose(ObservableTransformerUtils.<BaseEntity>io())
-                        .subscribe(new BaseObserver(TestActivity.this) {
-
-                            @Override
-                            protected void onSuccess(Object bean) throws Exception {
-
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            }
-                        });
+                Intent i = new Intent(this, PayFloatActivity.class);
+                i.putExtra("order_id", 2);
+                i.putExtra("pi_id", 2);
+                startActivity(i);
+                overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
                 break;
         }
     }
 
 
 
-//    /**
-//     * 上传日志
-//     *
-//     * @return
-//     */
-//    @Multipart
-//    @POST("v1/app/exception")
-//    Observable<ResponseBean<List<String>>> uploadLog(@PartMap Map<String, RequestBody> map);
+
 
 
 }

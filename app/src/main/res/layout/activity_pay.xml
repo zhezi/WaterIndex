@@ -6,117 +6,89 @@
 
     <include layout="@layout/module_include_title_bar" />
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:id="@+id/ll_float_snapshot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/trans_black"
-            android:orientation="vertical"
-            android:paddingLeft="80px"
-            android:paddingRight="80px"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1" />
+            <include layout="@layout/module_layout_header_rmb" />
 
-            <include layout="@layout/view_alertdialog1" />
+            <include layout="@layout/module_include_gray_space" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_marginTop="144px"
-                android:layout_weight="1" />
-        </LinearLayout>
+            <include layout="@layout/module_item_pay_info" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:scrollbars="none">
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_pay_type" />
+
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_user_name" />
+
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_account_name" />
+
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_qrcode" />
+
+            <include layout="@layout/module_item_bank_info" />
+
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_pay_code" />
+
+            <include layout="@layout/module_include_divider" />
+
+            <include layout="@layout/module_item_createtime" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:background="@color/space_gray"
+                android:orientation="horizontal"
+                android:paddingLeft="30px"
+                android:paddingTop="40px"
+                android:paddingBottom="90px">
 
-                <include layout="@layout/module_layout_header_rmb" />
-
-                <include layout="@layout/module_include_gray_space" />
-
-                <include layout="@layout/module_item_pay_info" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_pay_type" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_user_name" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_account_name" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_qrcode" />
-
-                <include layout="@layout/module_item_bank_info" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_pay_code" />
-
-                <include layout="@layout/module_include_divider" />
-
-                <include layout="@layout/module_item_createtime" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/cb_agreement"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/space_gray"
-                    android:orientation="horizontal"
-                    android:paddingLeft="30px"
-                    android:paddingTop="40px"
-                    android:paddingBottom="90px">
+                    android:padding="10px"
+                    android:theme="@style/MyCheckBox" />
 
-                    <CheckBox
-                        android:id="@+id/cb_agreement"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10px"
-                        android:theme="@style/MyCheckBox" />
-
-                    <TextView
-                        android:id="@+id/tv_readed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@id/cb_agreement"
-                        android:layout_toRightOf="@id/cb_agreement"
-                        android:text="我已知晓：需在付款后点击下方按钮"
-                        android:textColor="@color/text_gray"
-                        android:textSize="24px" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_finish_pay"
-                    style="@style/style_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/commit_btn_height"
-                    android:layout_marginBottom="100px"
-                    android:text="已完成付款" />
-
+                <TextView
+                    android:id="@+id/tv_readed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/cb_agreement"
+                    android:layout_toRightOf="@id/cb_agreement"
+                    android:text="我已知晓：需在付款后点击下方按钮"
+                    android:textColor="@color/text_gray"
+                    android:textSize="24px" />
             </LinearLayout>
 
-        </ScrollView>
+            <Button
+                android:id="@+id/btn_finish_pay"
+                style="@style/style_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commit_btn_height"
+                android:layout_marginBottom="100px"
+                android:text="已完成付款" />
 
-    </FrameLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

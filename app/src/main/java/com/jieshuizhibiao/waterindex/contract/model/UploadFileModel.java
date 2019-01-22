@@ -23,21 +23,33 @@ public class UploadFileModel {
 
     public void uploadFile(BaseActivity activity, String token,File file,final UploadFileCallback callback){
 
+        RequestBody t = RequestBody.create(null, token);
+
+        RequestBody d_t = RequestBody.create(null, "android");
+
+
         RequestBody fileBody = null;
         String fileName = file.getName();
-        if(file.getName().contains(".png")||file.getName().contains(".PNG")){
+        if(fileName.contains(".png")||fileName.contains(".PNG")){
             fileBody = RequestBody.create(MediaType.parse("image/png"), file);
-            fileName += ".png";
-        }else if (file.getName().contains(".jpg")||file.getName().contains(".JPG")){
+//            fileName += ".png";
+        }else if (fileName.contains(".jpg")||fileName.contains(".JPG")){
             fileBody = RequestBody.create(MediaType.parse("image/jpg"), file);
-            fileName += ".jpg";
-        }else {
+//            fileName += ".jpg";
+        }else if(fileName.contains(".jpeg")||fileName.contains(".JPEG")){
             fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-            fileName += ".jpeg";
+//            fileName += ".jpeg";
         }
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file",fileName, fileBody);
+        /**
+         *file部分，最终拼接成以下部分（注意“file”是后台定义好的，后台会用它作为key去查询你传的图片信息）：
+         *Content-Disposition: form-data; name="file"; filename=*****.jpg
+         *Content-Type: image/jpeg
+         *Content-Length: 52251(图片流字节数组的长度，底层的Okhttp帮我们计算了)
+         *...(文件流)
+         */
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", fileName, fileBody);
         RetrofitFactory.getInstance().createService()
-                .uploadFile(token,"android",filePart)
+                .uploadFile(t,d_t,filePart)
                 .compose(activity.<BaseEntity<UploadFileResponseBean>>bindToLifecycle())
                 .compose(ObservableTransformerUtils.<BaseEntity<UploadFileResponseBean>>io())
                 .subscribe(new BaseObserver<UploadFileResponseBean>() {

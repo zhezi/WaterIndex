@@ -45,13 +45,13 @@ import java.io.File;
 public class PicturePresenter extends BasePresenter<PictureViewImpl> {
 
     //请求相机
-    private static final int REQUEST_CAMERA = 100;
+    public static final int REQUEST_CAMERA = 100;
     //请求相册
-    private static final int REQUEST_PHOTO = 101;
+    public static final int REQUEST_PHOTO = 101;
     //请求访问外部存储
-    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
+    public static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
     //请求写入外部存储
-    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
+    public static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
 
     private File tempFile;
     /**

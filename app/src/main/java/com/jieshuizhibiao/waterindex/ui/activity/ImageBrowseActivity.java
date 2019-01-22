@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.bm.library.PhotoView;
@@ -21,6 +21,7 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.PictureFileUtil;
 import com.jieshuizhibiao.waterindex.utils.RxHelper;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
 
 import java.io.File;
@@ -37,8 +38,8 @@ public class ImageBrowseActivity extends BaseActivity {
     RelativeLayout rlPicBrowse;
     @BindView(R.id.pv_pic)
     PhotoView pvPic;
-    @BindView(R.id.imgbtn_save_pic)
-    ImageButton imgbtnSavePic;
+    @BindView(R.id.btn_save_pic)
+    Button btnSavePic;
 
     private String mImageUrl;
 
@@ -53,8 +54,6 @@ public class ImageBrowseActivity extends BaseActivity {
     private void getIntentExtra() {
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(PayActivity.QRCODE_URL);
-        mImageUrl = HttpConfig.BASE_URL + "/" + mImageUrl;//todo 试着拼接是否有误
-//        mImageUrl="https://www.jieshuizhibiao.com/upload/admin/20190109/277a2b3341ebbf2a70bf755c0774361e.jpg";
     }
 
     @Override
@@ -70,23 +69,19 @@ public class ImageBrowseActivity extends BaseActivity {
 
     private void initView() {
         pvPic.enable();
-        if (mImageUrl.contains("gif")) {
-            loadGif();
-        } else {
-            loadImage();
-        }
+        loadImage();
     }
 
 
-    @OnClick({R.id.rl_pic_browse, R.id.imgbtn_save_pic})
+    @OnClick({R.id.rl_pic_browse, R.id.btn_save_pic})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.rl_pic_browse:
                 goBack(view);
                 break;
-            case R.id.imgbtn_save_pic:
-//                saveImageToLocal(mImageUrl);
+            case R.id.btn_save_pic:
+                saveImageToLocal(mImageUrl);
                 break;
             default:
                 break;
@@ -122,54 +117,11 @@ public class ImageBrowseActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 加载gif
-     */
-    private void loadGif() {
-        Glide.with(ImageBrowseActivity.this)
-                .load(mImageUrl)
-                .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(new GlideDrawableImageViewTarget(pvPic) {
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<?
-                            super GlideDrawable> animation) {
-                        super.onResourceReady(resource, animation);
-                        //在这里添加一些图片加载完成的操作
-                        imgbtnSavePic.setVisibility(View.VISIBLE);
-                    }
-                });
-    }
 
     /**
      * 加载静态图片
      */
     private void loadImage() {
-        Log.e("tag", "*****-----" + mImageUrl);
-//        Glide.with(ImageBrowseActivity.this)
-//                .load(mImageUrl)
-//                .fitCenter()
-//                .crossFade()
-//                .into(new GlideDrawableImageViewTarget(pvPic) {
-//                    @Override
-//                    public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-//                        super.onResourceReady(drawable, anim);
-//                        //在这里添加一些图片加载完成的操作
-//                        imgbtnSavePic.setVisibility(View.VISIBLE);
-//                    }
-//                });
-//        Glide.with(ImageBrowseActivity.this)
-//                .load(mImageUrl)
-//                .fitCenter()
-//                .crossFade()
-//                .into(new GlideDrawableImageViewTarget(imgPic) {
-//                    @Override
-//                    public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-//                        super.onResourceReady(drawable, anim);
-//                        //在这里添加一些图片加载完成的操作
-//                        imgbtnSavePic.setVisibility(View.VISIBLE);
-//                    }
-//                });
         GlidImageManager.getInstance().loadImageView(this, mImageUrl, pvPic, R.mipmap.default_img);
     }
 
@@ -184,15 +136,24 @@ public class ImageBrowseActivity extends BaseActivity {
                 .SaveResultCallback() {
             @Override
             public void onSavedSuccess() {
-//                ToastUtils.showCustomToast("保存成功！");
-                LogUtils.e("TAG","保存成功！");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.showSuccessToast("保存成功！");
+                        btnSavePic.setVisibility(View.GONE);
+                    }
+                });
+
             }
 
             @Override
             public void onSavedFailed() {
-//                ToastUtils.showCustomToast("保存失败！");
-                LogUtils.e("TAG","保存失败！");
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.showSuccessToast("保存失败！");
+                    }
+                });
             }
         });
     }

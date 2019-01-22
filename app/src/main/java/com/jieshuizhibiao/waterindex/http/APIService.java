@@ -368,9 +368,9 @@ public interface APIService {
      */
     @Multipart
     @POST(UrlConfig.UPLOAD)
-    Observable<BaseEntity<UploadFileResponseBean>> uploadFile(
-            @Query("token") String token,@Query("device_type") String device_type, @Part MultipartBody.Part file
-    );
+    Observable<BaseEntity<UploadFileResponseBean>>uploadFile(@Part("token") RequestBody token,
+                                                             @Part("device_type") RequestBody device_type,
+                                                             @Part MultipartBody.Part file);
 
 
     /**

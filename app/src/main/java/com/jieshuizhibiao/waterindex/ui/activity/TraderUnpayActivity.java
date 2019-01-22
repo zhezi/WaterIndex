@@ -25,8 +25,10 @@ import com.jieshuizhibiao.waterindex.contract.presenter.TraderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CancelOrderViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
+import com.jieshuizhibiao.waterindex.event.UserDoPayEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
+import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
@@ -119,7 +121,8 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
     private String expire_time;
     private AlertChainDialog dialog;
     private HashMap<Integer, PayInfo> map = new HashMap<>();
-    private long millisUntilFinished = 0;
+    private long millis = 0;
+    private boolean isTimeout = false;//倒计时是否结束，结束订单将取消
 
     private final String CANCEL_SUCC = "取消成功!";
     private final String I_KNOW = "知道了";
@@ -137,6 +140,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         unbinder = ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         getIntentExtra();
         initView();
         traderPresenter = new TraderPresenter(new TraderModel());
@@ -216,7 +220,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
         dismissDialog();
     }
 
@@ -228,7 +232,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
 
     @Override
     public void onCancelFail(String msg) {
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
         dismissDialog();
     }
 
@@ -300,16 +304,18 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
             public void onTick(long millisUntilFinished) {
                 if (!TraderUnpayActivity.this.isFinishing()) {
                     String countDown = TimeUtils.getToMSTime((int) (millisUntilFinished / 1000));
+
                     tvExpireTime.setText(countDown);
-                    TraderUnpayActivity.this.millisUntilFinished = millisUntilFinished;
+                    millis = millisUntilFinished;
                 }
             }
 
             @Override
             public void onFinish() {
                 if (!TraderUnpayActivity.this.isFinishing()) {
-                    TimeCount.onFinish();
-                    cancelOrder(current_step, order_id);
+//                    cancelOrder(current_step, order_id);
+                    tvExpireTime.setText("00分00秒");
+                    isTimeout = true;
                 }
             }
 
@@ -350,12 +356,21 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 }
                 break;
             case R.id.btn_buyer_cancle:
-                cancelOrder(current_step, order_id);
+                if (!isTimeout) {
+                    cancelOrder(current_step, order_id);
+                } else {
+                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
+                }
                 break;
 
             case R.id.btn_buyer_pay:
-                //该步骤仅买家身份有，卖家身份没有
-                jumpPayActivity();
+                if(!isTimeout){
+                    //该步骤仅买家身份有，卖家身份没有
+                    jumpPayActivity();
+                }else{
+                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
+                }
+
                 break;
 
             case R.id.btn_seller_cancle:
@@ -391,8 +406,8 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 if (expire_time.equals("不限制")) {
                     intent.putExtra(MILLIS, "不限制");
                 } else if (isNumeric(expire_time)) {
-                    if (millisUntilFinished > 1000) {//1s
-                        intent.putExtra(MILLIS, String.valueOf(millisUntilFinished));
+                    if (millis > 1000) {//1s
+                        intent.putExtra(MILLIS, String.valueOf(millis));
                     }
                 } else {
                     intent.putExtra(MILLIS, "请尽快付款");
@@ -463,6 +478,14 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 .show();
     }
 
+    public void onEventMainThread(UserDoPayEvent event) {
+        if (event != null) {
+            if (event.getAction().equals(PayFloatActivity.ACTION_FORM_PAYFLOATACTIVITY)) {
+                finish();
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         if (traderPresenter != null) {
@@ -472,6 +495,8 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
             cancelOrderPresenter.detachView();
         }
         if (TimeCount != null) TimeCount.cancel();
+        EventBus.getDefault().unregister(this);
+        TimeCount.cancel();
         super.onDestroy();
     }
 

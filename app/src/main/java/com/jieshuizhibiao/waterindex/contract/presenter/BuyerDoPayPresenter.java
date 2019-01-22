@@ -12,7 +12,7 @@ public class BuyerDoPayPresenter extends BasePresenter<CommonViewImpl> {
     public BuyerDoPayPresenter(BuyerDoPayModel buyerDoPayModel) {
         this.buyerDoPayModel = buyerDoPayModel;
     }
-    public void buyerDoPay(BaseActivity activity,long order_id,int pi_id,String pay_snapshot){
+    public void buyerDoPay(BaseActivity activity,long order_id,long pi_id,String pay_snapshot){
         if(buyerDoPayModel==null){
             buyerDoPayModel=new BuyerDoPayModel();
         }

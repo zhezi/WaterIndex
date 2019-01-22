@@ -13,7 +13,7 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import java.util.HashMap;
 
 public class BuyerDoPayModel {
-    public void buyerDoPay(BaseActivity activity, long order_id, int pi_id, String pay_snapshot, final CommonCallback callback){
+    public void buyerDoPay(BaseActivity activity, long order_id, long pi_id, String pay_snapshot, final CommonCallback callback){
         HashMap<String,Object>params=new HashMap<>();
         params.put("order_id",String.valueOf(order_id));
         params.put("pi_id",String.valueOf(pi_id));
