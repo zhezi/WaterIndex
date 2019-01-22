@@ -168,7 +168,10 @@ public class TraderAppealActivity extends BaseActivity implements CommonViewImpl
                 }
                 if (order_info != null) {
                     tvTitleCenter.setText(order_info.getTitle());
-                    tvRmb.setText(order_info.getRmb());
+                    String rmbStr = order_info.getRmb();
+                    rmbStr=rmbStr.replace("元","").trim();
+                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+                    tvRmb.setText(rmbStr+"元");
                     tvRmb.setTextColor(textBlack);
                     tvTotal.setText(order_info.getTotal());
                     tvPrice.setText(order_info.getPrice());

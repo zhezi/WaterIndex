@@ -68,7 +68,10 @@ public class OrderListsAdapter extends RecyclerView.Adapter<OrderListsAdapter.Or
         holder.tvMyAction.setText(order.getMy_action());
         holder.tvTotal.setText(order.getTotal());
         holder.tvStatusText.setText(order.getStatus_text());
-        holder.tvRmb.setText(order.getRmb());
+        String rmbStr = order.getRmb();
+        rmbStr=rmbStr.replace("元","").trim();
+        rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+        holder.tvRmb.setText(rmbStr+"元");
 
     }
 

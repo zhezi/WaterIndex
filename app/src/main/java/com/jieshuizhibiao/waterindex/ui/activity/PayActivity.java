@@ -131,12 +131,12 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
     @Override
     public void onCancelSucc(Object bean) {
         ToastUtils.showSuccessToast("取消成功");
-        EventBus.getDefault().post(new ChangeOrderStatusEvent("PayActivity","buyer_cancel"));
+        EventBus.getDefault().post(new ChangeOrderStatusEvent("PayActivity", "buyer_cancel"));
     }
 
     @Override
     public void onCancelFail(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     private void getIntntExtra() {
@@ -170,8 +170,9 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
         }else {
             tvTitleCenter.setText("支付及收款情况");
         }*/
-
-        tvBigRmb.setText(rmb);
+        rmb=rmb.replace("元","").trim();
+        rmb=String.format("%.2f",Float.valueOf(rmb));
+        tvBigRmb.setText(rmb+"元");
         if (TraderUnpayActivity.isNumeric(expire_time)) {
             long ms = Long.valueOf(expire_time);
             if (ms > 1000) {
@@ -229,7 +230,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
             llBankInfo.setVisibility(View.GONE);
         }
         if (payInfo != null) {
-            tvUserName.setText(createtime);
+            tvUserName.setText(payInfo.getUser_name());
             tvPayCode.setText(pay_code);
             tvCreatetime.setText(createtime);
         }
@@ -253,9 +254,10 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
                 Intent intent = new Intent(PayActivity.this, ImageBrowseActivity.class);
                 intent.putExtra(QRCODE_URL, qrcodeUrl);
                 startActivity(intent);
+                overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
                 break;
             case R.id.btn_finish_pay:
-                if (isTimeout) {
+                if (!isTimeout) {
                     if (isChecked) {
                         Intent i = new Intent(PayActivity.this, PayFloatActivity.class);
                         i.putExtra("order_id", order_id);
@@ -264,10 +266,10 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
                         overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
 
                     } else {
-                        ToastUtils.showCustomToast("请同意");
+                        ToastUtils.showCustomToastMsg("请同意",150);
                     }
                 } else {
-                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
+                    ToastUtils.showCustomToastMsg("订单付款已超时，请重新下单",150);
                 }
                 break;
         }
@@ -324,7 +326,6 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
             cancelOrderPresenter.detachView();
         }
         if (TimeCount != null) TimeCount.cancel();
-        TimeCount.cancel();
         super.onDestroy();
     }
 }

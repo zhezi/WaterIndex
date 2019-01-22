@@ -313,7 +313,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             jump(UserOrderActivity.class, intent);
             getActivity().overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
         }else{
-            ToastUtils.showCustomToast("确保您已经登录且已完善必要的交易信息！");
+            ToastUtils.showCustomToastMsg("确保您已经登录且已完善必要的交易信息！",150);
         }
 
     }

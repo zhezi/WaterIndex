@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="C2C账户"
+                    android:text="节水指标账户"
                     android:textColor="@color/text_black"
                     android:textSize="32px"/>
                 <TextView
@@ -106,7 +106,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="主站账户"
+                    android:text="数字节水账户"
                     android:textColor="@color/text_black"
                     android:textSize="32px"/>
                 <TextView

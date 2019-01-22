@@ -262,7 +262,9 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 tvLeft.setVisibility(View.GONE);
                 tvRight.setVisibility(View.GONE);
             }
-            tvRmb.setText(baseUnpayOrderInfo.getRmb());
+            String rmbStr=baseUnpayOrderInfo.getRmb().replace("元","").trim();
+            rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+            tvRmb.setText(rmbStr+"元");
             tvTotal.setText(baseUnpayOrderInfo.getTotal());
             tvPrice.setText(baseUnpayOrderInfo.getPrice());
             tvOrderSn.setText(baseUnpayOrderInfo.getOrder_sn());
@@ -359,7 +361,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 if (!isTimeout) {
                     cancelOrder(current_step, order_id);
                 } else {
-                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
+                    ToastUtils.showCustomToastMsg("订单付款已超时，请重新下单",150);
                 }
                 break;
 
@@ -368,7 +370,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                     //该步骤仅买家身份有，卖家身份没有
                     jumpPayActivity();
                 }else{
-                    ToastUtils.showCustomToast("订单付款已超时，请重新下单");
+                    ToastUtils.showCustomToastMsg("订单付款已超时，请重新下单",150);
                 }
 
                 break;
@@ -496,7 +498,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
         }
         if (TimeCount != null) TimeCount.cancel();
         EventBus.getDefault().unregister(this);
-        TimeCount.cancel();
+        if(TimeCount!=null) TimeCount.cancel();
         super.onDestroy();
     }
 

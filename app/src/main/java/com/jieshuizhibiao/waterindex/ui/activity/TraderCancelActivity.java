@@ -148,7 +148,10 @@ public class TraderCancelActivity extends BaseActivity implements CommonViewImpl
                         nickname = orderInfo.getBuyer_nickname();
                     }
                     tvTitleCenter.setText(orderInfo.getTitle());
-                    tvRmb.setText(orderInfo.getRmb());
+                    String rmbStr = orderInfo.getRmb();
+                    rmbStr=rmbStr.replace("元","").trim();
+                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+                    tvRmb.setText(rmbStr+"元");
                     tvRmb.setTextColor(textBlack);
                     tvTotal.setText(orderInfo.getTotal());
                     tvPrice.setText(orderInfo.getPrice());

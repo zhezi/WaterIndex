@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="40px"
+        android:padding="30px"
         android:layout_margin="40px"
         android:orientation="horizontal"
         android:background="@drawable/gray_bg_shape">
@@ -24,7 +24,7 @@
                 android:id="@+id/tv_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="从C2C账户"
+                android:text="从节水指标账户"
                 android:textColor="@color/text_black"
                 android:textSize="32px"/>
             <TextView
@@ -54,7 +54,7 @@
                 android:id="@+id/tv_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="从C2C账户"
+                android:text="从节水指标账户"
                 android:textColor="@color/text_black"
                 android:textSize="32px"/>
             <TextView

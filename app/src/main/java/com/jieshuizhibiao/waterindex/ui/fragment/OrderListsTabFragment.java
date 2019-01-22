@@ -139,7 +139,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public void onItemClicked(ListOrder order) {
         boolean isLogin=(boolean) SPUtil.get(getActivity(),SPUtil.IS_LOGIN,false);
         if(!isLogin){
-            ToastUtils.showCustomToast("请重新登录");
+            ToastUtils.showCustomToastMsg("请重新登录",150);
             return;
         }
         if (order != null) {

@@ -88,9 +88,9 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
             String ds_Bb = getIntent().getStringExtra("ds_Bb");
             Double dsBb = Double.valueOf(ds_Bb.substring(0,ds_Bb.length()-1));
             if (ds.equals("c2c")){
-                tvTitle1.setText("从C2C账号");
+                tvTitle1.setText("从节水指标账号");
                 tvDs1.setText("余额："+(dsc2c <= 0.00 ? "0.00" : df.format(dsc2c)) +" T");
-                tvTitle2.setText("到主站账号");
+                tvTitle2.setText("到数字节水账号");
                 tvDs2.setText("余额："+(dsBb <= 0.00 ? "0.00" : df.format(dsBb)) + " T");
                 tvAbleDs.setText("可划转数量 "+(dsc2c <= 0.00 ? "0.00" : df.format(dsc2c))+" T");
                 if (dsc2c <= 0.00){
@@ -100,9 +100,9 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
                 }
                 params.setType("2");//划入
             }else{
-                tvTitle1.setText("从主站账号");
+                tvTitle1.setText("从数字节水账号");
                 tvDs1.setText("余额："+(dsBb <= 0.00 ? "0.00" : df.format(dsBb)) + " T");
-                tvTitle2.setText("到C2C账号");
+                tvTitle2.setText("到节水指标账号");
                 tvDs2.setText("余额："+(dsc2c <= 0.00 ? "0.00" :df.format(dsc2c)) +" T");
                 tvAbleDs.setText("可划转数量 "+(dsBb <= 0.00 ? "0.00" :df.format(dsBb))+" T");
                 if (dsBb <= 0.00){

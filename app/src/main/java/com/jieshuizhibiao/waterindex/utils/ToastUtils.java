@@ -67,7 +67,7 @@ public class ToastUtils {
         TextView textView = (TextView) layout.findViewById(R.id.toast_msg_tv);
         textView.setText(message);
         Toast toast = new Toast(WaterIndexApplication.getInstance());
-        toast.setGravity(Gravity.TOP, 0, yOffset);
+        toast.setGravity(Gravity.BOTTOM, 0, yOffset);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();

@@ -220,7 +220,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.activity.ImageBrowseActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/dialogstyle"/>
 
         <activity android:name=".ui.activity.TraderPaidActivity"
             android:screenOrientation="portrait"/>

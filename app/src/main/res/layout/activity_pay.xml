@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/module_include_title_bar" />
+    <include
+        android:id="@+id/titilBar"
+        layout="@layout/module_include_title_bar" />
+
+    <Button
+        android:id="@+id/btn_finish_pay"
+        style="@style/style_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commit_btn_height"
+        android:layout_alignParentBottom="true"
+        android:text="已完成付款" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/titilBar"
         android:background="@color/white"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:paddingBottom="@dimen/commit_btn_height">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,16 +88,10 @@
                     android:textSize="24px" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_finish_pay"
-                style="@style/style_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commit_btn_height"
-                android:layout_marginBottom="100px"
-                android:text="已完成付款" />
 
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+
+</RelativeLayout>

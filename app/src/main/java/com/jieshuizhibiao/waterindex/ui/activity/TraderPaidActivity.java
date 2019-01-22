@@ -289,7 +289,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             traderDoAppealPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(detail)) {
-            ToastUtils.showCustomToast("未填写申诉内容");
+            ToastUtils.showCustomToastMsg("未填写申诉内容",150);
             return;
         }
         if (current_step.equals(OrderListsTabFragment.BUYER_PAID)) {
@@ -306,7 +306,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
             sellerCheckoutPresenter.attachView(this);
         }
         if (TextUtils.isEmpty(safe_pw)) {
-            ToastUtils.showCustomToast("请输入资金密码");
+            ToastUtils.showCustomToastMsg("请输入资金密码",150);
             return;
         }
         sellerCheckoutPresenter.sellerCheckout(this, order_id, safe_pw);
@@ -328,8 +328,10 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                     pay_code = buyerPaidOrderInfo.getPay_code();
                     createtime = buyerPaidOrderInfo.getCreatetime();
                     //买家内容
-
-                    tvRmb.setText(buyerPaidOrderInfo.getRmb());
+                    String rmbStr = buyerPaidOrderInfo.getRmb();
+                    rmbStr=rmbStr.replace("元","").trim();
+                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+                    tvRmb.setText(rmbStr+"元");
                     tvTotal.setText(buyerPaidOrderInfo.getTotal());
                     tvPrice.setText(buyerPaidOrderInfo.getPrice());
                     tvPaytime.setText(buyerPaidOrderInfo.getPaytime());
@@ -345,7 +347,10 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                     pay_code = sellerPaidOrderInfo.getPay_code();
                     createtime = sellerPaidOrderInfo.getCreatetime();
                     //卖家内容
-                    tvBigRmb.setText(sellerPaidOrderInfo.getRmb());
+                    String rmbStr = sellerPaidOrderInfo.getRmb();
+                    rmbStr=rmbStr.replace("元","").trim();
+                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
+                    tvBigRmb.setText(rmbStr+"元");
                     tvTrader.setText("买家");
                     GlidImageManager.getInstance().loadCircleImg(this, sellerPaidOrderInfo.getBuyer_avatar(), imgTraderAvatar, R.mipmap.head, R.mipmap.head);
                     tvTraderNickname.setText(sellerPaidOrderInfo.getBuyer_nickname());
@@ -359,7 +364,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
 
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     //卖家申诉成功、买家申诉成功
@@ -371,7 +376,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     //申诉失败
     @Override
     public void onSecondRequstFailed(String msg) {
-        ToastUtils.showCustomToast(msg);
+        ToastUtils.showCustomToast(msg,0);
     }
 
     //放行成功

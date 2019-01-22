@@ -35,7 +35,7 @@ import io.reactivex.functions.Consumer;
 
 public class ImageBrowseActivity extends BaseActivity {
     @BindView(R.id.rl_pic_browse)
-    RelativeLayout rlPicBrowse;
+    View rlPicBrowse;
     @BindView(R.id.pv_pic)
     PhotoView pvPic;
     @BindView(R.id.btn_save_pic)
@@ -58,7 +58,8 @@ public class ImageBrowseActivity extends BaseActivity {
 
     @Override
     public void initContentView() {
-        setContentView(R.layout.activity_image_browse);
+//        setContentView(R.layout.activity_image_browse);
+        setContentView(R.layout.activity_float_image_browse);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class ImageBrowseActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.rl_pic_browse, R.id.btn_save_pic})
+    @OnClick({R.id.rl_pic_browse, R.id.btn_save_pic,R.id.btn_neg})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
@@ -82,6 +83,10 @@ public class ImageBrowseActivity extends BaseActivity {
                 break;
             case R.id.btn_save_pic:
                 saveImageToLocal(mImageUrl);
+                break;
+
+            case R.id.btn_neg:
+                finish();
                 break;
             default:
                 break;
@@ -139,8 +144,8 @@ public class ImageBrowseActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastUtils.showSuccessToast("保存成功！");
-                        btnSavePic.setVisibility(View.GONE);
+                        ToastUtils.showCustomToast("保存成功！",1);
+                        finish();
                     }
                 });
 
@@ -151,11 +156,18 @@ public class ImageBrowseActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastUtils.showSuccessToast("保存失败！");
+                        ToastUtils.showCustomToastMsg("保存失败！",150);
                     }
                 });
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        // 参数1：MainActivity进场动画，参数2：SecondActivity出场动画
+        overridePendingTransition(0, R.anim.actionsheet_dialog_out);
     }
 }
 

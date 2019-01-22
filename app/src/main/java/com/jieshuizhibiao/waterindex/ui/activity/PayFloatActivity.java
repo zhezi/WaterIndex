@@ -130,11 +130,11 @@ public class PayFloatActivity extends BaseActivity implements CommonViewImpl, Up
             if (file != null) {
                 uploadFilePresenter.uploadFile(this, token, file);
             } else {
-                ToastUtils.showCustomToast("支付凭证上传失败");
+                ToastUtils.showCustomToast("支付凭证上传失败",0);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtils.showCustomToast("支付凭证上传失败");
+            ToastUtils.showCustomToast("支付凭证上传失败",0);
         }
     }
 
@@ -147,7 +147,7 @@ public class PayFloatActivity extends BaseActivity implements CommonViewImpl, Up
         if (!TextUtils.isEmpty(snapshotUrl)) {
             buyerDoPayPresenter.buyerDoPay(this, order_id, pi_id, snapshotUrl);
         } else {
-            ToastUtils.showCustomToast("请上传支付凭证");
+            ToastUtils.showCustomToastMsg("请上传支付凭证",150);
         }
     }
 
@@ -163,7 +163,7 @@ public class PayFloatActivity extends BaseActivity implements CommonViewImpl, Up
     //买家身份-上传支付凭证失败
     @Override
     public void onUploadFileFailed(String msg) {
-        ToastUtils.showCustomToast("支付凭证上传失败，请重新上传");
+        ToastUtils.showCustomToast("支付凭证上传失败，请重新上传",0);
     }
 
 
