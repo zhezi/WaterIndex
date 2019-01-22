@@ -14,10 +14,13 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
+import com.jieshuizhibiao.waterindex.beans.SysConfigResponseBean;
 import com.jieshuizhibiao.waterindex.beans.request.AddTradeReqParams;
 import com.jieshuizhibiao.waterindex.contract.presenter.AddTradePresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.CommonSysConfigPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.PayMentTypePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AddTradeViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.PayMentTypeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
@@ -36,7 +39,7 @@ import butterknife.OnClick;
  * Class Note:发布购买需求
  */
 
-public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements AddTradeViewImpl,PayMentTypeViewImpl {
+public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements AddTradeViewImpl,PayMentTypeViewImpl,CommonViewImpl {
 
     @BindView(R.id.left_ll)
     LinearLayout leftLl;
@@ -82,8 +85,8 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
     @BindView(R.id.zfb_ll)
     LinearLayout alipayLl;
 
-    private String price = "5.0";//todo 暂时未知
     private String transfeNumber = "1809";//TODO 暂时未知
+    private CommonSysConfigPresenter sysConfigPresenter;
     private AddTradePresenter addTradePresenter;
     private PayMentTypePresenter payMentTypePresenter;
     @Override
@@ -94,6 +97,8 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
         addTradePresenter.attachView(this);
         payMentTypePresenter = new PayMentTypePresenter();
         payMentTypePresenter.attachView(this);
+        sysConfigPresenter = new CommonSysConfigPresenter();
+        sysConfigPresenter.attachView(this);
         initView();
     }
 
@@ -145,6 +150,10 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
         setContentView(R.layout.activity_transaction_release_buy);
     }
 
+    public void doReuqestPrice(){
+        sysConfigPresenter.getSysConfig(this);
+    }
+
     public void doRequestPayType(){
         payMentTypePresenter.payMentType(TranscationReleaseBuyOrSellActivity.this);
         showLoadingDialog();
@@ -153,12 +162,14 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
     @Override
     public void onReNetRefreshData(int viewId) {
         doRequestPayType();
+        doReuqestPrice();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         doRequestPayType();
+        doReuqestPrice();
     }
 
 
@@ -273,15 +284,26 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
         }else{
             wechatLl.setVisibility(View.GONE);
         }
-
-        transPrice.setText(price + "元/T");//暂时未知从何处获取单价
-        transferMax.setHint("交易数量 最大交易数量 "+transfeNumber);//最大交易量即个人资产可用数量
-        transferMin.setHint("最小交易量");
     }
 
     @Override
     public void onPayMentTypeFailed(String msg) {
         dismissLoadingDialog();
+        ToastUtils.showCustomToast(msg,0);
+    }
+
+    @Override
+    public void onRequestSuccess(Object bean) {
+        if (bean instanceof SysConfigResponseBean){
+            String price = ((SysConfigResponseBean) bean).getPrice();
+            transPrice.setText(price + "元/T");
+            transferMax.setHint("交易数量 最大交易数量 "+transfeNumber);//最大交易量即个人资产可用数量
+            transferMin.setHint("最小交易量");
+        }
+    }
+
+    @Override
+    public void onRequestFailed(String msg) {
         ToastUtils.showCustomToast(msg,0);
     }
 
@@ -293,6 +315,9 @@ public class TranscationReleaseBuyOrSellActivity extends BaseActivity implements
         }
         if (payMentTypePresenter!=null){
             payMentTypePresenter.detachView();
+        }
+        if (sysConfigPresenter!=null){
+            sysConfigPresenter.detachView();
         }
     }
 }

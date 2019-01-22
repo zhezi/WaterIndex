@@ -191,9 +191,14 @@ public class UserInfoActivity extends BaseActivity implements UserInfoViewImpl {
         showLoadingDialog();
     }
 
+    /**
+     * 使用存储的头像地址
+     */
     private void showAvatar() {
+
+        String avatarUrl = (String) SPUtil.get(UserInfoActivity.this,SPUtil.USER_AVATAR,"");
         //显示头像
-        GlidImageManager.getInstance().loadCircleImg(UserInfoActivity.this, avatar_url, imgAvatar, R.mipmap.head, R.mipmap.head);
+        GlidImageManager.getInstance().loadCircleImg(UserInfoActivity.this, avatarUrl, imgAvatar, R.mipmap.head, R.mipmap.head);
     }
 
 

@@ -98,7 +98,7 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
      * 记录当前是否登录，fargment切换后有登录、退出登录操作后，下次再显示时用该变量与本地SP所存结果比对，不一致时做刷新操作
      */
     private boolean isLogin=false;
-    private String user_login,avatar_url,nike_name;//用户登录手机号，作用同isLogin
+    private String user_login,nike_name;//用户登录手机号，作用同isLogin
 
     @OnClick({R.id.relative_user_detail, R.id.relative_account_detail, R.id.relative_auth_detail,
             R.id.relative_payment_type, R.id.relative_transaction_demand,
@@ -494,8 +494,8 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
         dismissLoadingDialog();
         if (bean instanceof UserIndexResponseBean){
 //            avatar_url = ((UserIndexResponseBean) bean).getAvatar();
+//            SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatar_url);
             nike_name = ((UserIndexResponseBean) bean).getNick_name();
-            SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatar_url);
             SPUtil.insert(getBaseActivity(),SPUtil.USER_NICKNAME,nike_name);
         }else{//上传头像
             ToastUtils.showCustomToast("上传成功",1);
@@ -509,16 +509,18 @@ public class PersonalFragment extends BaseFragment implements CommonViewImpl,Upl
     }
 
     private void showAvatar() {
+        String avatarUrl = (String) SPUtil.get(getBaseActivity(),SPUtil.USER_AVATAR,"");
         //显示头像
-        GlidImageManager.getInstance().loadCircleImg(getContext(), avatar_url, imgAvatar, R.mipmap.head, R.mipmap.head);
+        GlidImageManager.getInstance().loadCircleImg(getContext(), avatarUrl, imgAvatar, R.mipmap.head, R.mipmap.head);
     }
 
 
     @Override
     public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
         dismissLoadingDialog();
-        avatar_url = fileResponseBean.getFull_url();
-        SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatar_url);
+        String avatarUrl = fileResponseBean.getFull_url();
+        SPUtil.insert(getBaseActivity(),SPUtil.USER_AVATAR,avatarUrl);
+        showAvatar();
         doChangeAvatarRuest(fileResponseBean.getUrl());//使用上传图片成功以后的绝对路径
     }
 
