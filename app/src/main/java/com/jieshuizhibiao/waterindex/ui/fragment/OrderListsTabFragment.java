@@ -25,11 +25,17 @@ import com.jieshuizhibiao.waterindex.ui.activity.TraderPaidActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderSuccActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
+import com.jieshuizhibiao.waterindex.ui.widget.Chart.ChartUtil;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +61,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     private int intPage = 1;//loadMore执行成功时+1    refresh时归位至1
     private String page_size = "10";//每页数量
     private OrderListsAdapter orderListsAdapter;
-    private List<ListOrder> list = new ArrayList<>();
+    private List<ListOrder> list = new LinkedList<>();
 
     private boolean isLoadMore = false;//如果执行loadMore进行网络请求，该值设置为true,list累加,请求成功后必须归位至false;
     private boolean isRefresh;//数据是否刷新标志 true:表示数据需要刷新，list数据clear   false：加载更多或初次加载等情况
@@ -68,7 +74,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
     public static final String BUYER_PAID = "buyerPaid";
     public static final String BUYER_APPEAL = "buyerAppeal";
     public static final String BUYER_SUCC = "buyerSucc";
-    public static final String BUYER_CANCEL = "buyerCancel";
+    public static final String BUYER_CANCEL = "cancelOrder";
     public static final String SELLER_UNPAY = "sellerUnpay";
     public static final String SELLER_PAID = "sellerPaid";
     public static final String SELLER_APPEAL = "sellerAppeal";
@@ -174,6 +180,24 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
                 rlHint.setVisibility(View.GONE);
                 if (isRefresh) list.clear();
                 list.addAll(datas);
+                //sort
+                LinkedList<ListOrder>temp=new LinkedList<>();
+                Map<Long,ListOrder>map=new TreeMap<>(new Comparator<Long>() {
+                    @Override
+                    public int compare(Long o1, Long o2) {
+                        return o1.compareTo(o2);
+                    }
+                });
+                for (ListOrder listOrder:list){
+                    final String createtime = listOrder.getCreatetime();
+                    long longCreatetime= ChartUtil.time2MilliseSecond(createtime);
+                    map.put(longCreatetime,listOrder);
+                }
+                for (Map.Entry<Long,ListOrder> entry:map.entrySet()){
+                    temp.addFirst(entry.getValue());
+                }
+                list.clear();
+                list.addAll(temp);
                 if (datas.size() > 0) intPage += 1;
                 orderListsAdapter.notifyDataSetChanged();
             }

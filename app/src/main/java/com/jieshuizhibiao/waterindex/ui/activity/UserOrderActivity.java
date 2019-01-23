@@ -29,6 +29,7 @@ import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.event.TradeIndexRefreshEvent;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
 
 import java.util.Calendar;
@@ -82,6 +83,7 @@ public class UserOrderActivity extends BaseActivity implements
     Unbinder unbinder;
     private TradeIndex tradeIndex;
     private String type;
+    private String typeStr;
     private String trade_id;
     private String total;
     private UserOrderPresenter userOrderPresenter;
@@ -124,7 +126,7 @@ public class UserOrderActivity extends BaseActivity implements
         if (!TextUtils.isEmpty(type) && tradeIndex != null) {
             if (type.equals("2")) {
                 tvTitle.setText("购买节水指标");
-                tvPayMin.setText(new StringBuilder("最小购买量：").append(tradeIndex.getPay_min()).toString());
+                tvPayMin.setText(new StringBuilder("最小").append(typeStr).append("量：").append(tradeIndex.getPay_min()).toString());
 //                edtSafePw.setVisibility(View.GONE);
 //                edtSafePw.setText("");
                 tvPayTimeout.setText(new StringBuilder("该订单付款时限为  ").append(tradeIndex.getPay_timeout()).append("  分钟").toString());
@@ -132,12 +134,12 @@ public class UserOrderActivity extends BaseActivity implements
 
             } else if (type.equals("1")) {
                 tvTitle.setText("出售节水指标");
-                tvPayMin.setText(new StringBuilder("最小购买量：").append(tradeIndex.getPay_min()).toString());
+                tvPayMin.setText(new StringBuilder("最小").append(typeStr).append("量：").append(tradeIndex.getPay_min()).toString());
 //                edtSafePw.setVisibility(View.VISIBLE);
                 tvPayTimeout.setVisibility(View.GONE);
             }
             tvTotal.setText(new StringBuilder("数量：").append(tradeIndex.getTotal()).toString());
-            edtTotal.setHint(new StringBuilder("最大可买").append(tradeIndex.getTotal()).toString());
+            edtTotal.setHint(new StringBuilder("最多").append(typeStr).append("量：").append(tradeIndex.getTotal()).toString());
             edtTotal.addTextChangedListener(this);
             GlidImageManager.getInstance().loadCircleImg(this, tradeIndex.getAvatar(), imgAvatar, R.mipmap.head, R.mipmap.head);
             tvUserNickname.setText(tradeIndex.getUser_nickname());
@@ -272,22 +274,25 @@ public class UserOrderActivity extends BaseActivity implements
         Intent intent = getIntent();
         tradeIndex = intent.getParcelableExtra("trade_index");
         type = intent.getStringExtra("type");
+        if(type.equals("2")){
+            typeStr="购买";
+        }else if(type.equals("1")){
+            typeStr="出售";
+        }
     }
 
-    @Override
-    protected void onDestroy() {
-        unbinder.unbind();
-        super.onDestroy();
-    }
+
     //下单成功
     @Override
     public void onRequestSuccess(Object bean) {
         finish();
         EventBus.getDefault().post(new TradeIndexRefreshEvent("creat_order_success", null));
     }
+
     //下单失败
     @Override
     public void onRequestFailed(String msg) {
+        ToastUtils.showCustomToast(msg,0);
         finish();
     }
 
@@ -303,15 +308,16 @@ public class UserOrderActivity extends BaseActivity implements
     public void afterTextChanged(Editable s) {
         total = edtTotal.getText().toString().trim();
         if (!TextUtils.isEmpty(total)) {
-            if(total.endsWith(".")){
-                total=total+"0";
+            if (total.endsWith(".")) {
+                total = total + "0";
             }
             final Float aFloat = Float.valueOf(total);
-            String price=String.format("%.5f",aFloat * ds_price);
+            String price = String.format("%.2f", aFloat * ds_price);
 //            LogUtils.e("tag","aFloat:"+aFloat+"  ds_price:"+ds_price+"  price:"+price);
             tvTotalPrice.setText(new StringBuilder("总价：").append(price).append("元").toString());
         }
     }
+
     //获取单价成功
     @Override
     public void onSecondRequstSuccess(Object o) {
@@ -328,5 +334,13 @@ public class UserOrderActivity extends BaseActivity implements
     @Override
     public void onSecondRequstFailed(String msg) {
         LogUtils.e("tag", "******获取单价失败------" + msg);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbinder.unbind();
+        if (sysConfigPresenter != null) sysConfigPresenter.detachView();
+        if (userOrderPresenter != null) userOrderPresenter.detachView();
+        super.onDestroy();
     }
 }

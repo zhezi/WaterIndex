@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
+import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -68,10 +69,8 @@ public class OrderListsAdapter extends RecyclerView.Adapter<OrderListsAdapter.Or
         holder.tvMyAction.setText(order.getMy_action());
         holder.tvTotal.setText(order.getTotal());
         holder.tvStatusText.setText(order.getStatus_text());
-        String rmbStr = order.getRmb();
-        rmbStr=rmbStr.replace("元","").trim();
-        rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
-        holder.tvRmb.setText(rmbStr+"元");
+        String rmbStr = TraderUnpayActivity.formatRmb(order.getRmb(),"元");
+        holder.tvRmb.setText(rmbStr);
 
     }
 

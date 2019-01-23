@@ -125,7 +125,7 @@ public class GoodsActivity extends BaseActivity implements GoodsViewImpl {
 
     @Override
     public void onGetGoodsSuccess(List<GoodsResposeBean> list) {
-        dismissDialog();
+        dismissLoadingDialog();
         if (list != null) {
             if (list.size() == 0) {
                 relativeHint.setVisibility(View.VISIBLE);
@@ -143,7 +143,7 @@ public class GoodsActivity extends BaseActivity implements GoodsViewImpl {
 
     @Override
     public void onGetGoodsFailed(String msg) {
-        dismissDialog();
+        dismissLoadingDialog();
         relativeHint.setVisibility(View.VISIBLE);
         xrv.setVisibility(View.GONE);
     }

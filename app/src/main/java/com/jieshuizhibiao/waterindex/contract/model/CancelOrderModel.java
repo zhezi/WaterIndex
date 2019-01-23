@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class CancelOrderModel {
 
-    public void buyerCancle(BaseActivity activity, long order_id, final CancelOrderCallback callback){
+    public void cancelOrder(BaseActivity activity, long order_id, final CancelOrderCallback callback){
         RetrofitFactory.getInstance().createService()
                 .buyerCancle(RequestUtil.getRequestHashBody(initParams(order_id),false))
                 .compose(activity.<BaseEntity>bindToLifecycle())

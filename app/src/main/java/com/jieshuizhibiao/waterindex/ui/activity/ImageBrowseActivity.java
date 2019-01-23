@@ -42,6 +42,7 @@ public class ImageBrowseActivity extends BaseActivity {
     Button btnSavePic;
 
     private String mImageUrl;
+    public static final String IMG_URL="imgUrl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class ImageBrowseActivity extends BaseActivity {
 
     private void getIntentExtra() {
         Intent intent = getIntent();
-        mImageUrl = intent.getStringExtra(PayActivity.QRCODE_URL);
+        mImageUrl = intent.getStringExtra(IMG_URL);
     }
 
     @Override

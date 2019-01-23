@@ -168,13 +168,12 @@ public class TraderAppealActivity extends BaseActivity implements CommonViewImpl
                 }
                 if (order_info != null) {
                     tvTitleCenter.setText(order_info.getTitle());
-                    String rmbStr = order_info.getRmb();
-                    rmbStr=rmbStr.replace("元","").trim();
-                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
-                    tvRmb.setText(rmbStr+"元");
+                    String rmbStr = TraderUnpayActivity.formatRmb(order_info.getRmb(),"元");
+                    tvRmb.setText(rmbStr);
                     tvRmb.setTextColor(textBlack);
                     tvTotal.setText(order_info.getTotal());
-                    tvPrice.setText(order_info.getPrice());
+                    String priceStr=TraderUnpayActivity.formatRmb(order_info.getPrice(),"元/T");
+                    tvPrice.setText(priceStr);
                     String pay_type = order_info.getPay_type();
                     if (pay_type.equals("1")) {
                         imgPayTypeBankCard.setVisibility(View.VISIBLE);

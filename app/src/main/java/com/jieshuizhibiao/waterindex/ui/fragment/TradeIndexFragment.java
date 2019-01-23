@@ -43,6 +43,8 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
 
     @BindView(R.id.tv_tip)
     TextView tvTip;
+    @BindView(R.id.tv_go)
+    TextView tvGo;
     @BindView(R.id.ll_warning)
     LinearLayout llWarning;
     @BindView(R.id.btn_buy)
@@ -114,7 +116,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
             public void onRefresh() {
                 sellCounter = 0;
                 sellList.clear();
-                showLoadingDialog();
+//                showLoadingDialog();
                 doRequest();
                 xrvSell.refreshComplete();
             }
@@ -224,7 +226,12 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
         if (bean != null) {
             is_login = tradeIndexBase.getIs_login();
             is_auth = tradeIndexBase.getIs_auth();
+            SPUtil.insert(getActivity(),SPUtil.IS_AUTH,is_auth);
             tip = tradeIndexBase.getTip();
+            if(is_auth==1){
+                llWarning.setEnabled(false);
+                tvGo.setVisibility(View.GONE);
+            }
             if (!TextUtils.isEmpty(tradeIndexBase.getTip())) {
                 llWarning.setVisibility(View.VISIBLE);
                 tvTip.setText(tradeIndexBase.getTip());
@@ -262,7 +269,6 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
                 buyList.clear();
                 sellCounter = 1;
                 sellList.clear();
-                showLoadingDialog();
                 doRequest();
             }}
     }
@@ -295,6 +301,7 @@ public class TradeIndexFragment extends BaseFragment implements CommonViewImpl, 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreateOrder(TradeIndex tradeIndex) {
+        is_auth=(int)SPUtil.get(getActivity(),SPUtil.IS_AUTH,0);
         if (is_login.equals("0")) {
             showDialog("交易信息", tip, "去登陆");
             return;

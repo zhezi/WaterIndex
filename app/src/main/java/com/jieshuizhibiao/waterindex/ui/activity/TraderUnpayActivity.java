@@ -28,7 +28,6 @@ import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.event.UserDoPayEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
 import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
-import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.image.GlidImageManager;
@@ -71,6 +70,8 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
     @BindView(R.id.img_right_wechat)
     ImageView imgRightWechat;
 
+    @BindView(R.id.tv_pay_cate_txt)
+    TextView tvPayCateTxt;
     @BindView(R.id.ll_expire_time_container)
     LinearLayout llExpireTimeContainer;
     @BindView(R.id.tv_left)
@@ -169,11 +170,15 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 llBtnsSeller.setVisibility(View.GONE);
             } else if (current_step.equals(OrderListsTabFragment.SELLER_UNPAY)) {
                 tvTitleCenter.setText("出售节水指标");
-                llExpireTimeContainer.setVisibility(View.GONE);
+                tvPayCateTxt.setText("收款方式");
+                llExpireTimeContainer.setVisibility(View.GONE);//如果产品要求卖单不显示倒计时，执行这句
                 tvTradeType.setText("出售");
                 tvTrader.setText("买家");
                 llBtnsBuyer.setVisibility(View.GONE);
                 llBtnsSeller.setVisibility(View.VISIBLE);
+                llCard.setEnabled(false);
+                llAlipay.setEnabled(false);
+                llWechat.setEnabled(false);
             }
         }
     }
@@ -218,24 +223,6 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
         dismissLoadingDialog();
     }
 
-    @Override
-    public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg, 0);
-        dismissDialog();
-    }
-
-    @Override
-    public void onCancelSucc(Object bean) {
-        dismissLoadingDialog();
-        showDialog("提示", CANCEL_SUCC, I_KNOW);
-    }
-
-    @Override
-    public void onCancelFail(String msg) {
-        ToastUtils.showCustomToast(msg, 0);
-        dismissDialog();
-    }
-
     private void setView(BaseUnpayOrderInfo baseUnpayOrderInfo, List<PayInfo> list, String avatarUrl, String nickname) {
         if (baseUnpayOrderInfo != null && list != null) {
             expire_time = baseUnpayOrderInfo.getExpire_time();
@@ -262,11 +249,11 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 tvLeft.setVisibility(View.GONE);
                 tvRight.setVisibility(View.GONE);
             }
-            String rmbStr=baseUnpayOrderInfo.getRmb().replace("元","").trim();
-            rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
-            tvRmb.setText(rmbStr+"元");
+            String rmbStr=formatRmb(baseUnpayOrderInfo.getRmb(),"元");
+            tvRmb.setText(rmbStr);
             tvTotal.setText(baseUnpayOrderInfo.getTotal());
-            tvPrice.setText(baseUnpayOrderInfo.getPrice());
+            String priceStr=formatRmb(baseUnpayOrderInfo.getPrice(),"元/T");
+            tvPrice.setText(priceStr);
             tvOrderSn.setText(baseUnpayOrderInfo.getOrder_sn());
             tvPayCode.setText(baseUnpayOrderInfo.getPay_code());
             tvCreatetime.setText(baseUnpayOrderInfo.getCreatetime());
@@ -288,6 +275,31 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 map.put(type, payInfo);
             }
         }
+    }
+
+    public static String formatRmb(String rmb,String replaceTarget){
+        rmb=rmb.replace(replaceTarget,"").trim();
+        rmb=String.format("%.2f",Float.valueOf(rmb));
+        return rmb+replaceTarget;
+    }
+
+
+    @Override
+    public void onRequestFailed(String msg) {
+        ToastUtils.showCustomToast(msg, 0);
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void onCancelSucc(Object bean) {
+        dismissLoadingDialog();
+        showDialog("提示", CANCEL_SUCC, I_KNOW);
+    }
+
+    @Override
+    public void onCancelFail(String msg) {
+        ToastUtils.showCustomToast(msg, 0);
+        dismissLoadingDialog();
     }
 
     public static boolean isNumeric(String str) {
@@ -326,7 +338,7 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
     }
 
     @OnClick({R.id.left_ll, R.id.ll_card, R.id.ll_alipay, R.id.ll_wechat,
-            R.id.btn_buyer_cancle, R.id.btn_buyer_pay, R.id.btn_seller_cancle, R.id.btn_seller_pay})
+            R.id.btn_buyer_cancle, R.id.btn_buyer_pay,  R.id.btn_seller_pay})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
@@ -374,12 +386,12 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
                 }
 
                 break;
-
-            case R.id.btn_seller_cancle:
-                //todo 卖家取消订单  无对应接口
-                break;
+            //产品取消该功能
+            //case R.id.btn_seller_cancle:
+            //   //todo 卖家取消订单  无对应接口
+            //break;
             case R.id.btn_seller_pay:
-                //todo do nothing
+                //do nothing
 
                 break;
         }
@@ -441,8 +453,8 @@ public class TraderUnpayActivity extends BaseActivity implements CommonViewImpl,
         if (cancelOrderPresenter == null) {
             cancelOrderPresenter = new CancelOrderPresenter(new CancelOrderModel());
         }
-        if (OrderListsTabFragment.BUYER_UNPAY.equals(next_step)) {
-            cancelOrderPresenter.buyerCancel(this, order_id);
+        if(OrderListsTabFragment.BUYER_UNPAY.equals(next_step)){
+            cancelOrderPresenter.cancelOrder(this, order_id);
         }
     }
 

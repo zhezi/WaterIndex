@@ -18,7 +18,7 @@ public class ListOrder implements Parcelable {
      * buyerPaid 卖家未收款//
      * buyerAppeal 申诉中
      * buyerSucc 已完成
-     * buyerCancel 已取消
+     * cancelOrder 已取消
      *
      * sellerUnpay 买家未付款
      * sellerPaid 卖家未收款//

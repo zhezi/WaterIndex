@@ -21,14 +21,15 @@ import com.jieshuizhibiao.waterindex.contract.view.CancelOrderViewImpl;
 import com.jieshuizhibiao.waterindex.event.ChangeOrderStatusEvent;
 import com.jieshuizhibiao.waterindex.event.UserDoPayEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsTabFragment;
-import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.TimeUtils;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -102,12 +103,12 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
     private long pi_id;
     private boolean isTimeout = false;//倒计时结束，订单取消，不能继续操作
 
-    public static final String QRCODE_URL = "qrcodeUrl";
 
-
+    private Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        unbinder=ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         StatusBarUtil.setImmersionStatus(this, titleBar);
         getIntntExtra();
@@ -170,9 +171,8 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
         }else {
             tvTitleCenter.setText("支付及收款情况");
         }*/
-        rmb=rmb.replace("元","").trim();
-        rmb=String.format("%.2f",Float.valueOf(rmb));
-        tvBigRmb.setText(rmb+"元");
+        rmb=TraderUnpayActivity.formatRmb(rmb,"元");
+        tvBigRmb.setText(rmb);
         if (TraderUnpayActivity.isNumeric(expire_time)) {
             long ms = Long.valueOf(expire_time);
             if (ms > 1000) {
@@ -252,7 +252,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
 
             case R.id.ll_qrcode:
                 Intent intent = new Intent(PayActivity.this, ImageBrowseActivity.class);
-                intent.putExtra(QRCODE_URL, qrcodeUrl);
+                intent.putExtra(ImageBrowseActivity.IMG_URL, qrcodeUrl);
                 startActivity(intent);
                 overridePendingTransition(R.anim.actionsheet_dialog_in, 0);
                 break;
@@ -305,7 +305,7 @@ public class PayActivity extends BaseActivity implements CancelOrderViewImpl {
             cancelOrderPresenter = new CancelOrderPresenter(new CancelOrderModel());
         }
         if (OrderListsTabFragment.BUYER_UNPAY.equals(lastStep)) {
-            cancelOrderPresenter.buyerCancel(this, order_id);
+            cancelOrderPresenter.cancelOrder(this, order_id);
         } /*else if (TraderUnpayActivity.SELLER_UNPAY.equals(lastStep)) {
 //            traderUnpayPresenter.sellerUnpay(this, orderId);
         }*/

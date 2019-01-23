@@ -13,11 +13,11 @@ public class CancelOrderPresenter extends BasePresenter<CancelOrderViewImpl> {
         this.model = model;
     }
 
-    public void buyerCancel(BaseActivity activity, long order_id){
+    public void cancelOrder(BaseActivity activity, long order_id){
         if(model==null){
             model=new CancelOrderModel();
         }
-        model.buyerCancle(activity, order_id, new CancelOrderCallback() {
+        model.cancelOrder(activity, order_id, new CancelOrderCallback() {
             @Override
             public void onCancleSucc(Object bean) {
                 if(mView!=null){

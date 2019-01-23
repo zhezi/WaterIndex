@@ -77,7 +77,7 @@
                     android:paddingTop="17px"
                     android:drawableTop="@drawable/homepage_rb4_icon"
                     android:textColor="@color/homepage_rb_color"
-                    android:text="发现"
+                    android:text="订单"
                     android:textSize="10sp"
                     android:gravity="center"
                     android:layout_weight="1"/>

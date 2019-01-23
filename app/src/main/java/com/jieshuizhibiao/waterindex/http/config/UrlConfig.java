@@ -1065,7 +1065,7 @@ public class UrlConfig {
     public static final String BUYER_PAID = "api/home/userOrder/buyerPaid";
 
     /**
-     * 买家身份-取消
+     * 买家身份-取消   卖家身份没有取消订单操作
      * {
      * "code":1,
      * "msg":"取消成功",

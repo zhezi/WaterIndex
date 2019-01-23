@@ -150,6 +150,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
     private long order_id;
     private PayInfo payInfo;
     private String qrcodeUrl;//该页面要做放大吗？？
+    private String paySnapshotUrl;
     private String pay_code;
     private String createtime;
     private NewAlertDialog dialog;
@@ -215,6 +216,14 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
 
             btnBuyerAppeal.setVisibility(View.GONE);
             llBtnsSeller.setVisibility(View.VISIBLE);
+            llPaySnapshot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(TraderPaidActivity.this,ImageBrowseActivity.class);
+                    intent.putExtra(ImageBrowseActivity.IMG_URL,paySnapshotUrl);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -246,6 +255,7 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                         "请务必登录网银或第三方支付账号确定该笔款项",
                         "确认",
                         "取消");
+                break;
             case R.id.btn_buyer_appeal:
                 showDialog(NewAlertDialog.TYPES[0],
                         "订单申诉",
@@ -253,12 +263,6 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                         "确认",
                         null);
                 break;
-//            case R.id.left_ll:
-//
-//                break;
-//            case R.id.left_ll:
-//
-//                break;
         }
     }
 
@@ -328,12 +332,11 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                     pay_code = buyerPaidOrderInfo.getPay_code();
                     createtime = buyerPaidOrderInfo.getCreatetime();
                     //买家内容
-                    String rmbStr = buyerPaidOrderInfo.getRmb();
-                    rmbStr=rmbStr.replace("元","").trim();
-                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
-                    tvRmb.setText(rmbStr+"元");
+                    String rmbStr = TraderUnpayActivity.formatRmb(buyerPaidOrderInfo.getRmb(),"元");
+                    tvRmb.setText(rmbStr);
                     tvTotal.setText(buyerPaidOrderInfo.getTotal());
-                    tvPrice.setText(buyerPaidOrderInfo.getPrice());
+                    String priceStr=TraderUnpayActivity.formatRmb(buyerPaidOrderInfo.getPrice(),"元/T");
+                    tvPrice.setText(priceStr);
                     tvPaytime.setText(buyerPaidOrderInfo.getPaytime());
                 }
             } else if (current_step.equals(OrderListsTabFragment.SELLER_PAID)) {
@@ -347,13 +350,13 @@ public class TraderPaidActivity extends BaseActivity implements CommonViewImpl, 
                     pay_code = sellerPaidOrderInfo.getPay_code();
                     createtime = sellerPaidOrderInfo.getCreatetime();
                     //卖家内容
-                    String rmbStr = sellerPaidOrderInfo.getRmb();
-                    rmbStr=rmbStr.replace("元","").trim();
-                    rmbStr=String.format("%.2f",Float.valueOf(rmbStr));
-                    tvBigRmb.setText(rmbStr+"元");
+                    String rmbStr = TraderUnpayActivity.formatRmb(sellerPaidOrderInfo.getRmb(),"元");
+                    tvBigRmb.setText(rmbStr);
                     tvTrader.setText("买家");
                     GlidImageManager.getInstance().loadCircleImg(this, sellerPaidOrderInfo.getBuyer_avatar(), imgTraderAvatar, R.mipmap.head, R.mipmap.head);
                     tvTraderNickname.setText(sellerPaidOrderInfo.getBuyer_nickname());
+                    paySnapshotUrl=sellerPaidOrderInfo.getPay_snapshot();
+                    GlidImageManager.getInstance().loadImageView(this,paySnapshotUrl,imgPaySnapshot,R.mipmap.qrcode);
                 }
             }
             if (payInfo != null) {
