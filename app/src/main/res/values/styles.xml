@@ -178,8 +178,8 @@
         <item name="android:paddingBottom">30px</item>
         <item name="android:textColor">@color/hit_color</item>
         <item name="android:textSize">28px</item>
-        <item name="android:minWidth">310px</item>
     </style>
+    <!--<item name="android:minWidth">310px</item>-->
 
     <style name="style_txt_content">
         <item name="android:textSize">28px</item>

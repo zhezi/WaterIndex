@@ -32,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -144,10 +145,19 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     EditText edt_id_no;
     @BindView(R.id.ll_p_id_img)
     LinearLayout ll_p_id_img;
-    @BindView(R.id.btn_upload_p_id_img_a)
-    Button btn_upload_p_id_img_a;
-    @BindView(R.id.btn_upload_p_id_img_b)
-    Button btn_upload_p_id_img_b;
+
+    @BindView(R.id.ll_upload_p_id_img_a)
+    LinearLayout llUploadPIdImgA;
+    @BindView(R.id.img_add_a)
+    ImageView imgAddA;
+    @BindView(R.id.tv_a_txt)
+    TextView tvATxt;
+    @BindView(R.id.ll_upload_p_id_img_b)
+    LinearLayout llUploadPIdImgB;
+    @BindView(R.id.img_add_b)
+    ImageView imgAddB;
+    @BindView(R.id.tv_b_txt)
+    TextView tvBTxt;
     @BindView(R.id.tv_standing_off)
     TextView tvStandingOff;
 
@@ -339,8 +349,9 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     }
 
     @OnClick({R.id.btn_company, R.id.btn_personal, R.id.left_ll, R.id.btn_next, R.id.tv_standing_off,
-            R.id.btn_upload_boss_id_img_a, R.id.btn_upload_boss_id_img_b, R.id.btn_upload_p_id_img_a,
-            R.id.btn_upload_p_id_img_b, R.id.btn_license_img})
+            R.id.btn_upload_boss_id_img_a, R.id.btn_upload_boss_id_img_b,
+            R.id.ll_upload_p_id_img_a, R.id.ll_upload_p_id_img_b,
+            R.id.btn_license_img})
     public void onClick(View view) {
         int id = view.getId();
 
@@ -412,12 +423,12 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
                 onViewClicked();
                 showPopupView();
                 break;
-            case R.id.btn_upload_p_id_img_a:
+            case R.id.ll_upload_p_id_img_a:
                 view_no = PicturePresenter.VIEW_NO[3];
                 onViewClicked();
                 showPopupView();
                 break;
-            case R.id.btn_upload_p_id_img_b:
+            case R.id.ll_upload_p_id_img_b:
                 view_no = PicturePresenter.VIEW_NO[4];
                 onViewClicked();
                 showPopupView();
@@ -629,11 +640,15 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 //            bossIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[3]) {
             uploadFile();
-            btn_upload_p_id_img_a.setBackground(bitmapDrawable);
+            tvATxt.setVisibility(View.GONE);
+            imgAddA.setVisibility(View.GONE);
+            llUploadPIdImgA.setBackground(bitmapDrawable);
 //            personalIdImgStrA = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[4]) {
             uploadFile();
-            btn_upload_p_id_img_b.setBackground(bitmapDrawable);
+            tvBTxt.setVisibility(View.GONE);
+            imgAddB.setVisibility(View.GONE);
+            llUploadPIdImgB.setBackground(bitmapDrawable);
 //            personalIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[5]) {
             btn_license_img.setBackground(bitmapDrawable);
