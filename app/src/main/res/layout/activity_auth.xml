@@ -164,6 +164,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="法人身份证正面" />
 
+
                     <Button
                         android:id="@+id/btn_upload_boss_id_img_b"
                         style="@style/btn_upload"
@@ -221,8 +222,8 @@
                     android:hint="身份证号"
                     android:visibility="gone" />
 
-                <RelativeLayout
-                    android:id="@+id/relative_p_id_img"
+                <LinearLayout
+                    android:id="@+id/ll_p_id_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/view_space_edt_vertical"
@@ -233,19 +234,21 @@
                     <Button
                         android:id="@+id/btn_upload_p_id_img_a"
                         style="@style/btn_upload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_height="210px"
                         android:text="身份证正面" />
-
+                    <View
+                        android:layout_width="20px"
+                        android:layout_height="wrap_content"/>
                     <Button
                         android:id="@+id/btn_upload_p_id_img_b"
                         style="@style/btn_upload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_width="0px"
+                        android:layout_weight="1"
+                        android:layout_height="210px"
                         android:text="身份证反面" />
-                </RelativeLayout>
+                </LinearLayout>
 
 
                 <Button

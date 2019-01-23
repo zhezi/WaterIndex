@@ -48,7 +48,7 @@ import java.io.InputStream;
 public class PictureFileUtil {
     private static final String TAG = "PictureFileUtil";
 
-    public static final String PIC_DIR_NAME = "waterindex";
+    public static final String PIC_DIR_NAME = "WaterIndex";
     public static final String PIC_NAME_PREFIX = "waterindex_pic";
 
     /**

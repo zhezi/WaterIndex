@@ -88,9 +88,11 @@ public class PicturePresenter extends BasePresenter<PictureViewImpl> {
 
     public void onCameraClicked() {
         //创建拍照存储的图片文件
-        tempFile = new File(PictureFileUtil.checkDirPath(Environment.getExternalStorageDirectory()
-                .getPath() + "/image/"), MD5Util.getMD5("waterindex_temp") + System
-                .currentTimeMillis() + ".jpg");
+        String dirPath = Environment.getExternalStorageDirectory().getPath() + File.separator + PictureFileUtil.PIC_DIR_NAME;
+        dirPath = PictureFileUtil.checkDirPath(dirPath);
+        String suffix = ".jpg";
+        tempFile = new File(dirPath,PictureFileUtil.PIC_NAME_PREFIX+System.currentTimeMillis()+suffix);
+
         //权限判断
         int writePermission=ContextCompat.checkSelfPermission(mView.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int cameraPermission=ContextCompat.checkSelfPermission(mView.getActivity(), Manifest.permission.CAMERA);

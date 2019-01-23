@@ -10,6 +10,7 @@
  */
 package com.jieshuizhibiao.waterindex.ui.activity;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,21 +39,27 @@ import android.widget.TextView;
 
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.city.CityBean;
 import com.jieshuizhibiao.waterindex.beans.city.ProvinceBean;
 import com.jieshuizhibiao.waterindex.beans.request.CompanyAuthReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.PersonalAuthReqParams;
 import com.jieshuizhibiao.waterindex.contract.model.AuthModel;
+import com.jieshuizhibiao.waterindex.contract.model.UploadFileModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.AuthPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.PicturePresenter;
+import com.jieshuizhibiao.waterindex.contract.presenter.UploadFilePresenter;
 import com.jieshuizhibiao.waterindex.contract.view.AuthViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.PictureViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.event.PictureEvent;
 import com.jieshuizhibiao.waterindex.event.SelectFragmentEvent;
 import com.jieshuizhibiao.waterindex.ui.adapter.SpinnerAdapter;
 import com.jieshuizhibiao.waterindex.ui.widget.PicturePopupWindow;
 import com.jieshuizhibiao.waterindex.utils.GsonUtil;
 import com.jieshuizhibiao.waterindex.utils.PictureFileUtil;
+import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 import com.jieshuizhibiao.waterindex.utils.Util;
@@ -82,7 +89,7 @@ import io.reactivex.schedulers.Schedulers;
  * @Author: sxt
  * @Date: 2018/12/9 8:19 PM
  */
-public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureViewImpl {
+public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureViewImpl, UploadFileViewImpl {
     @BindView(R.id.title_bar)
     View title_bar;
     @BindView(R.id.left_ll)
@@ -135,8 +142,8 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     EditText edt_user_name;
     @BindView(R.id.edt_id_no)
     EditText edt_id_no;
-    @BindView(R.id.relative_p_id_img)
-    RelativeLayout relative_p_id_img;
+    @BindView(R.id.ll_p_id_img)
+    LinearLayout ll_p_id_img;
     @BindView(R.id.btn_upload_p_id_img_a)
     Button btn_upload_p_id_img_a;
     @BindView(R.id.btn_upload_p_id_img_b)
@@ -200,6 +207,12 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
         }
     };
 
+    //by sxt
+    private String personalIdImgAUrl;//正面照上传后后台返回相对地址
+    private String personalIdImgBUrl;//反面找上传后后台返回相对地址
+    private UploadFilePresenter uploadFilePresenter;
+    private Uri imgUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,6 +223,8 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
         authPresenter.attachView(this);
         picturePresenter = PicturePresenter.getInstance();
         picturePresenter.attachView(this);
+        uploadFilePresenter = new UploadFilePresenter(new UploadFileModel());
+        uploadFilePresenter.attachView(this);
         initViewArr();
         initView();
         EventBus.getDefault().register(this);
@@ -367,17 +382,17 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
                     companyParams.setCompany_boss_tel(edt_company_boss_tel.getText().toString());
                     companyParams.setCompany_other_name(edt_company_other_name.getText().toString());
                     companyParams.setCompany_other_tel(edt_company_other_tel.getText().toString());
-                    authPresenter.auth(AuthActivity.this,companyParams);
+                    authPresenter.auth(AuthActivity.this, companyParams);
                     showLoadingDialog();
                 } else {
                     personalParams.setProvince(provinceName);
                     personalParams.setCity(cityName);
                     personalParams.setUser_name(edt_user_name.getText().toString());
                     personalParams.setId_no(edt_id_no.getText().toString());
-                    personalParams.setId_img_a(personalIdImgStrA);
-                    personalParams.setId_img_b(personalIdImgStrB);
+                    personalParams.setId_img_a(personalIdImgAUrl);
+                    personalParams.setId_img_b(personalIdImgBUrl);
                     authPresenter.vertify(personalParams);
-                    authPresenter.auth(AuthActivity.this,personalParams);
+                    authPresenter.auth(AuthActivity.this, personalParams);
                     showLoadingDialog();
                 }
 
@@ -459,9 +474,35 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
                     edt_user_name,
                     edt_id_no,
                     edt_id_no,
-                    relative_p_id_img};
+                    ll_p_id_img};
         }
     }
+
+    private void uploadFile() {
+        if (uploadFilePresenter == null) {
+            uploadFilePresenter = new UploadFilePresenter(new UploadFileModel());
+            uploadFilePresenter.attachView(this);
+        }
+        String textStr = null;
+        if (view_no == PicturePresenter.VIEW_NO[3]) {//个人身份证正面
+            textStr = "身份证正面照上传失败";
+        } else if (view_no == PicturePresenter.VIEW_NO[4]) {//个人身份证反面
+            textStr = "身份证反面照上传失败";
+        }
+        try {
+            File file = PictureFileUtil.Uri2File(imgUri, this);
+            String token = (String) SPUtil.get(this, SPUtil.TOKEN, "token");
+            if (file != null) {
+                uploadFilePresenter.uploadFile(this, token, file);
+            } else {
+                ToastUtils.showCustomToast(textStr, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.showCustomToast(textStr, 0);
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onEdtContentsLegal() {
@@ -507,7 +548,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     @Override
     public void onCompanyAuthFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
     }
 
     @Override
@@ -519,7 +560,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     @Override
     public void onPersonalAuthFailed(String msg) {
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
     }
 
     /**
@@ -528,12 +569,12 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     private void go2SetCapitalPassActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        if(user_type){
+        if (user_type) {
             bundle.putParcelable("CompanyAuthReqParams", companyParams);
         } else {
             bundle.putParcelable("PersonalAuthReqParams", personalParams);
         }
-        bundle.putString("action","AuthActivity");
+        bundle.putString("action", "AuthActivity");
         intent.putExtras(bundle);
         intent.setClass(AuthActivity.this, SetCapitalPassActivity.class);
         startActivity(intent);
@@ -579,22 +620,24 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     @Override
     public void showView(Bitmap bitmap) {
         final BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-        String imgStr = PictureFileUtil.bitmap2String(bitmap);
+        //String imgStr = PictureFileUtil.bitmap2String(bitmap);//不上传string，改为上传url
         if (view_no == PicturePresenter.VIEW_NO[1]) {
             btn_upload_boss_id_img_a.setBackground(bitmapDrawable);
-            bossIdImgStrA = imgStr;
+//            bossIdImgStrA = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[2]) {
             btn_upload_boss_id_img_b.setBackground(bitmapDrawable);
-            bossIdImgStrB = imgStr;
+//            bossIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[3]) {
+            uploadFile();
             btn_upload_p_id_img_a.setBackground(bitmapDrawable);
-            personalIdImgStrA = imgStr;
+//            personalIdImgStrA = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[4]) {
+            uploadFile();
             btn_upload_p_id_img_b.setBackground(bitmapDrawable);
-            personalIdImgStrB = imgStr;
+//            personalIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[5]) {
             btn_license_img.setBackground(bitmapDrawable);
-            licenseImgStr = imgStr;
+//            licenseImgStr = imgStr;
         }
     }
 
@@ -651,8 +694,10 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
             Uri uri = AuthActivity.this.getContentResolver().insert(MediaStore.Images
                     .Media.EXTERNAL_CONTENT_URI, contentValues);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            imgUri=uri;
         } else {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+            imgUri=Uri.fromFile(tempFile);
         }
         startActivityForResult(intent, requestCode);
     }
@@ -664,7 +709,24 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        picturePresenter.onActivityResult(requestCode, resultCode, intent);
+//        picturePresenter.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+
+            case PicturePresenter.REQUEST_PHOTO:  //调用系统相册返回
+                if (resultCode == Activity.RESULT_OK) {
+                    imgUri = intent.getData();
+                }
+                break;
+        }
+
+        if (imgUri == null) {
+            return;
+        }
+        String cropImagePath = PictureFileUtil.getRealFilePathFromUri(this, imgUri);
+        Bitmap bitMap = BitmapFactory.decodeFile(cropImagePath);
+        if (bitMap != null) {
+            showView(bitMap);
+        }
     }
 
     @Override
@@ -673,6 +735,21 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
         picturePresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    public void onUploadFileSuccess(UploadFileResponseBean fileResponseBean) {
+        if (fileResponseBean != null) {
+            if (view_no == PicturePresenter.VIEW_NO[3]) {
+                personalIdImgAUrl = fileResponseBean.getUrl();
+            } else if (view_no == PicturePresenter.VIEW_NO[4]) {
+                personalIdImgBUrl = fileResponseBean.getUrl();
+            }
+        }
+    }
+
+    @Override
+    public void onUploadFileFailed(String msg) {
+        ToastUtils.showCustomToastMsg(msg, 150);
+    }
 
     public void onEventMainThread(PictureEvent event) {
         Uri uri = event.getUri();
@@ -690,7 +767,10 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl,PictureVi
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-        picturePresenter.detachView();
-        authPresenter.detachView();
+        if (picturePresenter != null) picturePresenter.detachView();
+        if (authPresenter != null) authPresenter.detachView();
+        if (uploadFilePresenter != null) uploadFilePresenter.detachView();
     }
+
+
 }
