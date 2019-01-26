@@ -1,5 +1,6 @@
 package com.jieshuizhibiao.waterindex.contract.view;
 
+import com.jieshuizhibiao.waterindex.beans.BeforeMvMoneyResponse;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
 import com.jieshuizhibiao.waterindex.contract.IBaseViewImpl;
 
@@ -9,6 +10,6 @@ import com.jieshuizhibiao.waterindex.contract.IBaseViewImpl;
  */
 
 public interface BeforeMvMoneryViewImpl extends IBaseViewImpl {
-    void onBeforeMvMonerySuccess(MoveMoneryBean moveMoneryBean);
+    void onBeforeMvMonerySuccess(BeforeMvMoneyResponse beforeMvMoneyResponse);
     void onBeforeMvMoneryFailed(String msg);
 }

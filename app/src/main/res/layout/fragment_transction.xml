@@ -30,7 +30,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:layout_marginBottom="20px"
-                android:background="@drawable/btn_blue_bg_selector"
+                android:background="@drawable/btn_yellow_bg_selector"
                 android:text="展开"
                 android:textSize="@dimen/text_size_edt"
                 android:visibility="gone" />

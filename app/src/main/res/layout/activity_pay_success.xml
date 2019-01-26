@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linear_agreement"
                 android:layout_marginTop="@dimen/view_space_bottom_btn_above"
-                android:background="@drawable/btn_blue_bg_selector"
+                android:background="@drawable/btn_yellow_bg_selector"
                 android:text="查看订单" />
 
             <TextView

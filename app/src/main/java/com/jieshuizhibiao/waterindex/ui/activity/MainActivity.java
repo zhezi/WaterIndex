@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,21 +15,27 @@ import android.widget.TextView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.ActivityManager;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.AppUpdateResponseBean;
+import com.jieshuizhibiao.waterindex.contract.presenter.AppUpdatePresenter;
+import com.jieshuizhibiao.waterindex.contract.view.AppUpdateViewImpl;
 import com.jieshuizhibiao.waterindex.event.LoginStatusChangedEvent;
 import com.jieshuizhibiao.waterindex.event.SelectFragmentEvent;
 import com.jieshuizhibiao.waterindex.ui.fragment.OrderListsFragment;
 import com.jieshuizhibiao.waterindex.ui.fragment.PersonalFragment;
 import com.jieshuizhibiao.waterindex.ui.fragment.TradeIndexFragment;
+import com.jieshuizhibiao.waterindex.ui.view.AlertChainDialog;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements AppUpdateViewImpl {
 
     @BindView(R.id.title_bar)
     View titleBar;
@@ -48,8 +55,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.rb5)
     public RadioButton rb5;
 
-    private Fragment currentFragment,tab1,tab2,tab3;
+    private Fragment currentFragment, tab1, tab2, tab3;
     private long mExitTime;
+    private AppUpdatePresenter appUpdatePresenter;
+    private AlertChainDialog alertChainDialog;
+    private boolean isUpdate = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +69,15 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         EventBus.getDefault().register(this);
+        appUpdatePresenter = new AppUpdatePresenter();
+        appUpdatePresenter.attachView(this);
+        checkAppVer();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
+        checkAppVer();
     }
 
     /**
@@ -112,10 +126,19 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void checkAppVer() {
+        if (appUpdatePresenter == null) {
+            appUpdatePresenter = new AppUpdatePresenter();
+            appUpdatePresenter.attachView(this);
+        }
+        appUpdatePresenter.appVersion(this, Util.versionName(this));
+    }
+
+
     private void switchFragment(Fragment targetFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (!targetFragment.isAdded()) {
-            if(currentFragment==null)
+            if (currentFragment == null)
                 transaction.add(R.id.activity_main_ll, targetFragment).commit();
             else
                 transaction.hide(currentFragment).add(R.id.activity_main_ll, targetFragment).commit();
@@ -145,7 +168,7 @@ public class MainActivity extends BaseActivity {
 
     public void exit() {
         if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            ToastUtils.showCustomToastMsg("再按一次退出程序",150);
+            ToastUtils.showCustomToastMsg("再按一次退出程序", 150);
             mExitTime = System.currentTimeMillis();
         } else {
             ActivityManager.AppExit(mContext);
@@ -176,25 +199,24 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
     private void showTradeIndex() {
         rb3.setChecked(true);
         tv_title_center.setText("交易市场");
-        if(tab1==null)tab1=new TradeIndexFragment();
+        if (tab1 == null) tab1 = new TradeIndexFragment();
         switchFragment(tab1);
     }
 
     private void showOrderLists() {
         rb4.setChecked(true);
         tv_title_center.setText("订单");
-        if(tab2==null)tab2=new OrderListsFragment();
+        if (tab2 == null) tab2 = new OrderListsFragment();
         switchFragment(tab2);
     }
 
     private void showPersonal() {
         rb5.setChecked(true);
         tv_title_center.setText("我的");
-        if(tab3==null)tab3=new PersonalFragment();
+        if (tab3 == null) tab3 = new PersonalFragment();
         switchFragment(tab3);
     }
 
@@ -208,6 +230,61 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if (appUpdatePresenter != null) appUpdatePresenter.detachView();
         super.onDestroy();
     }
+
+    @Override
+    public void onAppUpdateSuccess(Object bean) {
+        if (bean instanceof AppUpdateResponseBean){
+            String version = ((AppUpdateResponseBean) bean).getVer();
+            if (TextUtils.isEmpty(version)){
+                isUpdate = false;
+                return;
+            }else {
+                String[] versionService = version.split(".");
+                String[] versionLocal = Util.versionName(this).split(".");
+                int service = Integer.parseInt(versionService[0]+versionService[1]+versionService[2]);
+                int local = Integer.parseInt(versionLocal[0]+versionLocal[1]+versionLocal[2]);
+                if(TextUtils.isEmpty(version) && service>local){
+                    isUpdate = true;
+                }else {
+                    isUpdate = false;
+                }
+            }
+        }
+        if(alertChainDialog!=null){
+            if(alertChainDialog!=null){
+                alertChainDialog.builder().setCancelable(false);
+                alertChainDialog.setTitle("提示消息")
+                        .setMsg(isUpdate ? "有新版可供更新" :"当前已是最新版本")
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(isUpdate){
+                                    update();
+                                }
+                            }
+
+
+                        }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+            }
+        }
+    }
+
+
+    @Override
+    public void onAppUpdateFailed(String msg) {
+
+    }
+
+    private void update() {
+        //TODO 版本更新
+    }
+
 }

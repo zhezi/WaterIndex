@@ -59,7 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hit_edt_transfer_max"
-                    android:maxLength="11" />
+                    android:maxLength="11"
+                    android:inputType="number"/>
                 <TextView
                     android:id="@+id/tv_transfer_max_company"
                     android:layout_width="wrap_content"
@@ -85,7 +86,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hit_edt_transfer_min"
-                    android:maxLength="11" />
+                    android:maxLength="11"
+                    android:inputType="number"/>
                 <TextView
                     android:id="@+id/tv_transfer_min_company"
                     android:layout_width="wrap_content"
@@ -97,35 +99,37 @@
                     android:text="T"/>
 
             </FrameLayout>
+            <!--产品要求取消-->
+            <!--<FrameLayout-->
+                <!--android:id="@+id/time_limit_fl"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingHorizontal="30px"-->
+                <!--android:layout_marginBottom="20px">-->
 
-            <FrameLayout
-                android:id="@+id/time_limit_fl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="30px"
-                android:layout_marginBottom="20px">
+                <!--<EditText-->
+                    <!--android:id="@+id/edt_transfer_time_limit"-->
+                    <!--style="@style/style_edt"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/hit_edt_transfer_time_limit"-->
+                    <!--android:maxLength="2"-->
+                    <!--android:inputType="number"/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_transfer_time_limit"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:paddingHorizontal="20px"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textColor="@color/hit_color"-->
+                    <!--android:text="分钟"/>-->
 
-                <EditText
-                    android:id="@+id/edt_transfer_time_limit"
-                    style="@style/style_edt"
-                    android:gravity="center|left"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hit_edt_transfer_time_limit"
-                    android:maxLength="11" />
-                <TextView
-                    android:id="@+id/tv_transfer_time_limit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:paddingHorizontal="20px"
-                    android:gravity="center"
-                    android:textColor="@color/hit_color"
-                    android:text="分钟"/>
-
-            </FrameLayout>
+            <!--</FrameLayout>-->
 
             <LinearLayout
+                android:id="@+id/ll_pay_cate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -150,7 +154,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="100px"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_weight="1"
@@ -195,7 +200,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="100px"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_weight="1"
@@ -240,7 +246,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="100px"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
 

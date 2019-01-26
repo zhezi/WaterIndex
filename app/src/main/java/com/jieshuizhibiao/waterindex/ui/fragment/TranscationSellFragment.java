@@ -137,7 +137,6 @@ public class TranscationSellFragment extends BaseFragment implements ListTradeVi
         DelTradeReqParams params = new DelTradeReqParams();
         params.setId(sn);
         delTradePresenter.delTrade(getBaseActivity(),params);
-        showLoadingDialog();
     }
 
     @Override
@@ -211,13 +210,11 @@ public class TranscationSellFragment extends BaseFragment implements ListTradeVi
 
     @Override
     public void onDelTradeSuccess() {
-        dismissLoadingDialog();
-        ToastUtils.showCustomToast("已下架",1);
+        ToastUtils.showCustomToast("下架成功",1);
     }
 
     @Override
     public void onDelTradeFailed(String msg) {
-        dismissLoadingDialog();
         ToastUtils.showCustomToast(msg,0);
     }
 

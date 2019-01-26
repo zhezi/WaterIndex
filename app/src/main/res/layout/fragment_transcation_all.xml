@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_horizontal_margin"
-            android:background="@drawable/btn_blue_bg_selector"
+            android:background="@drawable/btn_yellow_bg_selector"
             android:text="发布出售需求" />
 
         <Button

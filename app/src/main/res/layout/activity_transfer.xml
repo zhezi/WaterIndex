@@ -9,61 +9,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30px"
         android:layout_margin="40px"
+        android:background="@drawable/gray_bg_shape"
         android:orientation="horizontal"
-        android:background="@drawable/gray_bg_shape">
+        android:padding="30px">
 
         <LinearLayout
-            android:layout_weight="1"
-            android:gravity="center|left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|left"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tv_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="从节水指标账户"
                 android:textColor="@color/text_black"
-                android:textSize="32px"/>
+                android:textSize="32px" />
+
             <TextView
                 android:id="@+id/tv_ds1"
+                style="@style/style_txt_content_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingVertical="25px"
-                style="@style/style_txt_content_gray"
-                android:text="余额：1997.45 T"/>
+                android:lineSpacingExtra="15px"
+                android:paddingVertical="25px" />
 
         </LinearLayout>
 
         <ImageView
-            android:layout_gravity="center"
             android:layout_width="50px"
             android:layout_height="50px"
-            android:background="@mipmap/transfer"/>
+            android:layout_gravity="center"
+            android:background="@mipmap/transfer" />
 
         <LinearLayout
-            android:layout_weight="1"
-            android:gravity="center|left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="40px"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:orientation="vertical"
+            android:paddingLeft="40px">
+
             <TextView
                 android:id="@+id/tv_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="从节水指标账户"
                 android:textColor="@color/text_black"
-                android:textSize="32px"/>
+                android:textSize="32px" />
+
             <TextView
                 android:id="@+id/tv_ds2"
+                style="@style/style_txt_content_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingVertical="25px"
-                style="@style/style_txt_content_gray"
-                android:text="余额：1997.45 T"/>
+                android:lineSpacingExtra="15px"
+                android:paddingVertical="25px" />
 
         </LinearLayout>
     </LinearLayout>
@@ -87,34 +91,35 @@
                 <EditText
                     android:id="@+id/edt_transfer_amonut"
                     style="@style/style_edt"
-                    android:gravity="center|left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center|left"
                     android:hint="@string/hit_edt_transfer_amonut"
+                    android:inputType="number"
                     android:maxLength="11" />
+
                 <TextView
                     android:id="@+id/tv_transfer_all_ds"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
-                    android:paddingHorizontal="20px"
                     android:gravity="center"
+                    android:paddingHorizontal="20px"
                     android:text="全部划转"
-                    android:textColor="@color/primary_yellow"/>
+                    android:textColor="@color/primary_yellow" />
 
             </FrameLayout>
 
             <TextView
                 android:id="@+id/tv_able_ds"
+                style="@style/style_txt_content_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20px"
-                style="@style/style_txt_content_gray"
+                android:layout_marginTop="40px"
+                android:paddingHorizontal="10px"
                 android:text="可划转数量 1997.45 T"
-                android:textSize="24px"
-                android:layout_marginTop="10px"/>
+                android:textSize="14sp" />
         </LinearLayout>
-
 
 
         <EditText
@@ -139,7 +144,6 @@
             android:text="立即划转" />
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

@@ -29,7 +29,7 @@ public class UrlConfig {
      * "data":"4444"
      * }
      */
-    public final static String SEND_VER_CODE = "api/home/common/sendVercode";
+    public final static String SEND_VER_CODE = "api/home/public/sendVercode";
     //登录
     /***
      * 注册
@@ -879,6 +879,24 @@ public class UrlConfig {
 
     /**
      * 我的资产
+     * {
+     * "code":1,
+     * "msg":"用户资产",
+     * "data":{
+     * "c2c":{
+     * "ds":"302.00000T",
+     * "ds_freeze":"0.00000T",
+     * "total":"302.00000T",
+     * "rmb":"906.00000元"
+     * },
+     * "bb":{
+     * "ds":"1523.68243T",
+     * "ds_freeze":"0.00011T",
+     * "total":"1523.68254T",
+     * "rmb":"4571.04762元"
+     * }
+     * }
+     * }
      */
     public static final String USER_MONEY = "api/home/user/money";
 
@@ -1366,37 +1384,46 @@ public class UrlConfig {
 
     /**
      * 移交资产
+     * {
+     * "code":1,
+     * "msg":"划转成功",
+     * "data":{
+     * "total":"5",
+     * "arrive":"5",
+     * "gyj":"0.00000"
+     * }
+     * }
      */
     public static final String MOVE_MONERY = "api/home/user/mvMoney";
 
     /**
      * 收款方式
      * "data":{
-     * │         "1":{
-     * │             "id":0,
-     * │             "type":1,
-     * │             "isopen":0,
-     * │             "link_text":"添加",
-     * │             "type_text":"银行",
-     * │             "account_name":"未添加"
-     * │         },
-     * │         "2":{
-     * │             "id":19,
-     * │             "type":2,
-     * │             "isopen":1,
-     * │             "link_text":"编辑",
-     * │             "type_text":"支付宝",
-     * │             "account_name":"3685269949@qq.com"
-     * │         },
-     * │         "3":{
-     * │             "id":18,
-     * │             "type":3,
-     * │             "isopen":1,
-     * │             "link_text":"编辑",
-     * │             "type_text":"微信",
-     * │             "account_name":"wx13718478437"
-     * │         }
-     * │     }
+     * "1":{
+     * "id":0,
+     * "type":1,
+     * "isopen":0,
+     * "link_text":"添加",
+     * "type_text":"银行",
+     * "account_name":"未添加"
+     * },
+     * "2":{
+     * "id":19,
+     * "type":2,
+     * "isopen":1,
+     * "link_text":"编辑",
+     * "type_text":"支付宝",
+     * "account_name":"3685269949@qq.com"
+     * },
+     * "3":{
+     * "id":18,
+     * "type":3,
+     * "isopen":1,
+     * "link_text":"编辑",
+     * "type_text":"微信",
+     * "account_name":"wx13718478437"
+     * }
+     * }
      */
     public static final String PAYMENT_TYPE = "api/home/userPayInfo/index";
 
@@ -1427,11 +1454,42 @@ public class UrlConfig {
 
     /**
      * 系统消息
+     * * "lists":[
+     * {
+     * "id":6,
+     * "add_time":"2018-12-08 17:47:49",
+     * "content":"完成首次交易，系统赠送10.00000个JSL"
+     * },
+     * {
+     * "id":4,
+     * "add_time":"2018-12-08 16:49:11",
+     * "content":"通过身份认证，系统赠送10.00000个JSL"
+     * },
+     * {
+     * "id":2,
+     * "add_time":"2018-12-08 16:46:24",
+     * "content":"通过身份认证，系统赠送10.00000个JSL"
+     * },
+     * {
+     * "id":1,
+     * "add_time":"2018-12-08 16:44:50",
+     * "content":"通过身份认证，系统赠送10.00000个JSL"
+     * }
+     * ]
      */
     public static final String SYSTEM_MSSAGE = "api/home/user/sysMsg";
 
     /**
      * 资产划转-划转前确认
+     * {
+     * "code":1,
+     * "msg":"确认转账金额",
+     * "data":{
+     * "total_ds":"5",
+     * "res_ds":"5",
+     * "gyj":"0.00000"
+     * }
+     * }
      */
     public static final String BEFORE_MOVE_MONERY = "api/home/user/beforeMvMoney";
 

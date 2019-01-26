@@ -99,13 +99,13 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
     private String confirm;
     private String invitation;
     private boolean isChecked = true,runningCode = false;
-    private RegisterPresenter presenter;
+    private RegisterPresenter registerPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new RegisterPresenter(new RegisterModel());
-        presenter.attachView(this);
+        registerPresenter = new RegisterPresenter(new RegisterModel());
+        registerPresenter.attachView(this);
 
         StatusBarUtil.setImmersionStatus(this, title_bar);
         initView();
@@ -138,9 +138,9 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
             case R.id.tv_get_sms:
 
                 mobile = edt_mobile.getText().toString();
-                presenter.verify(mobile);
+                registerPresenter.verify(mobile);
                 if(!Util.isFastDoubleClick()){
-                    presenter.getSms(this, mobile);
+                    registerPresenter.getSms(this, mobile);
                 }
 
                 break;
@@ -156,10 +156,10 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
                     pwd = edt_pwd.getText().toString();
                     confirm = edt_confirm.getText().toString();
                     invitation = edt_invitation.getText().toString();
-                    presenter.verify(mobile, pwd, confirm, sms, invitation, isChecked);
-                    presenter.register(this, mobile, pwd, confirm, sms, invitation, isChecked);
+                    registerPresenter.verify(mobile, pwd, confirm, sms, invitation, isChecked);
+                    registerPresenter.register(this, mobile, pwd, confirm, sms, invitation, isChecked);
                 } else {
-                    showToast("请阅读并同意《节水链平台用书协议》");
+                    showToast("请阅读并同意《节水指标平台用书协议》");
                 }
                 break;
             case R.id.tv_existing:
@@ -267,8 +267,8 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (presenter != null) {
-            presenter.detachView();
+        if (registerPresenter != null) {
+            registerPresenter.detachView();
         }
     }
 }

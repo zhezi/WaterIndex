@@ -274,10 +274,10 @@ public class UserOrderActivity extends BaseActivity implements
         Intent intent = getIntent();
         tradeIndex = intent.getParcelableExtra("trade_index");
         type = intent.getStringExtra("type");
-        if(type.equals("2")){
-            typeStr="购买";
-        }else if(type.equals("1")){
-            typeStr="出售";
+        if (type.equals("2")) {
+            typeStr = "购买";
+        } else if (type.equals("1")) {
+            typeStr = "出售";
         }
     }
 
@@ -292,7 +292,7 @@ public class UserOrderActivity extends BaseActivity implements
     //下单失败
     @Override
     public void onRequestFailed(String msg) {
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
         finish();
     }
 
@@ -306,15 +306,20 @@ public class UserOrderActivity extends BaseActivity implements
 
     @Override
     public void afterTextChanged(Editable s) {
-        total = edtTotal.getText().toString().trim();
-        if (!TextUtils.isEmpty(total)) {
-            if (total.endsWith(".")) {
-                total = total + "0";
-            }
-            final Float aFloat = Float.valueOf(total);
-            String price = String.format("%.2f", aFloat * ds_price);
+        try {
+            total = edtTotal.getText().toString().trim();
+            if (!TextUtils.isEmpty(total)) {
+                if (total.endsWith(".")) {
+                    total = total + "0";
+                }
+                final Float aFloat = Float.valueOf(total);
+                String price = String.format("%.2f", aFloat * ds_price);
 //            LogUtils.e("tag","aFloat:"+aFloat+"  ds_price:"+ds_price+"  price:"+price);
-            tvTotalPrice.setText(new StringBuilder("总价：").append(price).append("元").toString());
+                tvTotalPrice.setText(new StringBuilder("总价：").append(price).append("元").toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            edtTotal.setText("");
         }
     }
 

@@ -113,9 +113,7 @@ public class AboutListActivity extends BaseActivity implements AppUpdateViewImpl
                                 }
                             }
 
-                            private void update() {
-                                //TODO 版本更新
-                            }
+
                         }).setNegativeButton("取消", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -124,6 +122,10 @@ public class AboutListActivity extends BaseActivity implements AppUpdateViewImpl
                 }).show();
             }
         }
+    }
+
+    private void update() {
+        //TODO 版本更新
     }
 
     @Override

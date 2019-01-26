@@ -45,7 +45,7 @@
         android:layout_marginLeft="35px"
         android:layout_marginTop="30px"
         android:layout_toRightOf="@+id/img"
-        android:background="@drawable/btn_blue_bg_selector"
+        android:background="@drawable/btn_yellow_bg_selector"
         android:text="立即下单"
         android:textColor="@color/white"
         android:textSize="22px" />

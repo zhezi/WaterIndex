@@ -1,6 +1,9 @@
 package com.jieshuizhibiao.waterindex.contract.model;
 
+import android.text.TextUtils;
+
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
+import com.jieshuizhibiao.waterindex.beans.BeforeMvMoneyResponse;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
 import com.jieshuizhibiao.waterindex.beans.request.MoveMoneryReqParams;
 import com.jieshuizhibiao.waterindex.http.BaseObserver;
@@ -11,6 +14,8 @@ import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
+import java.util.HashMap;
+
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:移交资产前确认
@@ -18,15 +23,25 @@ import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
 public class BeforeMoveMoneryModel {
 
-    public void beforeMoveMonery(BaseActivity activity, MoveMoneryReqParams params,final MoveMoneryCallBack callBack){
+    public void beforeMoveMonery(BaseActivity activity, MoveMoneryReqParams reqParams, final BeforeMoveMoneryCallBack callBack) {
+        HashMap<String, Object> params = new HashMap<>();
+        if (!TextUtils.isEmpty(reqParams.getType())) {
+            params.put("type", reqParams.getType());
+        }
+        if (!TextUtils.isEmpty(reqParams.getTotal())) {
+            params.put("total", reqParams.getTotal());
+        }
+        if (!TextUtils.isEmpty(reqParams.getSafe_pw())) {
+            params.put("safe_pw", reqParams.getSafe_pw());
+        }
         RetrofitFactory.getInstance().createService()
-                .beforeMvMoney(RequestUtil.getRequestBeanBody(params,true))
-                .compose(activity.<BaseEntity<MoveMoneryBean>>bindToLifecycle())
-                .compose(ObservableTransformerUtils.<BaseEntity<MoveMoneryBean>>io())
-                .subscribe(new BaseObserver<MoveMoneryBean>(activity) {
+                .beforeMvMoney(RequestUtil.getRequestHashBody(params, false))
+                .compose(activity.<BaseEntity<BeforeMvMoneyResponse>>bindToLifecycle())
+                .compose(ObservableTransformerUtils.<BaseEntity<BeforeMvMoneyResponse>>io())
+                .subscribe(new BaseObserver<BeforeMvMoneyResponse>(activity) {
                     @Override
-                    protected void onSuccess(MoveMoneryBean moveMoneryBean) throws Exception {
-                        callBack.success(moveMoneryBean);
+                    protected void onSuccess(BeforeMvMoneyResponse beforeMvMoneyResponse) throws Exception {
+                        callBack.success(beforeMvMoneyResponse);
                     }
 
                     @Override
@@ -51,8 +66,9 @@ public class BeforeMoveMoneryModel {
                 });
     }
 
-    public interface MoveMoneryCallBack{
-        void success(MoveMoneryBean moveMoneryBean);
+    public interface BeforeMoveMoneryCallBack {
+        void success(BeforeMvMoneyResponse beforeMvMoneyResponse);
+
         void failed(String msg);
     }
 }

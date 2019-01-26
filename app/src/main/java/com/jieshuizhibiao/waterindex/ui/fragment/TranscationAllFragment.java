@@ -48,7 +48,7 @@ import butterknife.Unbinder;
  * Class Note:全部订单
  */
 
-public class TranscationAllFragment extends BaseFragment implements ListTradeViewImpl,DelTradeViewImpl {
+public class TranscationAllFragment extends BaseFragment implements ListTradeViewImpl, DelTradeViewImpl {
 
     @BindView(R.id.transaction_demand_all)
     XRecyclerView transcationAllList;
@@ -65,6 +65,12 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     private TransactionAdapter transactionAdapter;
     private List<ListTradeResponseBean.TradeList> tradeListArrayList = new ArrayList<>();
 
+    private int[] pay_info_list;
+    public static final String TYPE = "type_txt";
+    public static final String EXTRA_BUY = "extra_buy";
+    public static final String EXTRA_SELL = "extra_sell";
+    public static final String EXTRA_PAY_INFO_LIST ="extra_pay_info_list";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +82,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.fragment_transcation_all,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_transcation_all, container, false);
         ButterKnife.bind(this, rootView);
         alertChainDialog = new AlertChainDialog(getBaseActivity());
         initView();
@@ -105,7 +111,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
 
             @Override
             public void onLoadMore() {
-                currentPage++;
+//                currentPage++;
                 doReuqest();
             }
         });
@@ -119,7 +125,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
                 Date date1 = TimeUtils.stringToDate(lhs.getAdd_time());
                 Date date2 = TimeUtils.stringToDate(rhs.getAdd_time());
                 // 对日期字段进行升序，如果欲降序可采用after方法
-                if (date1.after(date2)) {
+                if (date2.after(date1)) {
                     return 1;
                 }
                 return -1;
@@ -132,7 +138,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     public void onAttach(Context context) {
         super.onAttach(context);
         this.demandActivity = (TransactionDemandActivity) context;
-        if(context instanceof TransactionDemandActivity){
+        if (context instanceof TransactionDemandActivity) {
 
         }
     }
@@ -141,7 +147,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.demandActivity = (TransactionDemandActivity) activity;
-        if(activity instanceof TransactionDemandActivity){
+        if (activity instanceof TransactionDemandActivity) {
 
         }
 
@@ -156,7 +162,7 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
+        if (!hidden) {
             doReuqest();
         }
     }
@@ -166,53 +172,61 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
         doReuqest();
     }
 
-    public void doReuqest(){
+    public void doReuqest() {
         ListTradeReqParams params = new ListTradeReqParams();
         params.setType(HttpConfig.TRANSCATION_RELEASE_All);
         params.setPage(String.valueOf(currentPage));
         params.setPage_size(String.valueOf(pageSize));
-        listTradePresenter.getListTrade(getBaseActivity(),params);
+        listTradePresenter.getListTrade(getBaseActivity(), params);
         showLoadingDialog();
     }
 
-    public void doRequestDel(String sn){
+    public void doRequestDel(String sn) {
         DelTradeReqParams params = new DelTradeReqParams();
         params.setId(sn);
-        delTradePresenter.delTrade(getBaseActivity(),params);
-        showLoadingDialog();
+        delTradePresenter.delTrade(getBaseActivity(), params);
     }
 
-    @OnClick({R.id.btn_release_transaction_buy,R.id.btn_release_transaction_sell})
-    public void OnClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.btn_release_transaction_buy, R.id.btn_release_transaction_sell})
+    public void OnClick(View view) {
+        switch (view.getId()) {
             case R.id.btn_release_transaction_buy:
-                jumpActivity("Buy",TranscationReleaseBuyOrSellActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(TYPE, EXTRA_BUY);
+                bundle.putIntArray(EXTRA_PAY_INFO_LIST,pay_info_list);
+                jumpActivity(bundle,TranscationReleaseBuyOrSellActivity.class);
                 break;
             case R.id.btn_release_transaction_sell:
-                jumpActivity("Sell",TranscationReleaseBuyOrSellActivity.class);
+                Bundle b=new Bundle();
+                b.putString(TYPE, EXTRA_SELL);
+                b.putIntArray(EXTRA_PAY_INFO_LIST,pay_info_list);
+                jumpActivity(b,TranscationReleaseBuyOrSellActivity.class);
                 break;
-            default:break;
+            default:
+                break;
         }
     }
-
-    public void jumpActivity(String action,Class<?> cla){
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putString("action",action);
+    public void jumpActivity(Bundle bundle,Class<?>cls){
+        Intent intent=new Intent(getActivity(),cls);
         intent.putExtras(bundle);
-        intent.setClass(this.demandActivity,cla);
         startActivity(intent);
     }
 
     @Override
     public void onListTradeSuccess(ListTradeResponseBean bean) {
-
+        if (bean != null) {
+            pay_info_list = bean.getPay_info_list();//该数据下一页需要
+        }
     }
 
     @Override
     public void onloadMoreListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
         dismissLoadingDialog();
+        if(tradeLists!=null&&tradeLists.size()>0){
+            currentPage+=1;
+        }
         tradeListArrayList.addAll(tradeLists);
+        sortData(tradeListArrayList);
         transactionAdapter.notifyDataSetChanged();
         transcationAllList.loadMoreComplete();
 
@@ -232,8 +246,12 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onRefreshListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
         dismissLoadingDialog();
+        if(tradeLists!=null&&tradeLists.size()>0){
+            currentPage+=1;
+        }
         tradeListArrayList.clear();
         tradeListArrayList.addAll(tradeLists);
+        sortData(tradeListArrayList);
         transactionAdapter.notifyDataSetChanged();
         transcationAllList.refreshComplete();
 
@@ -259,19 +277,17 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
             transcationAllList.loadMoreComplete();
         }
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
     }
 
     @Override
     public void onDelTradeSuccess() {
-        dismissLoadingDialog();
-        ToastUtils.showCustomToast("已下架",1);
+        ToastUtils.showCustomToast("下架成功", 1);
     }
 
     @Override
     public void onDelTradeFailed(String msg) {
-        dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
     }
 
     public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
@@ -296,10 +312,10 @@ public class TranscationAllFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (listTradePresenter!=null){
+        if (listTradePresenter != null) {
             listTradePresenter.detachView();
         }
-        if (delTradePresenter!=null){
+        if (delTradePresenter != null) {
             delTradePresenter.detachView();
         }
     }

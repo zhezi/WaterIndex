@@ -37,13 +37,14 @@ public class NewAlertDialog extends Dialog {
     private ImageView img_line;
     private FrameLayout flContainer;
     private EditText edtAppeal, edtSafepw;
+    private TextView tvTransInfo;
     private Display display;
     private boolean showTitle = false;
     private boolean showMsg = false;
     private boolean showPosBtn = false;
     private boolean showNegBtn = false;
-    private String type;
-    public static final String[] TYPES = new String[]{"appeal", "safepw"};
+    private String type;//决定本次dialog显示内容
+    public static final String[] TYPES = new String[]{"appeal", "safepw", "transInfo"};
     private String appealContent = "";
     private String safepwContent = "";
 
@@ -107,7 +108,7 @@ public class NewAlertDialog extends Dialog {
                 safepwContent = edtSafepw.getText().toString();
             }
         });
-
+        tvTransInfo = view.findViewById(R.id.tv_trans_info);
 
         // 定义Dialog布局和参数
         dialog = new Dialog(context, R.style.AlertDialogStyle);
@@ -126,9 +127,15 @@ public class NewAlertDialog extends Dialog {
             if (type.equals(TYPES[0])) {
                 edtAppeal.setVisibility(View.VISIBLE);
                 edtSafepw.setVisibility(View.GONE);
+                tvTransInfo.setVisibility(View.GONE);
             } else if (type.equals(TYPES[1])) {
                 edtAppeal.setVisibility(View.GONE);
                 edtSafepw.setVisibility(View.VISIBLE);
+                tvTransInfo.setVisibility(View.GONE);
+            } else if (type.equals(TYPES[2])) {
+                edtAppeal.setVisibility(View.GONE);
+                edtSafepw.setVisibility(View.GONE);
+                tvTransInfo.setVisibility(View.VISIBLE);
             }
         }
 
@@ -219,18 +226,23 @@ public class NewAlertDialog extends Dialog {
         return appealContent;
     }
 
-    public void setAppealContent(String appealContent){
-        this.appealContent=appealContent;
+    public void setAppealContent(String appealContent) {
+        this.appealContent = appealContent;
     }
-
 
     public String getSafepwContent() {
         return safepwContent;
     }
 
-    public void setSafepwContent(String safepwContent){
-        this.safepwContent=safepwContent;
+    public void setSafepwContent(String safepwContent) {
+        this.safepwContent = safepwContent;
     }
+
+    public NewAlertDialog setTransInfo(String info) {
+        tvTransInfo.setText(info);
+        return this;
+    }
+
 
     private void setLayout() {
         if (!showTitle && !showMsg) {

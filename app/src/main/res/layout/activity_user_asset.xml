@@ -67,13 +67,14 @@
                         android:layout_marginTop="18px"
                         style="@style/style_txt_content_gray"
                         android:text="冻结：1997.45"/>
-                    <TextView
-                        android:id="@+id/tv_jsl_gyj"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18px"
-                        style="@style/style_txt_content_gray"
-                        android:text="公益金：1997.45"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_jsl_gyj"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="18px"-->
+                        <!--style="@style/style_txt_content_gray"-->
+                        <!--android:text="公益金：1997.45"-->
+                        <!--android:visibility="gone"/>-->
 
                 </LinearLayout>
 
@@ -145,13 +146,14 @@
                         style="@style/style_txt_content_gray"
                         android:text="冻结：1997.45"/>
 
-                    <TextView
-                        android:id="@+id/tv_ds_transfer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18px"
-                        style="@style/style_txt_content_gray"
-                        android:text="公益金：1997.45"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_ds_transfer"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="18px"-->
+                        <!--style="@style/style_txt_content_gray"-->
+                        <!--android:text="公益金：1997.45"-->
+                        <!--android:visibility="gone"/>-->
 
                 </LinearLayout>
 

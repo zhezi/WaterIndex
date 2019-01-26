@@ -61,18 +61,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.tvTransState.setText(list.get(position).getAction_type_text());
         if(list.get(position).getAction_type_text().equals("出售")){
             holder.tvTransState.setTextColor(context.getResources().getColor(R.color.text_green));
-            holder.btnTransLowerShelf.setVisibility(View.VISIBLE);
-            if(list.get(position).getCan_del()==1){//1可下架 0 不能下架
-                holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_blue_bg_selector));
-                holder.btnTransLowerShelf.setEnabled(true);
-            }else {
-                holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_gray_bg_selector));
-                holder.btnTransLowerShelf.setEnabled(false);
-                holder.btnTransLowerShelf.setVisibility(View.GONE);
-            }
         }else {
-            holder.btnTransLowerShelf.setVisibility(View.GONE);
             holder.tvTransState.setTextColor(context.getResources().getColor(R.color.text_red_dialog));
+        }
+
+        if(list.get(position).getCan_del()==1){//1可下架 0 不能下架
+            holder.btnTransLowerShelf.setVisibility(View.VISIBLE);
+            holder.btnTransLowerShelf.setBackground(context.getResources().getDrawable(R.drawable.btn_yellow_bg_selector));
+        }else if(list.get(position).getCan_del()==0){
+            holder.btnTransLowerShelf.setVisibility(View.GONE);
         }
 
         holder.tvTransPrecent.setText(list.get(position).getTotal()+"T (已完成"+list.get(position).getDone()+")");

@@ -16,8 +16,11 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
+import com.jieshuizhibiao.waterindex.beans.request.DelTradeReqParams;
 import com.jieshuizhibiao.waterindex.beans.request.ListTradeReqParams;
+import com.jieshuizhibiao.waterindex.contract.presenter.DelTradePresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.ListTradePresenter;
+import com.jieshuizhibiao.waterindex.contract.view.DelTradeViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.ListTradeViewImpl;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.ui.adapter.TransactionAdapter;
@@ -37,7 +40,7 @@ import butterknife.Unbinder;
  * Class Note:购买
  */
 
-public class TranscationBuyFragment extends BaseFragment implements ListTradeViewImpl{
+public class TranscationBuyFragment extends BaseFragment implements ListTradeViewImpl, DelTradeViewImpl {
 
     @BindView(R.id.transaction_demand_buy)
     XRecyclerView transcationBuyList;
@@ -48,6 +51,7 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     private AlertChainDialog alertChainDialog;
     private Unbinder unbinder;
     private ListTradePresenter listTradePresenter;
+    private DelTradePresenter delTradePresenter;
     private int currentPage = 1, pageSize = 10;
     private TransactionAdapter transactionAdapter;
     private List<ListTradeResponseBean.TradeList> tradeListArrayList = new ArrayList<>();
@@ -57,12 +61,13 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
         super.onCreate(savedInstanceState);
         listTradePresenter = new ListTradePresenter();
         listTradePresenter.attachView(this);
-
+        delTradePresenter=new DelTradePresenter();
+        delTradePresenter.attachView(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView=inflater.inflate(R.layout.fragment_transcation_buy,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_transcation_buy, container, false);
         ButterKnife.bind(this, rootView);
         alertChainDialog = new AlertChainDialog(getBaseActivity());
         initView();
@@ -75,7 +80,7 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
         transactionAdapter = new TransactionAdapter(getBaseActivity(), tradeListArrayList, new TransactionAdapter.TransactionListener() {
             @Override
             public void onLowerShelfClick(String sn) {
-
+                doRequestDel(sn);
             }
         });
         transcationBuyList.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -91,7 +96,6 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
 
             @Override
             public void onLoadMore() {
-                currentPage++;
                 doReuqest();
             }
         });
@@ -106,7 +110,7 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
+        if (!hidden) {
             doReuqest();
         }
     }
@@ -114,7 +118,7 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser){
+        if (isVisibleToUser) {
             doReuqest();
         }
     }
@@ -124,13 +128,19 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
         doReuqest();
     }
 
-    public void doReuqest(){
+    public void doReuqest() {
         ListTradeReqParams params = new ListTradeReqParams();
         params.setType(HttpConfig.TRANSCATION_RELEASE_BUY);
         params.setPage(String.valueOf(currentPage));
         params.setPage_size(String.valueOf(pageSize));
-        listTradePresenter.getListTrade(getBaseActivity(),params);
+        listTradePresenter.getListTrade(getBaseActivity(), params);
         showLoadingDialog();
+    }
+
+    public void doRequestDel(String sn) {
+        DelTradeReqParams params = new DelTradeReqParams();
+        params.setId(sn);
+        delTradePresenter.delTrade(getBaseActivity(), params);
     }
 
     @Override
@@ -148,9 +158,10 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (listTradePresenter!=null){
+        if (listTradePresenter != null) {
             listTradePresenter.detachView();
         }
+        if(delTradePresenter!=null)delTradePresenter.detachView();
     }
 
     @Override
@@ -161,6 +172,9 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onloadMoreListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
         dismissLoadingDialog();
+        if (tradeLists != null && tradeLists.size() > 0) {
+            pageSize += 1;
+        }
         tradeListArrayList.addAll(tradeLists);
         transactionAdapter.notifyDataSetChanged();
         transcationBuyList.loadMoreComplete();
@@ -181,6 +195,9 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
     @Override
     public void onRefreshListTrade(List<ListTradeResponseBean.TradeList> tradeLists) {
         dismissLoadingDialog();
+        if (tradeLists != null && tradeLists.size() > 0) {
+            pageSize += 1;
+        }
         tradeListArrayList.clear();
         tradeListArrayList.addAll(tradeLists);
         transactionAdapter.notifyDataSetChanged();
@@ -208,7 +225,17 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
             transcationBuyList.loadMoreComplete();
         }
         dismissLoadingDialog();
-        ToastUtils.showCustomToast(msg,0);
+        ToastUtils.showCustomToast(msg, 0);
+    }
+
+    @Override
+    public void onDelTradeSuccess() {
+        ToastUtils.showCustomToast("下架成功", 1);
+    }
+
+    @Override
+    public void onDelTradeFailed(String msg) {
+        ToastUtils.showCustomToast(msg, 0);
     }
 
     public class SpaceItemDecoration extends RecyclerView.ItemDecoration {

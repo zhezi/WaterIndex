@@ -5,13 +5,14 @@ import com.jieshuizhibiao.waterindex.beans.UserMoney;
 import com.jieshuizhibiao.waterindex.contract.BasePresenter;
 import com.jieshuizhibiao.waterindex.contract.model.UserMoneryModel;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
 
 /**
  * Created by songxiaotao on 2019/1/12.
  * Class Note:
  */
 
-public class UserMoneryPresenter extends BasePresenter<CommonViewImpl> {
+public class UserMoneryPresenter extends BasePresenter<SecondRequstViewImpl> {
 
     private UserMoneryModel userMoneryModel;
 
@@ -29,14 +30,14 @@ public class UserMoneryPresenter extends BasePresenter<CommonViewImpl> {
             @Override
             public void success(UserMoney userMoney) {
                 if (mView!=null){
-                    mView.onRequestSuccess(userMoney);
+                    mView.onSecondRequstSuccess(userMoney);
                 }
             }
 
             @Override
             public void failed(String msg) {
                 if (mView!=null){
-                    mView.onRequestFailed(msg);
+                    mView.onSecondRequstFailed(msg);
                 }
 
             }

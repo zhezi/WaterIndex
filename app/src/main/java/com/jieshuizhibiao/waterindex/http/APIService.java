@@ -3,6 +3,7 @@ package com.jieshuizhibiao.waterindex.http;
 import com.jieshuizhibiao.waterindex.beans.AccountDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.AuthDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.BannerListResponseBean;
+import com.jieshuizhibiao.waterindex.beans.BeforeMvMoneyResponse;
 import com.jieshuizhibiao.waterindex.beans.CreateOrderResponseBean;
 import com.jieshuizhibiao.waterindex.beans.FactoryDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.FactoryListResponseBean;
@@ -469,37 +470,15 @@ public interface APIService {
 
     /**
      * 系统消息
-     * "lists":[
-     │             {
-     │                 "id":6,
-     │                 "add_time":"2018-12-08 17:47:49",
-     │                 "content":"完成首次交易，系统赠送10.00000个JSL"
-     │             },
-     │             {
-     │                 "id":4,
-     │                 "add_time":"2018-12-08 16:49:11",
-     │                 "content":"通过身份认证，系统赠送10.00000个JSL"
-     │             },
-     │             {
-     │                 "id":2,
-     │                 "add_time":"2018-12-08 16:46:24",
-     │                 "content":"通过身份认证，系统赠送10.00000个JSL"
-     │             },
-     │             {
-     │                 "id":1,
-     │                 "add_time":"2018-12-08 16:44:50",
-     │                 "content":"通过身份认证，系统赠送10.00000个JSL"
-     │             }
-     │         ]
      */
     @POST(UrlConfig.SYSTEM_MSSAGE)
     Observable<BaseEntity<SystemMsgResponseBean>> systemMsg(@Body RequestBody requestBody);
 
     /**
-     * 资金划转钱确认:资产划转-划转前确认 参数和返回与资产划转一样!!!
+     * 资产划转钱确认:资产划转-划转前确认 参数和返回与资产划转一样!!!
      */
     @POST(UrlConfig.BEFORE_MOVE_MONERY)
-    Observable<BaseEntity<MoveMoneryBean>> beforeMvMoney(@Body RequestBody requestBody);
+    Observable<BaseEntity<BeforeMvMoneyResponse>> beforeMvMoney(@Body RequestBody requestBody);
 
     /**
      * 版本更新检查

@@ -23,11 +23,11 @@ public class AddTradePresenter extends BasePresenter<AddTradeViewImpl> {
         this.addTradeModel = addTradeModel;
     }
 
-    public void vertify(AddTradeReqParams params,String action,String transferNumber){
+    public void vertify(AddTradeReqParams params,String action){
         if (addTradeModel == null){
             addTradeModel = new AddTradeModel();
         }
-        addTradeModel.verify(params,action,transferNumber);
+        addTradeModel.verify(params,action);
     }
 
     public void addTrade(BaseActivity activity,AddTradeReqParams params, String action){

@@ -119,7 +119,7 @@
     <style name="style_btn">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/text_size_commit</item>
-        <item name="android:background">@drawable/btn_blue_bg_selector</item>
+        <item name="android:background">@drawable/btn_yellow_bg_selector</item>
         <item name="android:minHeight">@dimen/commit_btn_height</item>
     </style>
 
@@ -141,6 +141,7 @@
     <style name="style_href">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/primary_yellow</item>
+        <item name="android:padding">20px</item>
     </style>
 
     <style name="style_hit">

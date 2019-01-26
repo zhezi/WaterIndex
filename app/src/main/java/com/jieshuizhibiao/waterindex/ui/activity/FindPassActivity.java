@@ -10,6 +10,7 @@
  */
 package com.jieshuizhibiao.waterindex.ui.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.jieshuizhibiao.waterindex.contract.model.FindPassModel;
 import com.jieshuizhibiao.waterindex.contract.presenter.FindPassPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.FindPassViewImpl;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
+import com.jieshuizhibiao.waterindex.utils.ToastUtils;
 
 import java.util.Map;
 
@@ -81,7 +83,7 @@ public class FindPassActivity extends BaseActivity implements FindPassViewImpl {
     private String pwd;
     private String confirm;
 
-    private FindPassPresenter presenter;
+    private FindPassPresenter findPassPresenter;
 
     private class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
@@ -106,8 +108,8 @@ public class FindPassActivity extends BaseActivity implements FindPassViewImpl {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new FindPassPresenter(new FindPassModel());
-        presenter.attachView(this);
+        findPassPresenter = new FindPassPresenter(new FindPassModel());
+        findPassPresenter.attachView(this);
 
         StatusBarUtil.setImmersionStatus(this, title_bar);
         initView();
@@ -133,16 +135,16 @@ public class FindPassActivity extends BaseActivity implements FindPassViewImpl {
         switch (id) {
             case R.id.tv_get_sms:
                 mobile = edt_mobile.getText().toString();
-                presenter.verify(mobile);
-                presenter.getSms(this, mobile);
+                findPassPresenter.verify(mobile);
+                findPassPresenter.getSms(this, mobile);
                 break;
             case R.id.btn_find:
                 mobile = edt_mobile.getText().toString();
                 sms = edt_sms.getText().toString();
                 pwd = edt_pwd.getText().toString();
                 confirm = edt_confirm.getText().toString();
-                presenter.verify(mobile, pwd, confirm, sms);
-                presenter.reset(this, mobile, pwd, confirm, sms);
+                findPassPresenter.verify(mobile, pwd, confirm, sms);
+                findPassPresenter.reset(this, mobile, pwd, confirm, sms);
                 break;
             case R.id.left_ll:
                 goBack(view);
@@ -204,19 +206,21 @@ public class FindPassActivity extends BaseActivity implements FindPassViewImpl {
 
     @Override
     public void onFindPassSuccess() {
-
+        ToastUtils.showCustomToast("修改密码成功",1);
+        finish();
+        startActivity(new Intent(this,LoginActivity.class));
     }
 
     @Override
     public void onFindPassFaild(String msg) {
-
+        ToastUtils.showCustomToast(msg,0);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (presenter != null) {
-            presenter.detachView();
+        if (findPassPresenter != null) {
+            findPassPresenter.detachView();
         }
     }
 }

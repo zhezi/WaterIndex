@@ -71,7 +71,7 @@
             android:layout_height="50px"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_blue_bg_selector"
+            android:background="@drawable/btn_yellow_bg_selector"
             android:text="查看服务选项"
             android:textColor="@color/white"
             android:textSize="22px" />

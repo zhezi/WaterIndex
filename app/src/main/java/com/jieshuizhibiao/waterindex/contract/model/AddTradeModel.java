@@ -13,6 +13,7 @@ import com.jieshuizhibiao.waterindex.http.bean.BaseEntity;
 import com.jieshuizhibiao.waterindex.http.config.HttpConfig;
 import com.jieshuizhibiao.waterindex.http.utils.ObservableTransformerUtils;
 import com.jieshuizhibiao.waterindex.http.utils.RequestUtil;
+import com.jieshuizhibiao.waterindex.ui.fragment.TranscationAllFragment;
 import com.jieshuizhibiao.waterindex.utils.AccountValidatorUtil;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 
@@ -29,7 +30,7 @@ public class AddTradeModel {
     private Map<String, Boolean> verifyResult = new HashMap<String, Boolean>();
     private WaterIndexApplication context = WaterIndexApplication.getInstance();
 
-    public Map<String, Boolean> verify(AddTradeReqParams params,String action,String transferNumber) {
+    public Map<String, Boolean> verify(AddTradeReqParams params,String action/*,String transferNumber*/) {
         verifyResult.clear();
         if(!TextUtils.isEmpty(params.getSafe_pw()) && AccountValidatorUtil.isPassword(params.getSafe_pw())){
             verifyResult.put(context.getString(R.string.key_edt_release_capital_pwd), true);
@@ -45,13 +46,13 @@ public class AddTradeModel {
             }
         }
 
-        if(!TextUtils.isEmpty(params.getTotal()) && Double.valueOf(params.getTotal()) <= Double.valueOf(transferNumber) && Double.valueOf(params.getTotal()) >= 0.00){
+        if(!TextUtils.isEmpty(params.getTotal())){
             verifyResult.put(context.getString(R.string.key_edt_release_transaction_max), true);
         }else{
             verifyResult.put(context.getString(R.string.key_edt_release_transaction_max), false);
         }
 
-        if(!TextUtils.isEmpty(params.getPay_min()) && Double.valueOf(params.getPay_min()) < Double.valueOf(transferNumber) && Double.valueOf(params.getPay_min()) >= 0.00){//最小交易量 < 交易总量
+        if(!TextUtils.isEmpty(params.getPay_min())){
             verifyResult.put(context.getString(R.string.key_edt_release_transaction_min), true);
         }else{
             verifyResult.put(context.getString(R.string.key_edt_release_transaction_min), false);
@@ -70,7 +71,7 @@ public class AddTradeModel {
         if (Illegal == 0) {
             callBack.onEdtContentsLegal();
         } else {
-            if (!TextUtils.isEmpty(action) && action.equals("Sell")){
+            if (!TextUtils.isEmpty(action) && action.equals(TranscationAllFragment.EXTRA_SELL)){
                 callBack.onEdtContentsIllegalSell(verifyResult);
                 return;
             }else {

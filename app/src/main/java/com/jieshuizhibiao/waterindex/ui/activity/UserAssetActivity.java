@@ -11,11 +11,9 @@ import com.jieshuizhibiao.waterindex.beans.Money;
 import com.jieshuizhibiao.waterindex.beans.UserMoney;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserMoneryPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
-import com.jieshuizhibiao.waterindex.utils.SPUtil;
+import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
-
-import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,7 +21,7 @@ import butterknife.OnClick;
 /**
  * @Author: fushizhe
  */
-public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
+public class UserAssetActivity extends BaseActivity implements SecondRequstViewImpl {
 
     @BindView(R.id.tv_title_center)
     TextView tv_title_center;
@@ -33,14 +31,10 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
     TextView tvJsl;
     @BindView(R.id.tv_jsl_freeze)
     TextView tvJslFreeze;
-    @BindView(R.id.tv_jsl_gyj)
-    TextView tvJslGyj;
     @BindView(R.id.tv_ds)
     TextView tvDs;
     @BindView(R.id.tv_ds_freeze)
     TextView tvDsFreeze;
-    @BindView(R.id.tv_ds_transfer)
-    TextView tvDsTransfer;
     @BindView(R.id.total_all_monery_bb)
     TextView tvDsTransferTotalBb;
     @BindView(R.id.total_all_monery_c2c)
@@ -49,6 +43,13 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
     private UserMoneryPresenter userMoneryPresenter;
     private Money moneryC2c = new Money();
     private Money moneryBb = new Money();
+
+    //by sxt
+    private String c2cDs;//节水指标账户总资产
+    private String bbDs;//数字节水账户总资产
+    public static final String TRANS_TYPE="trans_type";
+    public static final String C2C_DS="C2C_ds";
+    public static final String BB_DS="bb_ds";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,15 +100,15 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
                 goBack(view);
                 break;
             case R.id.btn_c2c_transfer:
-                bundle.putString("ds_c2c",moneryC2c.getDs());
-                bundle.putString("ds_Bb",moneryBb.getDs());
-                bundle.putString("action","c2c");
+                bundle.putString(C2C_DS,c2cDs);
+                bundle.putString(BB_DS,bbDs);
+                bundle.putString(TRANS_TYPE,"2");
                 jumpActivity(bundle,intent);
                 break;
             case R.id.btn_jsl_transfer:
-                bundle.putString("ds_Bb",moneryBb.getDs());
-                bundle.putString("ds_c2c",moneryC2c.getDs());
-                bundle.putString("action","Bb");
+                bundle.putString(C2C_DS,c2cDs);
+                bundle.putString(BB_DS,bbDs);
+                bundle.putString(TRANS_TYPE,"1");
                 jumpActivity(bundle,intent);
                 break;
             default:
@@ -123,36 +124,27 @@ public class UserAssetActivity extends BaseActivity implements CommonViewImpl {
     }
 
     @Override
-    public void onRequestSuccess(Object bean) {
+    public void onSecondRequstSuccess(Object bean) {
         dismissLoadingDialog();
         if(bean instanceof UserMoney){
             moneryBb = ((UserMoney) bean).getBb();
             moneryC2c = ((UserMoney) bean).getC2c();
         }
-        DecimalFormat df = new DecimalFormat("###.00");
-        Double rmbc2c = Double.valueOf(moneryC2c.getRmb().substring(0,moneryC2c.getRmb().length()-1));
-        Double totalc2c = Double.valueOf(moneryC2c.getTotal().substring(0,moneryC2c.getTotal().length()-1));
-        Double dsc2c = Double.valueOf(moneryC2c.getDs().substring(0,moneryC2c.getDs().length()-1));
-        Double dsFreezec2c = Double.valueOf(moneryC2c.getDs_freeze().substring(0,moneryC2c.getDs_freeze().length()-1));
+        String c2cRmbStr=TraderUnpayActivity.formatRmb(moneryC2c.getRmb(),"元");
+        c2cDs =moneryC2c.getDs();
+        tvDsTransferTotalC2c.setText(new StringBuilder("总资产折合:").append(c2cDs).append(" ≈ ").append(c2cRmbStr).toString());
+        tvJsl.setText(new StringBuilder("可用：").append(moneryC2c.getDs()).toString());
+        tvJslFreeze.setText(new StringBuilder("冻结：").append(moneryC2c.getDs_freeze()).toString());
 
-        tvJsl.setText(new StringBuilder("可用：").append(((dsc2c <= 0.00) ? "0.00":df.format(dsc2c))).toString()+" T");
-        tvJslFreeze.setText(new StringBuilder("冻结：").append(((dsFreezec2c <= 0.00) ? "0.00":df.format(dsFreezec2c))).toString()+" T");
-        tvJslGyj.setText(new StringBuilder("公益金：").append(SPUtil.get(this,SPUtil.C2C_TRAMSFER,"0.00")).append(" T").toString());
-        tvDsTransferTotalC2c.setText("总资产折合："+ ((rmbc2c <= 0.00) ? "0.00":df.format(rmbc2c)) +" 元" +" ≈ "+((totalc2c <= 0.00) ? "0.00":df.format(totalc2c))+" T");
-
-        Double rmbcBb = Double.valueOf(moneryBb.getRmb().substring(0,moneryBb.getRmb().length()-1));
-        Double totalBb = Double.valueOf(moneryBb.getTotal().substring(0,moneryBb.getTotal().length()-1));
-        Double dscBb = Double.valueOf(moneryBb.getDs().substring(0,moneryBb.getDs().length()-1));
-        Double dsFreezeBb = Double.valueOf(moneryBb.getDs_freeze().substring(0,moneryBb.getDs_freeze().length()-1));
-
-        tvDs.setText(new StringBuilder("可用：").append(((dscBb <= 0.00) ? "0.00":df.format(dscBb))).append(" T").toString());
-        tvDsFreeze.setText(new StringBuilder("冻结：").append(((dsFreezeBb <= 0.00) ? "0.00":df.format(dsFreezeBb))).append(" T").toString());
-        tvDsTransfer.setText(new StringBuilder("公益金：").append(SPUtil.get(this,SPUtil.BB_TRAMSFER,"0.00")).append(" T").toString());
-        tvDsTransferTotalBb.setText("总资产折合："+((rmbcBb <= 0.00) ? "0.00" :df.format(rmbcBb)) +" 元" +" ≈ "+((totalBb <= 0.00) ? "0.00":df.format(totalBb))+" T");
+        String bbRmbStr = TraderUnpayActivity.formatRmb(moneryBb.getRmb(),"元");
+        bbDs=moneryBb.getDs();
+        tvDsTransferTotalBb.setText(new StringBuilder("总资产折合:").append(bbDs).append(" ≈ ").append(bbRmbStr).toString());
+        tvDs.setText(new StringBuilder("可用：").append(moneryBb.getDs()).toString());
+        tvDsFreeze.setText(new StringBuilder("冻结：").append(moneryBb.getDs_freeze()).toString());
     }
 
     @Override
-    public void onRequestFailed(String msg) {
+    public void onSecondRequstFailed(String msg) {
         dismissLoadingDialog();
         ToastUtils.showCustomToast(msg,0);
     }
