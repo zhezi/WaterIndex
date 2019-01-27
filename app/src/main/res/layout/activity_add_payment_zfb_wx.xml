@@ -11,14 +11,36 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="40px"
         android:paddingVertical="30px"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_payment_qrcode_img"
-            style="@style/btn_upload"
+        android:orientation="vertical"
+        android:layout_marginBottom="30px">
+        <LinearLayout
+            android:id="@+id/ll_upload_qrcode"
             android:layout_width="match_parent"
             android:layout_height="250px"
-            android:layout_marginBottom="30px" />
+            android:orientation="vertical"
+            android:background="@drawable/gray_border_bg_shape"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/img_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/add"
+                />
+            <TextView
+                android:id="@+id/tv_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="30px"
+                android:gravity="center"
+                android:textColor="@color/hit_color"/>
+        </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btn_payment_qrcode_img"-->
+            <!--style="@style/btn_upload"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="250px"-->
+            <!--android:layout_marginBottom="30px" />-->
 
         <EditText
             android:id="@+id/edt_payment_name"

@@ -214,6 +214,7 @@ public class PaymentTypeActivity extends BaseActivity implements PayMentTypeSwit
     @Override
     public void onPaymentTypeSwitchSuccess() {
         dismissLoadingDialog();
+        ToastUtils.showCustomToast("修改成功",1);
     }
 
     @Override
