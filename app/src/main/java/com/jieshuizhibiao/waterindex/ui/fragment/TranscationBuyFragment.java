@@ -79,8 +79,8 @@ public class TranscationBuyFragment extends BaseFragment implements ListTradeVie
 
         transactionAdapter = new TransactionAdapter(getBaseActivity(), tradeListArrayList, new TransactionAdapter.TransactionListener() {
             @Override
-            public void onLowerShelfClick(String sn) {
-                doRequestDel(sn);
+            public void onLowerShelfClick(String id) {
+                doRequestDel(id);
             }
         });
         transcationBuyList.setArrowImageView(R.drawable.iconfont_downgrey);

@@ -77,7 +77,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             @Override
             public void onClick(View view) {
                 if(listener!=null){
-                    listener.onLowerShelfClick(list.get(position).getT_sn());
+                    listener.onLowerShelfClick(String.valueOf(list.get(position).getId()));
                 }
             }
         });
@@ -113,6 +113,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public interface TransactionListener{
-        void onLowerShelfClick(String sn);
+        void onLowerShelfClick(String id);
     }
 }

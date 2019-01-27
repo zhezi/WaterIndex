@@ -210,28 +210,36 @@ public class TransferActivity extends BaseActivity implements BeforeMvMoneryView
         isBfSucc = true;
         dismissLoadingDialog();
 
-        String msg = null;
+        String msg = "";
         String info;
-        if (isTransAll) {
-            info = new StringBuilder()
-                    .append("划转总额：")
-                    .append(beforeMvMoneyResponse.getTotal_ds()).append("T")
-                    .append("\n实际到账：")
-                    .append(beforeMvMoneyResponse.getRes_ds()).append("T")
-                    .toString();
-        } else {
-            msg = "系统将您划转的节水指标的30%结转到您的平台账号，并兑换为积分作为公益用途，您可以在兑换商城进行消费";
-            info = new StringBuilder()
-                    .append("划转总额：")
-                    .append(beforeMvMoneyResponse.getTotal_ds()).append("T")
-                    .append("\n实际到账：")
-                    .append(beforeMvMoneyResponse.getRes_ds()).append("T")
-                    .append("\n结转水方：")
-                    .append(beforeMvMoneyResponse.getGyj()).append("水方")
-                    .toString();
+        if(beforeMvMoneyResponse!=null){
+            String total_ds = beforeMvMoneyResponse.getTotal_ds();
+            String res_ds = beforeMvMoneyResponse.getRes_ds();
+            String gyj = beforeMvMoneyResponse.getGyj();
+            float fltTotalDs=Float.valueOf(total_ds);
+            float fltRes_Ds=Float.valueOf(res_ds);
+            float fltGyj=Float.valueOf(gyj);
+            //total_ds==res_ds或gyj==0   --->全额划转
+            if (fltTotalDs==fltRes_Ds) {
+                info = new StringBuilder()
+                        .append("            划转总额：")
+                        .append(String.format("%.5f",fltTotalDs)).append("  T")
+                        .append("\n            实际到账：")
+                        .append(String.format("%.5f",fltRes_Ds)).append("  T")
+                        .toString();
+            } else {
+                msg = "系统将您划转的节水指标的30%结转到您的平台账号，并兑换为积分作为公益用途，您可以在兑换商城进行消费";
+                info = new StringBuilder()
+                        .append("划转总额：")
+                        .append(String.format("%.5f",fltTotalDs)).append("  T")
+                        .append("\n实际到账：")
+                        .append(String.format("%.5f",fltRes_Ds)).append("  T")
+                        .append("\n结转水方：")
+                        .append(String.format("%.5f",fltGyj)).append("  水方")
+                        .toString();
+            }
+            showDialog(NewAlertDialog.TYPES[2], "确认划转", msg, info, "确认划转", "取消");
         }
-
-        showDialog(NewAlertDialog.TYPES[2], "确认划转", msg, info, "确认划转", "取消");
     }
 
     @Override

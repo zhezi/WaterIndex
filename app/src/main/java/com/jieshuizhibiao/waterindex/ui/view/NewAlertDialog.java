@@ -170,11 +170,12 @@ public class NewAlertDialog extends Dialog {
     }
 
     public NewAlertDialog setMsg(String msg) {
-        showMsg = true;
+
         SpannableString spannableString = new SpannableString(msg);
         if ("".equals(msg)) {
             txt_msg.setVisibility(View.GONE);
         } else {
+            showMsg = true;
             txt_msg.setText(msg);
         }
         return this;
