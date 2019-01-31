@@ -147,7 +147,10 @@ public class RegisterActivity extends BaseActivity implements RegisterViewImpl {
 //            case R.id.cb_agreement:
 //                break;
             case R.id.tv_agreement:
-                //todo startAct 2 agreement webView
+                Intent i = new Intent(this, WebViewActivity.class);
+                i.putExtra(WebViewActivity.WEBVIEW_ACT_TITLE,"协议");
+                i.putExtra(WebViewActivity.GET_URL_TYPE,"contract");
+                startActivity(i);
                 break;
             case R.id.btn_register:
                 if (isChecked) {

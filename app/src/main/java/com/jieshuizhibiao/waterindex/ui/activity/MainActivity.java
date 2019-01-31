@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity implements AppUpdateViewImpl {
     @Override
     public void initContentView() {
         setContentView(R.layout.activity_main);
+        alertChainDialog=new AlertChainDialog(this);
     }
 
 
@@ -280,7 +281,7 @@ public class MainActivity extends BaseActivity implements AppUpdateViewImpl {
 
     @Override
     public void onAppUpdateFailed(String msg) {
-
+        ToastUtils.showCustomToast(msg,1);
     }
 
     private void update() {

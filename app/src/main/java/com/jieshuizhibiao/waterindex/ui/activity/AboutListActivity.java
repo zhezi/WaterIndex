@@ -61,7 +61,11 @@ public class AboutListActivity extends BaseActivity implements AppUpdateViewImpl
 
         switch (id) {
             case R.id.btn_about:
-                startActivity(new Intent(this,AboutActivity.class));
+                Intent intent = new Intent(this, WebViewActivity.class);
+                intent.putExtra(WebViewActivity.WEBVIEW_ACT_TITLE,"关于我们");
+                intent.putExtra(WebViewActivity.GET_URL_TYPE,"about");
+                startActivity(intent);
+//                startActivity(new Intent(this,AboutActivity.class));
                 break;
             case R.id.img_title_left:
                 goBack(view);

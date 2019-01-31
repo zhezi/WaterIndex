@@ -8,6 +8,7 @@ import com.jieshuizhibiao.waterindex.beans.CreateOrderResponseBean;
 import com.jieshuizhibiao.waterindex.beans.FactoryDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.FactoryListResponseBean;
 import com.jieshuizhibiao.waterindex.beans.FactoryServiceResponseBean;
+import com.jieshuizhibiao.waterindex.beans.GetUrlResponseBean;
 import com.jieshuizhibiao.waterindex.beans.GoodsResposeBean;
 import com.jieshuizhibiao.waterindex.beans.InfoListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
@@ -400,7 +401,7 @@ public interface APIService {
     Observable<BaseEntity<ListTradeResponseBean>> listTrade(@Body RequestBody requestBody);
 
     @POST(UrlConfig.GET_URL)
-    Observable<BaseEntity>getUrl(@Body RequestBody body);
+    Observable<BaseEntity<GetUrlResponseBean>>getUrl(@Body RequestBody body);
 
     /**
      * 修改资金密码
