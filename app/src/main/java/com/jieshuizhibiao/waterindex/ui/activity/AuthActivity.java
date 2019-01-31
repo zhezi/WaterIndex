@@ -38,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.OptionsPickerView;
 import com.jieshuizhibiao.waterindex.R;
 import com.jieshuizhibiao.waterindex.base.BaseActivity;
 import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
@@ -105,18 +106,23 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     @BindView(R.id.btn_personal)
     Button btn_personal;
 
-    @BindView(R.id.frame_nationality)
-    FrameLayout frame_nationality;
+    @BindView(R.id.ll_nationality)
+    LinearLayout llNationality;
 
-    @BindView(R.id.sp_nationality)
-    Spinner sp_nationality;
+    @BindView(R.id.tv_nationality)
+    TextView tvNationality;
 
     @BindView(R.id.linear_cities)
     LinearLayout linear_cities;
-    @BindView(R.id.sp_province)
-    Spinner sp_province;
-    @BindView(R.id.sp_city)
-    Spinner sp_city;
+
+    @BindView(R.id.ll_province)
+    LinearLayout llProvince;
+    @BindView(R.id.tv_province)
+    TextView tvProvince;
+    @BindView(R.id.ll_city)
+    LinearLayout llCity;
+    @BindView(R.id.tv_city)
+    TextView tvCity;
 
     @BindView(R.id.edt_company_name)
     EditText edt_company_name;
@@ -195,38 +201,23 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
     private String nationalityName;
     private String provinceName;
     private String cityName;
-    private ArrayAdapter<String> nationalityAdapter;
-    private ArrayAdapter<String> provinceAdapter;
-    private ArrayAdapter<String> cityAdapter;
-    private ArrayList<String> nationalityStr;//从array.xml获取而来的国籍list
-    private ArrayList<ProvinceBean> cities;//从json文件解析而来的provinceBean list
-    private ArrayList<String> provinceStr;
-    private HashMap<String, ArrayList<String>> cityMap;
     private CompanyAuthReqParams companyParams = new CompanyAuthReqParams();
     private PersonalAuthReqParams personalParams = new PersonalAuthReqParams();
-
-    private AdapterView.OnItemSelectedListener onCityItemSelectedListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            cityName = cityMap.get(provinceName).get(position);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
 
     //by sxt
     private String personalIdImgAUrl;//正面照上传后后台返回相对地址
     private String personalIdImgBUrl;//反面找上传后后台返回相对地址
     private UploadFilePresenter uploadFilePresenter;
     private Uri imgUri;
+    private ArrayList<String> nationalityItems;
+    private ArrayList<String> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initCityData();
+        initJsonData();
 
         StatusBarUtil.setImmersionStatus(this, title_bar);
         authPresenter = new AuthPresenter();
@@ -253,91 +244,6 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         setGone(companyViews);
     }
 
-    private void initAdapter() {
-        nationalityAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, nationalityStr);
-        nationalityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
-        sp_nationality.setAdapter(nationalityAdapter); // 将adapter 添加到spinner中
-        sp_province.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nationalityName = nationalityStr.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        provinceAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, provinceStr);
-        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
-        sp_province.setAdapter(provinceAdapter); // 将adapter 添加到spinner中
-        sp_province.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                provinceName = provinceStr.get(position);
-                ArrayList<String> cityStr = cityMap.get(provinceName);
-                if (cityStr != null) {
-                    cityAdapter = new SpinnerAdapter(AuthActivity.this, android.R.layout.simple_spinner_item, cityStr);
-                    cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
-                    sp_city.setAdapter(cityAdapter); // 将adapter 添加到spinner中
-                    sp_city.setOnItemSelectedListener(onCityItemSelectedListener);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    private void initCityData() {
-
-        String[] stringArray = getResources().getStringArray(R.array.nationality);
-        List<String> strings = Arrays.asList(stringArray);
-        nationalityStr = new ArrayList<String>(strings);
-
-        Observable.create(new ObservableOnSubscribe<ArrayList<ProvinceBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<ArrayList<ProvinceBean>> e) throws Exception {
-                ArrayList<ProvinceBean> cities = GsonUtil.getCities(GsonUtil.readFile("city.json"));
-                e.onNext(cities);
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ArrayList<ProvinceBean>>() {
-                    @Override
-                    public void accept(ArrayList<ProvinceBean> provinceBeans) throws Exception {
-                        cities = provinceBeans;
-                        provinceStr = new ArrayList<>();
-                        cityMap = new HashMap<String, ArrayList<String>>();
-                        for (ProvinceBean provinceBean : cities) {
-                            String p = provinceBean.getP();
-                            ArrayList<CityBean> c = provinceBean.getC();
-                            provinceStr.add(p);
-                            ArrayList<String> cities = cityMap.get(p);
-                            if (cities == null) {
-                                cities = new ArrayList<String>();
-                                cityMap.put(p, cities);
-                            }
-                            if (c == null) {
-//                                LogUtils.e("tag","c为空"+p);
-                                cities.add("国外");
-                            } else {
-//                                LogUtils.e("tag","c不为空"+c.size());
-                                for (CityBean cityBean : provinceBean.getC()) {
-                                    cities.add(cityBean.getN());
-                                }
-                            }
-
-                        }
-                        initAdapter();
-                    }
-                });
-    }
-
-
     @Override
     public void initContentView() {
         setContentView(R.layout.activity_auth);
@@ -350,8 +256,8 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
 
     @OnClick({R.id.btn_company, R.id.btn_personal, R.id.left_ll, R.id.btn_next, R.id.tv_standing_off,
             R.id.btn_upload_boss_id_img_a, R.id.btn_upload_boss_id_img_b,
-            R.id.ll_upload_p_id_img_a, R.id.ll_upload_p_id_img_b,
-            R.id.btn_license_img})
+            R.id.ll_upload_p_id_img_a, R.id.ll_upload_p_id_img_b, R.id.btn_license_img,
+            R.id.ll_nationality, R.id.ll_province, R.id.ll_city})
     public void onClick(View view) {
         int id = view.getId();
 
@@ -438,7 +344,13 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
                 onViewClicked();
                 showPopupView();
                 break;
-
+            case R.id.ll_province:
+            case R.id.ll_city:
+                ShowPickerView(false);
+                break;
+            case R.id.ll_nationality:
+                ShowPickerView(true);
+                break;
             default:
                 break;
         }
@@ -481,7 +393,7 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         }
         if (personalViews == null) {
             personalViews = new View[]{
-                    frame_nationality,
+                    llNationality,
                     edt_user_name,
                     edt_id_no,
                     edt_id_no,
@@ -634,25 +546,20 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         //String imgStr = PictureFileUtil.bitmap2String(bitmap);//不上传string，改为上传url
         if (view_no == PicturePresenter.VIEW_NO[1]) {
             btn_upload_boss_id_img_a.setBackground(bitmapDrawable);
-//            bossIdImgStrA = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[2]) {
             btn_upload_boss_id_img_b.setBackground(bitmapDrawable);
-//            bossIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[3]) {
             uploadFile();
             tvATxt.setVisibility(View.GONE);
             imgAddA.setVisibility(View.GONE);
             llUploadPIdImgA.setBackground(bitmapDrawable);
-//            personalIdImgStrA = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[4]) {
             uploadFile();
             tvBTxt.setVisibility(View.GONE);
             imgAddB.setVisibility(View.GONE);
             llUploadPIdImgB.setBackground(bitmapDrawable);
-//            personalIdImgStrB = imgStr;
         } else if (view_no == PicturePresenter.VIEW_NO[5]) {
             btn_license_img.setBackground(bitmapDrawable);
-//            licenseImgStr = imgStr;
         }
     }
 
@@ -709,10 +616,10 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
             Uri uri = AuthActivity.this.getContentResolver().insert(MediaStore.Images
                     .Media.EXTERNAL_CONTENT_URI, contentValues);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            imgUri=uri;
+            imgUri = uri;
         } else {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-            imgUri=Uri.fromFile(tempFile);
+            imgUri = Uri.fromFile(tempFile);
         }
         startActivityForResult(intent, requestCode);
     }
@@ -776,6 +683,113 @@ public class AuthActivity extends BaseActivity implements AuthViewImpl, PictureV
         if (bitMap != null) {
             showView(bitMap);
         }
+    }
+
+
+    /**
+     * 省市县弹框
+     */
+    private void ShowPickerView(final boolean isNationality) {
+        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                if (isNationality) {
+                    tvNationality.setText(nationalityItems.get(options1));
+                    nationalityName = nationalityItems.get(options1);
+                } else {
+                    tvProvince.setText(options1Items.get(options1));
+                    provinceName = options1Items.get(options1);
+
+                    tvCity.setText(options2Items.get(options1).get(options2));
+                    cityName = options2Items.get(options1).get(options2);
+
+                }
+            }
+        }).setTitleText("城市选择")
+                .setDividerColor(mContext.getResources().getColor(R.color.primary_yellow))
+                .setTextColorCenter(mContext.getResources().getColor(R.color.primary_yellow)) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .build();
+        pvOptions.setPicker(options1Items, options2Items);//三级选择器
+        if (isNationality) {
+            pvOptions.setPicker(nationalityItems);
+        }
+        pvOptions.show();
+    }
+
+    /**
+     * 从assert文件夹中获取json数据
+     */
+    private void initJsonData() {
+        String[] stringArray = getResources().getStringArray(R.array.nationality);
+        List<String> strings = Arrays.asList(stringArray);
+        nationalityItems = new ArrayList<String>(strings);
+
+        //省市县
+        Observable.create(new ObservableOnSubscribe<ArrayList<ProvinceBean>>() {
+            @Override
+            public void subscribe(ObservableEmitter<ArrayList<ProvinceBean>> emitter) throws Exception {
+                ArrayList<ProvinceBean> cities = GsonUtil.parseData(GsonUtil.readFile("city.json"));
+                emitter.onNext(cities);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ArrayList<ProvinceBean>>() {
+                    @Override
+                    public void accept(ArrayList<ProvinceBean> provinces) throws Exception {
+                        for (int i = 0; i < provinces.size(); i++) {//遍历省份
+                            ArrayList<String> ProvinceList = new ArrayList<>();//该省的城市列表（第二级）
+                            if (provinces.get(i).getP().equals("国外")) {
+                                return;
+                            } else {
+                                ProvinceList.add(provinces.get(i).getP());
+                            }
+
+                            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+                            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+                            for (int j = 0; j < provinces.get(i).getC().size(); j++) {//遍历该省份的所有城市
+                                if (Util.isEmpty(provinces.get(i).getC().get(j).getN())) {//直辖市没有
+                                    return;
+                                }
+                                String CityName = provinces.get(i).getC().get(j).getN();
+
+                                CityList.add(CityName);//添加城市
+                                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+
+                                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                                if (provinces.get(i).getC().get(j).getA() == null
+                                        || provinces.get(i).getC().get(j).getA().size() == 0) {
+                                    City_AreaList.add("");
+                                } else {
+                                    for (int k = 0; k < provinces.get(i).getC().get(j).getA().size(); k++) {
+                                        City_AreaList.add(provinces.get(i).getC().get(j).getA().get(k).getS());
+                                    }
+                                }
+                                Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+
+                            }
+
+                            /**
+                             * 添加省份数据
+                             */
+                            options1Items.addAll(ProvinceList);
+
+                            /**
+                             * 添加城市数据
+                             */
+                            options2Items.add(CityList);
+
+                            /**
+                             * 添加地区数据
+                             */
+                            options3Items.add(Province_AreaList);
+                        }
+
+
+                    }
+                });
     }
 
     @Override
