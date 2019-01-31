@@ -158,6 +158,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoViewImpl {
         dismissLoadingDialog();
         if (userInfoResponseBean != null) {
             avatar_url = userInfoResponseBean.getAvatar();
+            SPUtil.insert(this, SPUtil.USER_AVATAR,avatar_url);
             tvCreateTime.setText(userInfoResponseBean.getCreate_time());
             tvUserLoginTel.setText(TextUtils.isEmpty(userInfoResponseBean.getUser_login()) ? Util.hide4Phone(userLogin): userInfoResponseBean.getUser_login());
             int userStatus = userInfoResponseBean.getIs_auth();

@@ -326,7 +326,7 @@ public class WxOrZfbPaymetActivity extends BaseActivity
     }
 
     @Override
-    public BaseActivity getActivity() {
+    public Activity getCtx() {
         return WxOrZfbPaymetActivity.this;
     }
 

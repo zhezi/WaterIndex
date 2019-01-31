@@ -285,7 +285,7 @@ public class PayFloatActivity extends BaseActivity implements CommonViewImpl, Up
     }
 
     @Override
-    public BaseActivity getActivity() {
+    public Activity getCtx() {
         return PayFloatActivity.this;
     }
 
