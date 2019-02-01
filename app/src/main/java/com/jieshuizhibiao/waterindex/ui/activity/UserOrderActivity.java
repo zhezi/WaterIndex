@@ -25,7 +25,6 @@ import com.jieshuizhibiao.waterindex.contract.presenter.SysConfigPresenter;
 import com.jieshuizhibiao.waterindex.contract.presenter.UserOrderPresenter;
 import com.jieshuizhibiao.waterindex.contract.view.CommonViewImpl;
 import com.jieshuizhibiao.waterindex.contract.view.SecondRequstViewImpl;
-import com.jieshuizhibiao.waterindex.contract.view.UploadFileViewImpl;
 import com.jieshuizhibiao.waterindex.event.TradeIndexRefreshEvent;
 import com.jieshuizhibiao.waterindex.utils.LogUtils;
 import com.jieshuizhibiao.waterindex.utils.StatusBarUtil;

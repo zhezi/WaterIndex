@@ -25,9 +25,9 @@ import com.jieshuizhibiao.waterindex.ui.activity.TraderPaidActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderSuccActivity;
 import com.jieshuizhibiao.waterindex.ui.activity.TraderUnpayActivity;
 import com.jieshuizhibiao.waterindex.ui.adapter.OrderListsAdapter;
-import com.jieshuizhibiao.waterindex.ui.widget.Chart.ChartUtil;
 import com.jieshuizhibiao.waterindex.utils.SPUtil;
 import com.jieshuizhibiao.waterindex.utils.ToastUtils;
+import com.jieshuizhibiao.waterindex.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -190,7 +190,7 @@ public class OrderListsTabFragment extends BaseFragment implements CommonViewImp
                 });
                 for (ListOrder listOrder:list){
                     final String createtime = listOrder.getCreatetime();
-                    long longCreatetime= ChartUtil.time2MilliseSecond(createtime);
+                    long longCreatetime= Util.time2MilliseSecond(createtime);
                     map.put(longCreatetime,listOrder);
                 }
                 for (Map.Entry<Long,ListOrder> entry:map.entrySet()){

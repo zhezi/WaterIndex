@@ -70,8 +70,8 @@ public class Util {
         return simpleDateFormat.format(date);
     }
 
-    public static int getAccurateTime(int type,long millisecond){
-        int year = 2018,month= 10,day= 26,hour= 19;
+    public static int getAccurateTime(int type, long millisecond) {
+        int year = 2018, month = 10, day = 26, hour = 19;
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             // 用parse方法，可能会异常，所以要try-catch
@@ -101,10 +101,12 @@ public class Util {
                 return day;
             case 3://时
                 return hour;
-            default:return -1;
+            default:
+                return -1;
         }
     }
-    public static String utcDateToDate(String utcDate){
+
+    public static String utcDateToDate(String utcDate) {
         try {
             //yyyy-MM-dd'T'HH:mm:ss.SSSZ
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -127,10 +129,9 @@ public class Util {
         Matcher m;
         p = Pattern.compile(regEx1);
         m = p.matcher(string);
-        if (m.matches()){
+        if (m.matches()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -214,13 +215,15 @@ public class Util {
     }
 
     public static String hide4Phone(String phone) {
-        String phoneNumber = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        String phoneNumber = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
         return phoneNumber;
     }
 
-    public static int versionCode(Context context) { PackageManager manager = context.getPackageManager();
+    public static int versionCode(Context context) {
+        PackageManager manager = context.getPackageManager();
         int code = 0;
-        try { PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+        try {
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
             code = info.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -228,13 +231,55 @@ public class Util {
         return code;
     }
 
-    public static String versionName(Context context) { PackageManager manager = context.getPackageManager();
+    public static String versionName(Context context) {
+        PackageManager manager = context.getPackageManager();
         String name = null;
-        try { PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+        try {
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
             name = info.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         return name;
+    }
+
+    public static String MilliseSecond2DateString(long millisecond, String type) {
+        String pattern = "yyyy-MM-dd hh:mm";
+
+        if (type.equals("today")) {
+            pattern = "yyyy-MM-dd hh:mm";
+        } else if (type.equals("week") || type.equals("year")) {
+            pattern = "yyyy-MM-dd";
+        }
+        Date date = new Date(millisecond / 1000);
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(date);
+    }
+
+    /**
+     * 将"2019-01-01 00:00:00"/"2019-01-01"转为秒（float）
+     * tradeLine  type为today时，xasix格式为2019-01-01 00:00:00
+     * type为week活year时，格式为2019-01-01
+     *
+     * @param time
+     * @return
+     */
+    public static long time2MilliseSecond(String time) {
+        try {
+            String pattern = "yyyy-MM-dd HH:mm:ss";
+            time.trim();
+            if (time.length() == 10) {//"weekyear"会快一些
+                pattern = "yyyy-MM-dd";
+            } else if (time.length() == 19) {
+                pattern = "yyyy-MM-dd HH:mm:ss";
+            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new SimpleDateFormat(pattern).parse(time));
+            return calendar.getTimeInMillis();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

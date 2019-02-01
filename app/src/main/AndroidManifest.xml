@@ -120,17 +120,6 @@
             android:name=".ui.activity.UserInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.EnterpriseActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.OrderDetailActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.FactoryServiceActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.AboutListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -146,47 +135,9 @@
             android:name=".ui.activity.SystemMessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GoodsActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
-        <activity
-            android:name=".ui.activity.ConfirmOrderActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.WashDemandActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.DistributionInfoActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.ChangeInfoActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.PaySuceessActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.activity.InfoDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.GoodsListsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.TradeListsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.TradeDetaiActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.WebViewActivity"
             android:screenOrientation="portrait" />

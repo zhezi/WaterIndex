@@ -2,33 +2,18 @@ package com.jieshuizhibiao.waterindex.http;
 
 import com.jieshuizhibiao.waterindex.beans.AccountDetailResponseBean;
 import com.jieshuizhibiao.waterindex.beans.AuthDetailResponseBean;
-import com.jieshuizhibiao.waterindex.beans.BannerListResponseBean;
 import com.jieshuizhibiao.waterindex.beans.BeforeMvMoneyResponse;
-import com.jieshuizhibiao.waterindex.beans.CreateOrderResponseBean;
-import com.jieshuizhibiao.waterindex.beans.FactoryDetailResponseBean;
-import com.jieshuizhibiao.waterindex.beans.FactoryListResponseBean;
-import com.jieshuizhibiao.waterindex.beans.FactoryServiceResponseBean;
 import com.jieshuizhibiao.waterindex.beans.GetUrlResponseBean;
-import com.jieshuizhibiao.waterindex.beans.GoodsResposeBean;
-import com.jieshuizhibiao.waterindex.beans.InfoListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.ListOrder;
 import com.jieshuizhibiao.waterindex.beans.ListTradeResponseBean;
 import com.jieshuizhibiao.waterindex.beans.LoginResponseBean;
 import com.jieshuizhibiao.waterindex.beans.MoveMoneryBean;
-import com.jieshuizhibiao.waterindex.beans.OrderDetailResponseBean;
-import com.jieshuizhibiao.waterindex.beans.OrderListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.PayMentResponseBean;
 import com.jieshuizhibiao.waterindex.beans.RegisterResponseBean;
-import com.jieshuizhibiao.waterindex.beans.SellResponseBean;
-import com.jieshuizhibiao.waterindex.beans.ServiceListResponseBean;
 import com.jieshuizhibiao.waterindex.beans.SysConfigResponseBean;
 import com.jieshuizhibiao.waterindex.beans.SysMsgBase;
 import com.jieshuizhibiao.waterindex.beans.SystemMsgResponseBean;
-import com.jieshuizhibiao.waterindex.beans.TotalPriceResponseBean;
-import com.jieshuizhibiao.waterindex.beans.TradeCenterResponseBean;
 import com.jieshuizhibiao.waterindex.beans.TradeIndexBase;
-import com.jieshuizhibiao.waterindex.beans.TradeLineResponseBean;
-import com.jieshuizhibiao.waterindex.beans.TradeListsResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UploadFileResponseBean;
 import com.jieshuizhibiao.waterindex.beans.UserAuthInfo;
 import com.jieshuizhibiao.waterindex.beans.UserDetailResponseBean;
@@ -93,41 +78,9 @@ public interface APIService {
     @POST(UrlConfig.CHANGE_PASS)
     Observable<BaseEntity> changePass(@Body RequestBody requestBody);
 
-    //订单详情
-    @POST(UrlConfig.ORDER_DETAIL)
-    Observable<BaseEntity<OrderDetailResponseBean>> orderDetail(@Body RequestBody requestBody);
-
-    //洗地订单列表
-    @POST(UrlConfig.ORDER_LIST)
-    Observable<BaseEntity<OrderListsResponseBean>> orderList(@Body RequestBody requestBody);
-
     //成交明细
     @POST(UrlConfig.TRADE_DETAIL)
     Observable<BaseEntity> tradeDetail(@Body RequestBody requestBody);
-
-    //交易中心
-    @POST(UrlConfig.TRADE_CENTER)
-    Observable<BaseEntity<TradeCenterResponseBean>> tradeCenter(@Body RequestBody requestBody);
-
-    //用户撤单
-    @POST(UrlConfig.TRADE_CANCEL)
-    Observable<BaseEntity>cancle(@Body RequestBody body);
-
-    //贡献节水量
-    @POST(UrlConfig.TRADE_BUY)
-    Observable<BaseEntity> buy(@Body RequestBody requestBody);
-
-    //获取节水量
-    @POST(UrlConfig.TRADE_SELL)
-    Observable<BaseEntity<SellResponseBean>> sell(@Body RequestBody requestBody);
-
-    //折线图
-    @POST(UrlConfig.TRADE_LINE)
-    Observable<BaseEntity<TradeLineResponseBean>> tradeLine(@Body RequestBody body);
-
-    //个人中心
-    @POST(UrlConfig.TRADE_LIST)
-    Observable<BaseEntity<TradeListsResponseBean>> tradeList(@Body RequestBody requestBody);
 
     //用户身份认证信息
     @POST(UrlConfig.AUTH_DETAIL)
@@ -144,43 +97,6 @@ public interface APIService {
     //平台咨询详情
     @POST(UrlConfig.INFO_DETAIL)
     Observable<BaseEntity> infoDetail(@Body RequestBody requestBody);
-
-    //平台咨询列表
-    @POST(UrlConfig.INFO_LIST)
-    Observable<BaseEntity<InfoListsResponseBean>> infoList(@Body RequestBody requestBody);
-
-    //轮播列表
-    @POST(UrlConfig.BANNER_LIST)
-    Observable<BaseEntity<BannerListResponseBean>> bannerList(@Body RequestBody requestBody);
-
-    //洗涤项目列表
-    @POST(UrlConfig.SERVICE_LIST)
-    Observable<BaseEntity<ServiceListResponseBean>> serviceList(@Body RequestBody requestBody);
-
-    //洗涤商城企业列表
-    @POST(UrlConfig.FACTORY_LIST)
-    Observable<BaseEntity<List<FactoryListResponseBean>>> factoryList(@Body RequestBody requestBody);
-
-    //洗涤企业详情
-    @POST(UrlConfig.FACTORY_DETAIL)
-    Observable<BaseEntity<FactoryDetailResponseBean>> factoryDetail(@Body RequestBody requestBody);
-
-    //洗涤企业项目详情
-    @POST(UrlConfig.FACTORY_SERVICE)
-    Observable<BaseEntity<FactoryServiceResponseBean>> factoryService(@Body RequestBody requestBody);
-
-    //下单支付总金额
-    @POST(UrlConfig.TOTAL_PRICE)
-    Observable<BaseEntity<TotalPriceResponseBean>> totalPrice(@Body RequestBody requestBody);
-
-    //创建订单
-    @POST(UrlConfig.CREATE_ORDER)
-    Observable<BaseEntity<CreateOrderResponseBean>> createOrder(@Body RequestBody requestBody);
-
-    //我的兑换
-    @POST(UrlConfig.GOODS)
-    Observable<BaseEntity<List<GoodsResposeBean>>> goods(@Body RequestBody requestBody);
-
 
     @POST(UrlConfig.SYSMSG)
     Observable<BaseEntity<SysMsgBase>> sysMsg(@Body RequestBody requestBody);
